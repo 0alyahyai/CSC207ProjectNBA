@@ -3,17 +3,18 @@ package data_access;
 import entity.User;
 import entity.UserFactory;
 import use_case.clear_users.ClearUserDataAccessInterface;
+import use_case.leaderboard.LeaderboardDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
+import use_case.menu.MenuUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 import java.io.*;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FileUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface,
-        ClearUserDataAccessInterface {
+        ClearUserDataAccessInterface, LeaderboardDataAccessInterface, MenuUserDataAccessInterface {
 
     private final File csvFile;
 
@@ -29,7 +30,8 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
         csvFile = new File(csvPath);
         headers.put("username", 0);
         headers.put("password", 1);
-        headers.put("creation_time", 2);
+        headers.put("user_id", 2);
+        System.out.println(csvFile.length());
 
         if (csvFile.length() == 0) {
             save();
@@ -39,15 +41,14 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
                 String header = reader.readLine();
 
                 // For later: clean this up by creating a new Exception subclass and handling it in the UI.
-                assert header.equals("username,password,creation_time");
+                assert header.equals("username,password,user_id");
 
                 String row;
                 while ((row = reader.readLine()) != null) {
                     String[] col = row.split(",");
                     String username = String.valueOf(col[headers.get("username")]);
                     String password = String.valueOf(col[headers.get("password")]);
-                    String creationTimeText = String.valueOf(col[headers.get("creation_time")]);
-                    LocalDateTime ldt = LocalDateTime.parse(creationTimeText);
+                    int userid = Integer.parseInt((col[headers.get("user_id")]));
                     User user = userFactory.create(1, username, password);
                     accounts.put(username, user);
                 }
@@ -57,7 +58,7 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
 
     @Override
     public void save(User user) {
-        accounts.put(user.getName(), user);
+        accounts.put(user.getUserName(), user);
         this.save();
     }
 
@@ -75,7 +76,7 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
 
             for (User user : accounts.values()) {
                 String line = String.format("%s,%s,%s",
-                        user.getName(), user.getUserPassword(), user.getCreationTime());
+                        user.getUserName(), user.getUserPassword(), user.getUserID());
                 writer.write(line);
                 writer.newLine();
             }
@@ -110,5 +111,17 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
         accounts.clear();
         this.save();
         return names;
+    }
+
+    //ToDo: The following method is not implemented properly. It must be completed later, it is a stand-in for now, as we have not yet implemented teams.
+    @Override
+    public String[] getUserswithTeam() {
+        String[] usersWithTeam = new String[accounts.size()];
+        int i = 0;
+        for (User user : accounts.values()) {
+            usersWithTeam[i] = user.getUserName();
+            i++;
+        }
+        return usersWithTeam;
     }
 }

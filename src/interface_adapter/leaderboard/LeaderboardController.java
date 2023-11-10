@@ -1,7 +1,6 @@
 package interface_adapter.leaderboard;
 
 import use_case.leaderboard.LeaderboardInputBoundary;
-import use_case.menu.MenuInputBoundary;
 
 public class LeaderboardController {
 
@@ -12,5 +11,9 @@ public class LeaderboardController {
     }
     public void back () {
         leaderboardUseCaseInteractor.back();
+    }
+
+    public void load () {
+        leaderboardUseCaseInteractor.load();
     }
 }

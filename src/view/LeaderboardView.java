@@ -2,6 +2,7 @@ package view;
 
 import interface_adapter.Menu.MenuViewModel;
 import interface_adapter.leaderboard.LeaderboardController;
+import interface_adapter.leaderboard.LeaderboardState;
 import interface_adapter.leaderboard.LeaderboardViewModel;
 import interface_adapter.signup.SignupState;
 import interface_adapter.signup.SignupViewModel;
@@ -32,7 +33,20 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
         JPanel buttons = new JPanel();
         leaderboard = new JPanel();
-        buttons.add(leaderboard);
+        if (leaderboardViewModel.getState().getLeaderboard() != null) {
+            for (String user : leaderboardViewModel.getState().getLeaderboard()) {
+                JLabel userLabel = new JLabel(user);
+                Font font = new Font("Arial", Font.PLAIN, 16);
+                userLabel.setFont(font);
+                leaderboard.add(userLabel);
+            }
+        } else {
+            JLabel userLabel = new JLabel("No users yet!");
+            Font font = new Font("Arial", Font.PLAIN, 16);
+            userLabel.setFont(font);
+            leaderboard.add(userLabel);
+        }
+
         back = new JButton(LeaderboardViewModel.BACK_BUTTON_LABEL);
         buttons.add(back);
 
@@ -64,6 +78,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
 
         add(title);
+        add(leaderboard);
         add(buttons);
     }
 
@@ -80,9 +95,9 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        SignupState state = (SignupState) evt.getNewValue();
-        if (state.getUsernameError() != null) {
-            JOptionPane.showMessageDialog(this, state.getUsernameError());
+        LeaderboardState state = (LeaderboardState) evt.getNewValue();
+        if (state.getLeaderboardError() != null) {
+            JOptionPane.showMessageDialog(this, state.getLeaderboardError());
         }
     }
 }

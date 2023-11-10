@@ -1,4 +1,4 @@
 package use_case.menu;
 
-public class MenuUserDataAccessInterface {
+public interface MenuUserDataAccessInterface {
 }

@@ -5,11 +5,14 @@ import interface_adapter.Menu.MenuController;
 import interface_adapter.Menu.MenuPresenter;
 import interface_adapter.Menu.MenuViewModel;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.leaderboard.LeaderboardController;
 import interface_adapter.leaderboard.LeaderboardViewModel;
 import interface_adapter.signup.SignupViewModel;
+import use_case.leaderboard.LeaderboardDataAccessInterface;
 import use_case.menu.MenuInputBoundary;
 import use_case.menu.MenuInteractor;
 import use_case.menu.MenuOutputBoundary;
+import use_case.menu.MenuUserDataAccessInterface;
 import view.MenuView;
 
 import javax.swing.*;
@@ -21,11 +24,12 @@ public class MenuUseCaseFactory {
     private MenuUseCaseFactory() {}
 
     public static MenuView create(MenuViewModel menuViewModel, ViewManagerModel viewManagerModel,
-            SignupViewModel signupViewModel, LeaderboardViewModel leaderboardViewModel) {
-
+            SignupViewModel signupViewModel, LeaderboardViewModel leaderboardViewModel, MenuUserDataAccessInterface userDataAccessObject) throws IOException {
+            LeaderboardController leaderboardController = LeaderboardUseCaseFactory.createLeaderboardUseCase(viewManagerModel, leaderboardViewModel, menuViewModel, (LeaderboardDataAccessInterface) userDataAccessObject);
         try {
             MenuController menuController = createMenuUseCase(viewManagerModel, signupViewModel, leaderboardViewModel);
-            return new MenuView(menuViewModel, menuController);
+
+            return new MenuView(menuViewModel, menuController, leaderboardController);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }
