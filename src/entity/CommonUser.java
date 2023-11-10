@@ -33,7 +33,6 @@ class CommonUser implements User {
         return userPassword;
     }
 
-
     @Override
     // returns null if user does not have a team yet
     public Team getUserTeam() {
@@ -42,5 +41,21 @@ class CommonUser implements User {
 
     public void setTeam(Team userTeam){
         this.userTeam = userTeam;
+    }
+
+    //The following methods were added just so that Main runs. Revisit this later and remove if necessary.
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public String getCreationTIme() {
+        return null;
+    }
+
+    @Override
+    public String getCreationTime() {
+        return "string";
     }
 }
