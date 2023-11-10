@@ -13,16 +13,16 @@ public class MenuInteractor implements MenuInputBoundary{
     final MenuOutputBoundary menuPresenter;
 
     public MenuInteractor(MenuOutputBoundary MenuPresenter) {
-
         this.menuPresenter = MenuPresenter;
     }
 
     //For the following code, I create an if case for each button, again could we do this more efficiently?
     @Override
     public void execute(MenuInputData menuInputData) {
-        if (menuInputData.equals("signup")) {
+        String data = menuInputData.getButtonName();
+        if (data.equals("signup")) {
             menuPresenter.prepareSignupView();
-        } else if (menuInputData.equals("leaderboard")) {
+        } else if (data.equals("leaderboard")) {
             menuPresenter.prepareLeaderboardView();
         } else {
             menuPresenter.prepareFailView("Invalid input.");

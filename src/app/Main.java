@@ -26,6 +26,11 @@ public class Main {
 
         CardLayout cardLayout = new CardLayout();
 
+        // ToDo: Changed Menu View to grid so options appear down a column?
+//        int columns = 3;
+//        int rows = 0; // You can adjust the number of rows based on your needs
+//        GridLayout gridLayout = new GridLayout(rows, columns);
+
         // The various View objects. Only one view is visible at a time.
         JPanel views = new JPanel(cardLayout);
         application.add(views);
@@ -64,6 +69,9 @@ public class Main {
 
         MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel);
         views.add(menuView, menuView.viewName);
+
+        LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(menuViewModel, viewManagerModel, leaderboardViewModel);
+        views.add(leaderboardView, leaderboardView.viewName);
 
         viewManagerModel.setActiveView(menuView.viewName);
         viewManagerModel.firePropertyChanged();

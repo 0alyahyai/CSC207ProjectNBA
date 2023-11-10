@@ -37,7 +37,6 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
 //        this.leaderboardViewModel = leaderboardViewModel;
         this.menuViewModel = menuViewModel;
         this.menuController = menuController;
-        //ToDo: Figure out why this error is happening
         menuViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(MenuViewModel.TITLE_LABEL);
@@ -59,7 +58,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
                 // This creates an anonymous subclass of ActionListener and instantiates it.
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
-                        if (evt.getSource().equals(signUp)) {
+                        if (evt.getSource().equals(Leaderboard)) {
                             menuController.execute("leaderboard");
                         }
                     }
