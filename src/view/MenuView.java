@@ -43,7 +43,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         JLabel title = new JLabel(MenuViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JPanel buttons = new JPanel();
+        JPanel buttons = new JPanel(new GridLayout(0, 1, 10, 10));
         Leaderboard = new JButton(LeaderboardViewModel.LEADERBOARD_BUTTON_LABEL);
         buttons.add(Leaderboard);
         signUp = new JButton(SignupViewModel.SIGNUP_BUTTON_LABEL);
@@ -60,6 +60,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(Leaderboard)) {
+//                            leaderboardViewModel
                             leaderboardController.load();
                             menuController.execute("leaderboard");
                         }
@@ -77,9 +78,8 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
                     }
                 }
         );
-
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         cancel.addActionListener(this);
-
         add(title);
         add(buttons);
     }

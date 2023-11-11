@@ -32,7 +32,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JPanel buttons = new JPanel();
-        leaderboard = new JPanel();
+        leaderboard = new JPanel(new GridLayout(0, 3, 10, 10));
         if (leaderboardViewModel.getState().getLeaderboard() != null) {
             for (String user : leaderboardViewModel.getState().getLeaderboard()) {
                 JLabel userLabel = new JLabel(user);
@@ -76,6 +76,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
                 }
         );
 
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         add(title);
         add(leaderboard);
@@ -98,6 +99,41 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         LeaderboardState state = (LeaderboardState) evt.getNewValue();
         if (state.getLeaderboardError() != null) {
             JOptionPane.showMessageDialog(this, state.getLeaderboardError());
+        } else {
+            //Remove everything from leaderboard
+            leaderboard.removeAll();
+            //Add new labels for the leaderboard
+            JLabel placeLabel = new JLabel("Place");
+            JLabel userLabel = new JLabel("User");
+            JLabel ptsLabel = new JLabel("Points");
+            //Set font for labels
+            Font font = new Font("Arial", Font.BOLD, 16);
+            placeLabel.setFont(font);
+            userLabel.setFont(font);
+            ptsLabel.setFont(font);
+            //Add labels to leaderboard
+            leaderboard.add(placeLabel);
+            leaderboard.add(userLabel);
+            leaderboard.add(ptsLabel);
+
+            //The following forloop adds users to the leaderboard.
+            //Note that the place and score values are dummy values. These will be replaced
+            //formulaically when we have determined how to set places/scores.
+
+            int i = 1;
+            int score = 1000;
+            for (String user : state.getLeaderboard()) {
+                JLabel place = new JLabel(i + ".");
+                JLabel userName = new JLabel(user);
+                JLabel pts = new JLabel(Integer.toString(score));
+                Font font1 = new Font("Arial", Font.PLAIN, 16);
+                userName.setFont(font1);
+                leaderboard.add(place);
+                leaderboard.add(userName);
+                leaderboard.add(pts);
+            }
+            leaderboard.revalidate();
+            leaderboard.repaint();
         }
     }
 }
