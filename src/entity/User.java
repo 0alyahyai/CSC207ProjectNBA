@@ -2,7 +2,7 @@ package entity;
 
 public interface User {
 
-    int getUserID();
+    String getUserID();
 
     String getUserName();
 

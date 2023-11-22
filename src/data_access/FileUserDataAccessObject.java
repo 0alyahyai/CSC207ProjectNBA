@@ -2,7 +2,6 @@ package data_access;
 
 import entity.User;
 import entity.UserFactory;
-import use_case.clear_users.ClearUserDataAccessInterface;
 import use_case.leaderboard.LeaderboardDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.menu.MenuUserDataAccessInterface;
@@ -14,7 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FileUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface,
-        ClearUserDataAccessInterface, LeaderboardDataAccessInterface, MenuUserDataAccessInterface {
+        LeaderboardDataAccessInterface, MenuUserDataAccessInterface {
 
     private final File csvFile;
 
@@ -48,8 +47,8 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
                     String[] col = row.split(",");
                     String username = String.valueOf(col[headers.get("username")]);
                     String password = String.valueOf(col[headers.get("password")]);
-                    int userid = Integer.parseInt((col[headers.get("user_id")]));
-                    User user = userFactory.create(1, username, password);
+                    String userid = String.valueOf((col[headers.get("user_id")]));
+                    User user = userFactory.create(userid, username, password);
                     accounts.put(username, user);
                 }
             }
@@ -99,19 +98,6 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
         return accounts.containsKey(identifier);
     }
 
-    @Override
-    public String[] clearUsers() {
-        String[] names = new String[accounts.size()];
-        int i = 0;
-        for (User user : accounts.values()) {
-            names[i] = user.getName();
-            i++;
-        }
-
-        accounts.clear();
-        this.save();
-        return names;
-    }
 
     //ToDo: The following method is not implemented properly. It must be completed later, it is a stand-in for now, as we have not yet implemented teams.
     @Override

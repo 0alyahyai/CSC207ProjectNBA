@@ -2,7 +2,7 @@ package entity;
 
 class CommonUser implements User {
 
-    private final int userID;
+    private final String userID;
 
     private final String userName;
 
@@ -10,7 +10,7 @@ class CommonUser implements User {
 
     private Team userTeam;
 
-    CommonUser(int userID, String userName, String userPassword){
+    CommonUser(String userID, String userName, String userPassword){
         this.userID = userID;
         this.userName = userName;
         this.userPassword = userPassword;
@@ -19,7 +19,7 @@ class CommonUser implements User {
 
 
     @Override
-    public int getUserID() {
+    public String getUserID() {
         return userID;
     }
 

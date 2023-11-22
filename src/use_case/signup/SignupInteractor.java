@@ -52,7 +52,7 @@ public class SignupInteractor implements SignupInputBoundary {
             //For now I have just set userID to 1 when generating a new user.
             //ToDo: Create userid generating function
 
-            User user = userFactory.create(1, signupInputData.getUsername(), signupInputData.getPassword());
+            User user = userFactory.create("placeholder", signupInputData.getUsername(), signupInputData.getPassword());
             userDataAccessObject.save(user);
 
             //I have replaced CreationTime with standard string "string" for now.

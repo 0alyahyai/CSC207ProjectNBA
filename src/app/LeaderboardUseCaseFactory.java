@@ -1,16 +1,16 @@
 package app;
 
 
-import interface_adapter.Menu.MenuViewModel;
-import interface_adapter.ViewManagerModel;
-import interface_adapter.leaderboard.LeaderboardController;
-import interface_adapter.leaderboard.LeaderboardPresenter;
-import interface_adapter.leaderboard.LeaderboardViewModel;
+import use_case.menu.interface_adapter.MenuViewModel;
+import view.ViewManagerModel;
+import use_case.leaderboard.interface_adapter.LeaderboardController;
+import use_case.leaderboard.interface_adapter.LeaderboardPresenter;
+import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
 import use_case.leaderboard.LeaderboardDataAccessInterface;
 import use_case.leaderboard.LeaderboardInputBoundary;
 import use_case.leaderboard.LeaderboardInteractor;
 import use_case.leaderboard.LeaderboardOutputBoundary;
-import view.LeaderboardView;
+import use_case.leaderboard.view.LeaderboardView;
 
 import javax.swing.*;
 import java.io.IOException;
