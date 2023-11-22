@@ -2,7 +2,6 @@ package use_case.menu.view;
 
 import use_case.menu.interface_adapter.MenuController;
 import use_case.menu.interface_adapter.MenuViewModel;
-import use_case.leaderboard.interface_adapter.LeaderboardController;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
 import use_case.signup.interface_adapter.SignupState;
 import use_case.signup.interface_adapter.SignupViewModel;
@@ -22,7 +21,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
 
     private final MenuViewModel menuViewModel;
 
-    private final LeaderboardController leaderboardController;
+//    private final LeaderboardController leaderboardController;
 
     private final MenuController menuController;
 
@@ -32,9 +31,8 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
 //    private final JButton clear;
 
 
-    public MenuView(MenuViewModel menuViewModel ,MenuController menuController,
-                    LeaderboardController leaderboardController){
-        this.leaderboardController = leaderboardController;
+    public MenuView(MenuViewModel menuViewModel ,MenuController menuController){
+//        this.leaderboardController = leaderboardController;
 //        this.leaderboardViewModel = leaderboardViewModel;
         this.menuViewModel = menuViewModel;
         this.menuController = menuController;
@@ -60,8 +58,6 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(Leaderboard)) {
-//                            leaderboardViewModel
-                            leaderboardController.load();
                             menuController.execute("leaderboard");
                         }
                     }

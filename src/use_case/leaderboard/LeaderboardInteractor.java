@@ -1,7 +1,5 @@
 package use_case.leaderboard;
 
-import use_case.clear_users.ClearUserDataAccessInterface;
-import use_case.menu.MenuOutputBoundary;
 
 public class LeaderboardInteractor implements LeaderboardInputBoundary{
 

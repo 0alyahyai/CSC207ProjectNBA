@@ -72,7 +72,7 @@ public class Main {
         LoggedInView loggedInView = new LoggedInView(loggedInViewModel);
         views.add(loggedInView, loggedInView.viewName);
 
-        MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel, userDataAccessObject);
+        MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel);
         views.add(menuView, menuView.viewName);
 
         LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(menuViewModel, viewManagerModel, leaderboardViewModel, userDataAccessObject);
