@@ -1,11 +1,8 @@
 package view;
 
-import interface_adapter.Menu.MenuViewModel;
-import interface_adapter.leaderboard.LeaderboardController;
-import interface_adapter.leaderboard.LeaderboardState;
-import interface_adapter.leaderboard.LeaderboardViewModel;
-import interface_adapter.signup.SignupState;
-import interface_adapter.signup.SignupViewModel;
+import use_case.leaderboard.interface_adapter.LeaderboardController;
+import use_case.leaderboard.interface_adapter.LeaderboardState;
+import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
 
 import javax.swing.*;
 import java.awt.*;

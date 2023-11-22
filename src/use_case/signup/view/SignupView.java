@@ -1,8 +1,6 @@
 package view;
 
-import interface_adapter.clear_users.ClearController;
-import interface_adapter.clear_users.ClearState;
-import interface_adapter.clear_users.ClearViewModel;
+
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupState;
 import interface_adapter.signup.SignupViewModel;
@@ -20,21 +18,16 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     public final String viewName = "sign up";
 
     private final SignupViewModel signupViewModel;
-    private final ClearViewModel clearViewModel;
     private final JTextField usernameInputField = new JTextField(15);
     private final JPasswordField passwordInputField = new JPasswordField(15);
     private final JPasswordField repeatPasswordInputField = new JPasswordField(15);
     private final SignupController signupController;
-    private final ClearController clearController;
+
 
     private final JButton signUp;
     private final JButton cancel;
-    private final JButton clear;
 
-    public SignupView(SignupController controller, SignupViewModel signupViewModel, ClearController clearController,
-            ClearViewModel clearViewModel) {
-        this.clearController = clearController;
-        this.clearViewModel =  clearViewModel;
+    public SignupView(SignupController controller, SignupViewModel signupViewModel) {
         this.signupController = controller;
         this.signupViewModel = signupViewModel;
         signupViewModel.addPropertyChangeListener(this);
@@ -55,8 +48,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         cancel = new JButton(SignupViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
 
-        clear = new JButton(SignupViewModel.CLEAR_BUTTON_LABEL);
-        buttons.add(clear);
 
         signUp.addActionListener(
                 // This creates an anonymous subclass of ActionListener and instantiates it.
@@ -75,19 +66,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 }
         );
 
-        clear.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (e.getSource().equals(clear)) {
-                            ClearState currentState = clearViewModel.getState();
-                            clearController.execute();
-
-                            clearJOptionPane(currentState.getMessage());
-                        }
-                    }
-                }
-        );
 
 
         cancel.addActionListener(this);

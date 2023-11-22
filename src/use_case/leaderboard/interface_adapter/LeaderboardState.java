@@ -1,7 +1,5 @@
 package interface_adapter.leaderboard;
 
-import interface_adapter.clear_users.ClearState;
-
 public class LeaderboardState {
     private String leaderboardError = null;
 

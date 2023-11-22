@@ -1,7 +1,7 @@
 package interface_adapter.Menu;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.leaderboard.LeaderboardViewModel;
+import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
 
 import interface_adapter.signup.SignupViewModel;
 import use_case.menu.MenuOutputBoundary;
