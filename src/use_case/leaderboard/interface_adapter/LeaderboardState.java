@@ -1,4 +1,4 @@
-package interface_adapter.leaderboard;
+package use_case.leaderboard.interface_adapter;
 
 public class LeaderboardState {
     private String leaderboardError = null;

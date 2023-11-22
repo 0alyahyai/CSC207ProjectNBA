@@ -1,9 +1,9 @@
-package interface_adapter.Menu;
+package use_case.menu.interface_adapter;
 
-import interface_adapter.ViewManagerModel;
+import view.ViewManagerModel;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
 
-import interface_adapter.signup.SignupViewModel;
+import use_case.signup.interface_adapter.SignupViewModel;
 import use_case.menu.MenuOutputBoundary;
 
 

@@ -1,4 +1,4 @@
-package view;
+package use_case.leaderboard.view;
 
 import use_case.leaderboard.interface_adapter.LeaderboardController;
 import use_case.leaderboard.interface_adapter.LeaderboardState;

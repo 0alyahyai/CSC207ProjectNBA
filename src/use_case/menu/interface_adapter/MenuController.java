@@ -1,4 +1,4 @@
-package interface_adapter.Menu;
+package use_case.menu.interface_adapter;
 
 import use_case.menu.MenuInputBoundary;
 import use_case.menu.MenuInputData;

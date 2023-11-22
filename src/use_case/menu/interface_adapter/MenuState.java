@@ -1,4 +1,4 @@
-package interface_adapter.Menu;
+package use_case.menu.interface_adapter;
 
 
 public class MenuState {

@@ -1,11 +1,11 @@
-package view;
+package use_case.menu.view;
 
-import interface_adapter.Menu.MenuController;
-import interface_adapter.Menu.MenuViewModel;
+import use_case.menu.interface_adapter.MenuController;
+import use_case.menu.interface_adapter.MenuViewModel;
 import use_case.leaderboard.interface_adapter.LeaderboardController;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
-import interface_adapter.signup.SignupState;
-import interface_adapter.signup.SignupViewModel;
+import use_case.signup.interface_adapter.SignupState;
+import use_case.signup.interface_adapter.SignupViewModel;
 
 import javax.swing.*;
 import java.awt.*;

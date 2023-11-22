@@ -23,3 +23,16 @@ I haven't touched this use case, so it will be the same as the week5ca loggedinv
 and we will all need to edit this view as we add in our use cases (as users will access most usecases through this view)>
 
 If we have issues with the names of these views/use-cases, we can refactor them quite easily.
+
+-- OMAR NOTES --
+Continuing what Peter was talking about:
+
+1. Basically for your use case, you will make a directory, inside the use_case directory, having the name of your use 
+case. It will contain basically everything that defines a use case (including a view and everything associated with it),
+but without worrying about the DataAccess object/database. If you need something, define it using an interface. All that
+stuff will be defined relatively soon though.
+2. Regarding the views: You will have to make your own view (not in terms of coding it alone). We will have a 
+LoggedInView (see in code) that will have a button for each of the usecases that will simply switch
+the ActiveView to the view of your usecase. Basically, for the most part, you do not need to know how the other views
+look like.
+3. Currently there is a non-nested view folder. It has just a few general files that are important for all views.

@@ -1,7 +1,6 @@
-package interface_adapter.leaderboard;
+package use_case.leaderboard.interface_adapter;
 
-import interface_adapter.ViewModel;
-import interface_adapter.signup.SignupState;
+import view.ViewModel;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

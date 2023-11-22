@@ -1,4 +1,4 @@
-package interface_adapter.leaderboard;
+package use_case.leaderboard.interface_adapter;
 
 import use_case.leaderboard.LeaderboardInputBoundary;
 

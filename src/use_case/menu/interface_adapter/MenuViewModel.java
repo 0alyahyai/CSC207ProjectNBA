@@ -1,6 +1,6 @@
-package interface_adapter.Menu;
+package use_case.menu.interface_adapter;
 
-import interface_adapter.ViewModel;
+import view.ViewModel;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

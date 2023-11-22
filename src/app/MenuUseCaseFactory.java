@@ -1,19 +1,19 @@
 package app;
 
 
-import interface_adapter.Menu.MenuController;
-import interface_adapter.Menu.MenuPresenter;
-import interface_adapter.Menu.MenuViewModel;
-import interface_adapter.ViewManagerModel;
-import interface_adapter.leaderboard.LeaderboardController;
-import interface_adapter.leaderboard.LeaderboardViewModel;
-import interface_adapter.signup.SignupViewModel;
+import use_case.menu.interface_adapter.MenuController;
+import use_case.menu.interface_adapter.MenuPresenter;
+import use_case.menu.interface_adapter.MenuViewModel;
+import view.ViewManagerModel;
+import use_case.leaderboard.interface_adapter.LeaderboardController;
+import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
+import use_case.signup.interface_adapter.SignupViewModel;
 import use_case.leaderboard.LeaderboardDataAccessInterface;
 import use_case.menu.MenuInputBoundary;
 import use_case.menu.MenuInteractor;
 import use_case.menu.MenuOutputBoundary;
 import use_case.menu.MenuUserDataAccessInterface;
-import view.MenuView;
+import use_case.menu.view.MenuView;
 
 import javax.swing.*;
 import java.io.IOException;

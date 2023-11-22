@@ -1,8 +1,9 @@
-package view;
+package use_case.login.view;
 
-import interface_adapter.login.LoginController;
-import interface_adapter.login.LoginState;
-import interface_adapter.login.LoginViewModel;
+import use_case.login.interface_adapter.LoginController;
+import use_case.login.interface_adapter.LoginState;
+import use_case.login.interface_adapter.LoginViewModel;
+import view.LabelTextPanel;
 
 import javax.swing.*;
 import java.awt.*;

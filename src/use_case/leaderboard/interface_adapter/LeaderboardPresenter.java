@@ -1,7 +1,7 @@
-package interface_adapter.leaderboard;
+package use_case.leaderboard.interface_adapter;
 
-import interface_adapter.Menu.MenuViewModel;
-import interface_adapter.ViewManagerModel;
+import use_case.menu.interface_adapter.MenuViewModel;
+import view.ViewManagerModel;
 import use_case.leaderboard.LeaderboardOutputBoundary;
 import use_case.leaderboard.LeaderboardOutputData;
 

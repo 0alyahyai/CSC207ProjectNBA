@@ -1,9 +1,10 @@
-package view;
+package use_case.signup.view;
 
 
-import interface_adapter.signup.SignupController;
-import interface_adapter.signup.SignupState;
-import interface_adapter.signup.SignupViewModel;
+import use_case.signup.interface_adapter.SignupController;
+import use_case.signup.interface_adapter.SignupState;
+import use_case.signup.interface_adapter.SignupViewModel;
+import view.LabelTextPanel;
 
 import javax.swing.*;
 import java.awt.*;
