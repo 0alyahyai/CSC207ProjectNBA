@@ -44,18 +44,15 @@ class CommonUser implements User {
     }
 
     //The following methods were added just so that Main runs. Revisit this later and remove if necessary.
-    @Override
-    public String getName() {
-        return null;
-    }
 
-    @Override
-    public String getCreationTIme() {
-        return null;
-    }
-
-    @Override
-    public String getCreationTime() {
-        return "string";
-    }
+//    @Override
+//    public String getCreationTIme() {
+//        return null;
+//    }
+//
+//
+//    @Override
+//    public String getCreationTime() {
+//        return "string";
+//    }
 }
