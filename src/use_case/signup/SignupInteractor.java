@@ -4,6 +4,7 @@ import entity.User;
 import entity.UserFactory;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 //This is the SignupInteractor Class. It depends on the SignupUserDataAccessInterface, and implements
 //the SignupInputBoundary interface. It also depends on the SignupOutputBoundary interface, as well as the
@@ -52,9 +53,10 @@ public class SignupInteractor implements SignupInputBoundary {
             userPresenter.prepareFailView("Passwords don't match.");
         } else {
             //For now I have just set userID to 1 when generating a new user.
-            //ToDo: Create userid generating function
+            //ToDo: Create userid generating function (done)
+            String userid = UUID.randomUUID().toString();
 
-            User user = userFactory.create("placeholder", signupInputData.getUsername(), signupInputData.getPassword());
+            User user = userFactory.create(userid, signupInputData.getUsername(), signupInputData.getPassword());
             userDataAccessObject.save(user);
 
             //I have replaced CreationTime with standard string "string" for now.

@@ -31,9 +31,13 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
 
     private final JButton Leaderboard;
     private final JButton signUp;
-    private final JButton cancel;
+
+    //unused
+//    private final JButton cancel;
 
     private final JButton logIn;
+
+    //unused
 //    private final JButton clear;
 
 
@@ -55,8 +59,8 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         buttons.add(signUp);
         logIn = new JButton(LoginViewModel.LOGIN_BUTTON_LABEL);
         buttons.add(logIn);
-        cancel = new JButton(SignupViewModel.CANCEL_BUTTON_LABEL);
-        buttons.add(cancel);
+//        cancel = new JButton(SignupViewModel.CANCEL_BUTTON_LABEL);
+//        buttons.add(cancel);
 
         //Current methodology is to create an actionlistener for each button, and pass in the name of the button
         //to the menuController.execute function. Could we do this more efficiently, by using some property of the button?
@@ -98,7 +102,10 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         );
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        cancel.addActionListener(this);
+
+
+//        cancel.addActionListener(this);
+
         add(title);
         add(buttons);
     }
