@@ -78,6 +78,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         add(title);
         add(leaderboard);
         add(buttons);
+        leaderboardController.load();
     }
 
     private void clearJOptionPane(String message) {
