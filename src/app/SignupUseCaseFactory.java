@@ -2,19 +2,16 @@ package app;
 
 import entity.CommonUserFactory;
 import entity.UserFactory;
-import interface_adapter.ViewManagerModel;
-import interface_adapter.clear_users.ClearController;
-import interface_adapter.clear_users.ClearViewModel;
-import interface_adapter.login.LoginViewModel;
-import interface_adapter.signup.SignupController;
-import interface_adapter.signup.SignupPresenter;
-import interface_adapter.signup.SignupViewModel;
-import use_case.clear_users.ClearUserDataAccessInterface;
+import view.ViewManagerModel;
+import use_case.login.interface_adapter.LoginViewModel;
+import use_case.signup.interface_adapter.SignupController;
+import use_case.signup.interface_adapter.SignupPresenter;
+import use_case.signup.interface_adapter.SignupViewModel;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
 import use_case.signup.SignupUserDataAccessInterface;
-import view.SignupView;
+import use_case.signup.view.SignupView;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -25,14 +22,12 @@ public class SignupUseCaseFactory {
     private SignupUseCaseFactory() {}
 
     public static SignupView create(
-            ViewManagerModel viewManagerModel, LoginViewModel loginViewModel, SignupViewModel signupViewModel, ClearViewModel clearViewModel,
+            ViewManagerModel viewManagerModel, LoginViewModel loginViewModel, SignupViewModel signupViewModel,
             SignupUserDataAccessInterface userDataAccessObject) {
 
         try {
             SignupController signupController = createUserSignupUseCase(viewManagerModel, signupViewModel, loginViewModel, userDataAccessObject);
-            ClearController clearController = ClearUseCaseFactory.createClearUseCase(viewManagerModel, clearViewModel,
-                    (ClearUserDataAccessInterface) userDataAccessObject);
-            return new SignupView(signupController, signupViewModel, clearController, clearViewModel);
+            return new SignupView(signupController, signupViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }

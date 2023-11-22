@@ -6,5 +6,5 @@ import java.time.LocalDateTime;
 //as parameters, and returns a User. It depends on the User class (entity).
 public interface UserFactory {
     /** Requires: password is valid. */
-    User create(int userID, String userName, String userPassword);
+    User create(String userID, String userName, String userPassword);
 }

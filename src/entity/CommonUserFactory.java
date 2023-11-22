@@ -11,7 +11,7 @@ public class CommonUserFactory implements UserFactory {
      */
 
     @Override
-    public User create(int userID, String userName, String userPassword) {
+    public User create(String userID, String userName, String userPassword) {
         return new CommonUser(userID, userName, userPassword);
     }
 }
