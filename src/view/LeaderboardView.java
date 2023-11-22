@@ -1,11 +1,8 @@
 package view;
 
-import interface_adapter.Menu.MenuViewModel;
 import interface_adapter.leaderboard.LeaderboardController;
 import interface_adapter.leaderboard.LeaderboardState;
 import interface_adapter.leaderboard.LeaderboardViewModel;
-import interface_adapter.signup.SignupState;
-import interface_adapter.signup.SignupViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,20 +47,6 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         back = new JButton(LeaderboardViewModel.BACK_BUTTON_LABEL);
         buttons.add(back);
 
-        //Current methodology is to create an actionlistener for each button, and pass in the name of the button
-        //to the menuController.execute function. Could we do this more efficiently, by using some property of the button?
-        //Or is this the best way to do it?
-
-//        Leaderboard.addActionListener(
-//                // This creates an anonymous subclass of ActionListener and instantiates it.
-//                new ActionListener() {
-//                    public void actionPerformed(ActionEvent evt) {
-//                        if (evt.getSource().equals(signUp)) {
-//                            menuController.execute("leaderboard");
-//                        }
-//                    }
-//                }
-//        );
 
         back.addActionListener(
                 // We might need to edit this method to take into account if user is loggen in or not
@@ -120,6 +103,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
             //Note that the place and score values are dummy values. These will be replaced
             //formulaically when we have determined how to set places/scores.
 
+            //ToDo: Replace user label with button, so that signed-in users can click them and directly compare teams.
             int i = 1;
             int score = 1000;
             for (String user : state.getLeaderboard()) {
