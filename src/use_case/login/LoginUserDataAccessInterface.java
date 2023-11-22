@@ -12,4 +12,6 @@ public interface LoginUserDataAccessInterface {
     void save(User user);
 
     User get(String username);
+
+    void setActiveUser(User user);
 }

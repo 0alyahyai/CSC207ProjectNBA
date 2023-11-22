@@ -7,5 +7,7 @@ public interface MenuOutputBoundary {
 
     void prepareLeaderboardView();
 
+    void prepareLoginView();
+
     void prepareFailView(String error);
 }

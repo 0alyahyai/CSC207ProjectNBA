@@ -24,6 +24,8 @@ public class MenuInteractor implements MenuInputBoundary{
             menuPresenter.prepareSignupView();
         } else if (data.equals("leaderboard")) {
             menuPresenter.prepareLeaderboardView();
+        } else if (data.equals("logIn")) {
+            menuPresenter.prepareLoginView();
         } else {
             menuPresenter.prepareFailView("Invalid input.");
         }

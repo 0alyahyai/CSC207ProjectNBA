@@ -46,6 +46,8 @@ public class SignupInteractor implements SignupInputBoundary {
     public void execute(SignupInputData signupInputData) {
         if (userDataAccessObject.existsByName(signupInputData.getUsername())) {
             userPresenter.prepareFailView("User already exists.");
+        } else if (signupInputData.getUsername().equals("") || signupInputData.getPassword().equals("")) {
+            userPresenter.prepareFailView("Username or password cannot be empty.");
         } else if (!signupInputData.getPassword().equals(signupInputData.getRepeatPassword())) {
             userPresenter.prepareFailView("Passwords don't match.");
         } else {
@@ -56,7 +58,7 @@ public class SignupInteractor implements SignupInputBoundary {
             userDataAccessObject.save(user);
 
             //I have replaced CreationTime with standard string "string" for now.
-            SignupOutputData signupOutputData = new SignupOutputData(user.getName(), "string", false);
+            SignupOutputData signupOutputData = new SignupOutputData(user.getUserName(), "string", false);
             userPresenter.prepareSuccessView(signupOutputData);
         }
     }
