@@ -52,6 +52,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         JLabel title = new JLabel(MenuViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+
         JPanel buttons = new JPanel(new GridLayout(0, 1, 10, 10));
         Leaderboard = new JButton(LeaderboardViewModel.LEADERBOARD_BUTTON_LABEL);
         buttons.add(Leaderboard);
@@ -59,6 +60,8 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
         buttons.add(signUp);
         logIn = new JButton(LoginViewModel.LOGIN_BUTTON_LABEL);
         buttons.add(logIn);
+
+        //unused
 //        cancel = new JButton(SignupViewModel.CANCEL_BUTTON_LABEL);
 //        buttons.add(cancel);
 

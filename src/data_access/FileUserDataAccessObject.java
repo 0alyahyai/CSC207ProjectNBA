@@ -6,6 +6,7 @@ import use_case.leaderboard.LeaderboardDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.menu.MenuUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
+import use_case.view_team.ViewTeamUserDataAccessInterface;
 
 import java.io.*;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FileUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface,
-        LeaderboardDataAccessInterface, MenuUserDataAccessInterface {
+        LeaderboardDataAccessInterface, MenuUserDataAccessInterface, ViewTeamUserDataAccessInterface {
 
     private final File csvFile;
 
