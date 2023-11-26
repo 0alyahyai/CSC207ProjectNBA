@@ -19,4 +19,8 @@ class CommonPlayer implements Player {
     public int getPlayerID() {
         return playerID;
     }
+
+    public String toString() {
+        return playerName;
+    }
 }

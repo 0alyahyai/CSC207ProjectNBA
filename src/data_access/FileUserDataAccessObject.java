@@ -1,19 +1,23 @@
 package data_access;
 
-import entity.User;
-import entity.UserFactory;
+import entity.*;
 import use_case.leaderboard.LeaderboardDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
+import use_case.make_team.MakeTeamDAI;
 import use_case.menu.MenuUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
-public class FileUserDataAccessObject implements SignupUserDataAccessInterface, LoginUserDataAccessInterface,
-        LeaderboardDataAccessInterface, MenuUserDataAccessInterface {
+public class FileUserDataAccessObject implements
+        SignupUserDataAccessInterface, LoginUserDataAccessInterface,
+        LeaderboardDataAccessInterface, MenuUserDataAccessInterface,
+        MakeTeamDAI
+    {
 
     private final File csvFile;
 
@@ -30,6 +34,7 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
         headers.put("username", 0);
         headers.put("password", 1);
         headers.put("user_id", 2);
+        headers.put("team", 3);
         System.out.println(csvFile.length());
 
         if (csvFile.length() == 0) {
@@ -74,8 +79,19 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
             writer.newLine();
 
             for (User user : accounts.values()) {
-                String line = String.format("%s,%s,%s",
-                        user.getUserName(), user.getUserPassword(), user.getUserID());
+                String teamString;
+                if (!user.hasTeam()) {
+                    teamString = "";
+                }
+                else {
+                    teamString = userTeamToString(user);
+                }
+                String line = String.format("%s,%s,%s,%s",
+                        user.getUserName(),
+                        user.getUserPassword(),
+                        user.getUserID(),
+                        teamString
+                        );
                 writer.write(line);
                 writer.newLine();
             }
@@ -110,4 +126,41 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface, 
         }
         return usersWithTeam;
     }
-}
+
+        @Override
+        public boolean saveTeam(User user, Team team) {
+//            List<Player> players = team.getTeamPlayers();
+//            String newTeam = String.format("[%s;%s;%s;%s;%s;%s]",
+//                    team.getTeamName(), players.get(0), players.get(1), players.get(2), players.get(3), players.get(4));
+//            System.out.println(newTeam);
+            user.setTeam(team);
+            this.save();
+            return true;
+        }
+
+        public static void main(String[] args) throws IOException {
+            UserFactory uf = new CommonUserFactory();
+            FileUserDataAccessObject dao = new FileUserDataAccessObject("./users.csv",
+                    uf);
+
+            User user = uf.create("32", "Bob", "mar420");
+            dao.save(user);
+
+            TeamFactory tf = new CommonTeamFactory();
+            dao.saveTeam(user, tf.createMockTeam());
+        }
+
+
+        public static String userTeamToString(User user) {
+            List<Player> players = user.getUserTeam().getTeamPlayers();
+            String newTeamString = String.format("[%s;%s;%s;%s;%s;%s]",
+                    user.getUserTeam().getTeamName(),
+                    players.get(0).getPlayerID(),
+                    players.get(1).getPlayerID(),
+                    players.get(2).getPlayerID(),
+                    players.get(3).getPlayerID(),
+                    players.get(4).getPlayerID());
+            return newTeamString;
+        }
+
+    }

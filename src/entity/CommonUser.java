@@ -58,4 +58,9 @@ class CommonUser implements User {
     public String getCreationTime() {
         return "string";
     }
+
+    @Override
+    public boolean hasTeam() {
+        return (userTeam != null);
+    }
 }

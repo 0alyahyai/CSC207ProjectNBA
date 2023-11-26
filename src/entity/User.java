@@ -18,4 +18,6 @@ public interface User {
     String getName();
 
     String getCreationTime();
+
+    boolean hasTeam();
 }
