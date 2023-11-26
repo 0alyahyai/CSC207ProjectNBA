@@ -25,6 +25,8 @@ public class FileUserDataAccessObject implements
 
     private final Map<String, User> accounts = new HashMap<>();
 
+    private User activeUser;
+
     private UserFactory userFactory;
 
     public FileUserDataAccessObject(String csvPath, UserFactory userFactory) throws IOException {
@@ -114,6 +116,23 @@ public class FileUserDataAccessObject implements
         return accounts.containsKey(identifier);
     }
 
+
+    /**
+     * Return the active user.
+     * @return the active user
+     */
+    public User getActiveUser() {
+        return activeUser;
+    }
+
+    /**
+     * Set the active user.
+     * @param user the user to set as active
+     */
+    @Override
+    public void setActiveUser(User user) {
+        activeUser = user;
+    }
 
     //ToDo: The following method is not implemented properly. It must be completed later, it is a stand-in for now, as we have not yet implemented teams.
     @Override

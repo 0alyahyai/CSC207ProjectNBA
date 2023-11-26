@@ -1,10 +1,12 @@
 package use_case.signup.view;
 
 
+import use_case.login.interface_adapter.LoginState;
 import use_case.signup.interface_adapter.SignupController;
 import use_case.signup.interface_adapter.SignupState;
 import use_case.signup.interface_adapter.SignupViewModel;
 import view.LabelTextPanel;
+import view.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,13 +26,16 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final JPasswordField repeatPasswordInputField = new JPasswordField(15);
     private final SignupController signupController;
 
+    private final ViewManagerModel viewManagerModel;
+
 
     private final JButton signUp;
     private final JButton cancel;
 
-    public SignupView(SignupController controller, SignupViewModel signupViewModel) {
+    public SignupView(SignupController controller, SignupViewModel signupViewModel, ViewManagerModel viewManagerModel) {
         this.signupController = controller;
         this.signupViewModel = signupViewModel;
+        this.viewManagerModel = viewManagerModel;
         signupViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(SignupViewModel.TITLE_LABEL);
@@ -56,6 +61,15 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(signUp)) {
                             SignupState currentState = signupViewModel.getState();
+                            usernameInputField.setText(""); // Clear the input field.
+                            passwordInputField.setText("");
+                            repeatPasswordInputField.setText("");
+
+                            //Clearing the input fields above is done so that the fields are empty if a user logs out.
+                            //If the fields are not cleared, then the fields will still contain the username and password.
+                            //TODO: Currently this has the unintended side effect of clearing the fields if the user
+                            // enters an invalid username or password. This is not ideal, but it is not a high priority.
+                            // might be fixed but needs to be looked into. Has to do with setfields method.
 
                             signupController.execute(
                                     currentState.getUsername(),
@@ -68,17 +82,42 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         );
 
 
-
-        cancel.addActionListener(this);
+        // Returns to menu view upon cancel button press.
+        cancel.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(cancel)) {
+                            SignupState currentState = signupViewModel.getState();
+                            currentState.setUsername("");
+                            currentState.setPassword("");
+                            currentState.setRepeatPassword("");
+                            usernameInputField.setText("");
+                            passwordInputField.setText("");
+                            repeatPasswordInputField.setText("");
+                            signupViewModel.setState(currentState);
+                            viewManagerModel.setActiveView("menu");
+                            viewManagerModel.firePropertyChanged();
+                        }
+                    }
+                }
+        );
 
         // This makes a new KeyListener implementing class, instantiates it, and
         // makes it listen to keystrokes in the usernameInputField.
         //
         // Notice how it has access to instance variables in the enclosing class!
+
+        // Note that this prevents the user from entering an enter key in the username field.
         usernameInputField.addKeyListener(
                 new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
+                        if (e.getKeyChar() == '\n') {
+                            JDialog dialog = new JDialog();
+                            dialog.setAlwaysOnTop(true);
+                            JOptionPane.showMessageDialog(dialog, "Enter key not allowed in username field.");
+                        }
+
                         SignupState currentState = signupViewModel.getState();
                         String text = usernameInputField.getText() + e.getKeyChar();
                         currentState.setUsername(text);
@@ -162,5 +201,15 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         if (state.getUsernameError() != null) {
             JOptionPane.showMessageDialog(this, state.getUsernameError());
         }
+        state.setUsernameError(null);
+        signupViewModel.setState(state);
+        setFields(state);
+    }
+
+    private void setFields(SignupState state) {
+
+        usernameInputField.setText(state.getUsername());
+        passwordInputField.setText(state.getPassword());
+        repeatPasswordInputField.setText(state.getRepeatPassword());
     }
 }
