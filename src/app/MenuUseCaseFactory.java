@@ -1,9 +1,13 @@
 package app;
 
 
+import use_case.login.LoginUserDataAccessInterface;
+import use_case.login.interface_adapter.LoginController;
+import use_case.login.interface_adapter.LoginViewModel;
 import use_case.menu.interface_adapter.MenuController;
 import use_case.menu.interface_adapter.MenuPresenter;
 import use_case.menu.interface_adapter.MenuViewModel;
+import view.LoggedInViewModel;
 import view.ViewManagerModel;
 import use_case.leaderboard.interface_adapter.LeaderboardController;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
@@ -24,10 +28,15 @@ public class MenuUseCaseFactory {
     private MenuUseCaseFactory() {}
 
     public static MenuView create(MenuViewModel menuViewModel, ViewManagerModel viewManagerModel,
-            SignupViewModel signupViewModel, LeaderboardViewModel leaderboardViewModel, MenuUserDataAccessInterface userDataAccessObject) throws IOException {
-            LeaderboardController leaderboardController = LeaderboardUseCaseFactory.createLeaderboardUseCase(viewManagerModel, leaderboardViewModel, menuViewModel, (LeaderboardDataAccessInterface) userDataAccessObject);
+                                  SignupViewModel signupViewModel, LeaderboardViewModel leaderboardViewModel,
+                                  LoginViewModel loginViewModel,  MenuUserDataAccessInterface userDataAccessObject)
+            throws IOException {
+        LeaderboardController leaderboardController = LeaderboardUseCaseFactory.createLeaderboardUseCase(viewManagerModel,
+                leaderboardViewModel, menuViewModel, (LeaderboardDataAccessInterface) userDataAccessObject);
+
         try {
-            MenuController menuController = createMenuUseCase(viewManagerModel, signupViewModel, leaderboardViewModel);
+            MenuController menuController = createMenuUseCase(viewManagerModel, signupViewModel, leaderboardViewModel,
+                    loginViewModel);
 
             return new MenuView(menuViewModel, menuController, leaderboardController);
         } catch (IOException e) {
@@ -38,10 +47,12 @@ public class MenuUseCaseFactory {
     }
 
     private static MenuController createMenuUseCase(ViewManagerModel viewManagerModel, SignupViewModel signupViewModel,
-                                                    LeaderboardViewModel leaderboardViewModel) throws IOException {
+                                                    LeaderboardViewModel leaderboardViewModel,
+                                                    LoginViewModel loginViewModel) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
-        MenuOutputBoundary menuOutputBoundary = new MenuPresenter(viewManagerModel, signupViewModel, leaderboardViewModel);
+        MenuOutputBoundary menuOutputBoundary = new MenuPresenter(viewManagerModel, signupViewModel, leaderboardViewModel,
+                loginViewModel);
 
         MenuInputBoundary menuInteractor = new MenuInteractor(menuOutputBoundary);
 

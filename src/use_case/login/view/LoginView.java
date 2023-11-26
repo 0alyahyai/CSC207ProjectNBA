@@ -4,6 +4,7 @@ import use_case.login.interface_adapter.LoginController;
 import use_case.login.interface_adapter.LoginState;
 import use_case.login.interface_adapter.LoginViewModel;
 import view.LabelTextPanel;
+import view.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +19,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
 
     public final String viewName = "log in";
     private final LoginViewModel loginViewModel;
+    private final ViewManagerModel viewManagerModel;
 
     final JTextField usernameInputField = new JTextField(15);
     private final JLabel usernameErrorField = new JLabel();
@@ -29,11 +31,13 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     final JButton cancel;
     private final LoginController loginController;
 
-    public LoginView(LoginViewModel loginViewModel, LoginController controller) {
+    public LoginView(LoginViewModel loginViewModel, LoginController controller, ViewManagerModel viewManagerModel) {
 
         this.loginController = controller;
         this.loginViewModel = loginViewModel;
         this.loginViewModel.addPropertyChangeListener(this);
+        this.viewManagerModel = viewManagerModel;
+
 
         JLabel title = new JLabel("Login Screen");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -55,6 +59,14 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                         if (evt.getSource().equals(logIn)) {
                             LoginState currentState = loginViewModel.getState();
 
+                            usernameInputField.setText(""); //clear the username and password fields after logging in.
+                            passwordInputField.setText("");
+
+                            //Clearing the input fields above is done so that the fields are empty if a user logs out.
+                            //If the fields are not cleared, then the fields will still contain the username and password.
+                            //TODO: Currently this has the unintended side effect of clearing the fields if the user
+                            // enters an invalid username or password. This is not ideal, but it is not a high priority.
+
                             loginController.execute(
                                     currentState.getUsername(),
                                     currentState.getPassword()
@@ -63,8 +75,26 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                     }
                 }
         );
+        // Switch to the menu view if the cancel button is pressed.
+        cancel.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getSource().equals(cancel)) {
+                            //bug fix required: clear the username and password fields when returning to menu
+                            LoginState currentState = loginViewModel.getState(); //get the current state
+                            currentState.setUsername("");
+                            currentState.setPassword("");
+                            usernameInputField.setText(""); //clear the username and password fields
+                            passwordInputField.setText("");
+                            loginViewModel.setState(currentState);
+                            viewManagerModel.setActiveView("menu");
+                            viewManagerModel.firePropertyChanged();
 
-        cancel.addActionListener(this);
+                        }
+                    }
+                }
+        );
 
         usernameInputField.addKeyListener(new KeyListener() {
             @Override
@@ -120,11 +150,19 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         LoginState state = (LoginState) evt.getNewValue();
+        // If there is an error, display it. Here, usernameError is a bit misleading, as it can be an error for
+        // either the username or the password.
+        if (state.getUsernameError() != null) {
+            JOptionPane.showMessageDialog(this, state.getUsernameError());
+        }
+        state.setUsernameError(null);
+        loginViewModel.setState(state);
         setFields(state);
     }
 
     private void setFields(LoginState state) {
-        usernameInputField.setText(state.getUsername());
+
+        usernameInputField.setText(state.getUsername());;
     }
 
 }
