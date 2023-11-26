@@ -7,4 +7,5 @@ import java.util.Map;
 public interface APIinterface {
 
     Stats getStats();
+
 }
