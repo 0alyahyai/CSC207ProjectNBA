@@ -7,4 +7,9 @@ public interface Player {
     int getPlayerID();
 
     String toString();
+
+    // Implementing classes must override this
+    boolean equals(Object o);
+
+
 }

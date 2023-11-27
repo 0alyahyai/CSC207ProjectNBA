@@ -15,4 +15,6 @@ public interface MakeTeamDAI {
      * @return whether the team was successfully saved
      */
     boolean saveTeam(User user, Team team);
+
+    Team getTeamOfUser(String userID);
 }

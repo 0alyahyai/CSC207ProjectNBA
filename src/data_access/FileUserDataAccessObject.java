@@ -8,10 +8,7 @@ import use_case.menu.MenuUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FileUserDataAccessObject implements
         SignupUserDataAccessInterface, LoginUserDataAccessInterface,
@@ -29,10 +26,17 @@ public class FileUserDataAccessObject implements
 
     private UserFactory userFactory;
 
-    public FileUserDataAccessObject(String csvPath, UserFactory userFactory) throws IOException {
+    private TeamFactory teamFactory = new CommonTeamFactory();
+
+    private final APIinterface apiDAO;
+
+    public FileUserDataAccessObject(
+            String csvPath,
+            UserFactory userFactory, APIinterface apiDAO) throws IOException {
         this.userFactory = userFactory;
 
         csvFile = new File(csvPath);
+        this.apiDAO = apiDAO;
         headers.put("username", 0);
         headers.put("password", 1);
         headers.put("user_id", 2);
@@ -47,7 +51,7 @@ public class FileUserDataAccessObject implements
                 String header = reader.readLine();
 
                 // For later: clean this up by creating a new Exception subclass and handling it in the UI.
-                assert header.equals("username,password,user_id");
+                assert header.equals("username,password,user_id,team");
 
                 String row;
                 while ((row = reader.readLine()) != null) {
@@ -55,8 +59,17 @@ public class FileUserDataAccessObject implements
                     String username = String.valueOf(col[headers.get("username")]);
                     String password = String.valueOf(col[headers.get("password")]);
                     String userid = String.valueOf((col[headers.get("user_id")]));
+
+                    System.out.println(col.length);
+
+
+                    String userTeamString = String.valueOf((col[headers.get("team")]));
+                    Team team = teamStringToTeam(userTeamString);
+
                     User user = userFactory.create(userid, username, password);
+                    user.setTeam(team);
                     accounts.put(username, user);
+
                 }
             }
         }
@@ -83,7 +96,7 @@ public class FileUserDataAccessObject implements
             for (User user : accounts.values()) {
                 String teamString;
                 if (!user.hasTeam()) {
-                    teamString = "";
+                    teamString = "NA";
                 }
                 else {
                     teamString = userTeamToString(user);
@@ -157,10 +170,16 @@ public class FileUserDataAccessObject implements
             return true;
         }
 
+        @Override
+        public Team getTeamOfUser(String userName) {
+            User user = accounts.get(userName);
+            return user.getUserTeam();
+        }
+
         public static void main(String[] args) throws IOException {
             UserFactory uf = new CommonUserFactory();
             FileUserDataAccessObject dao = new FileUserDataAccessObject("./users.csv",
-                    uf);
+                    uf, new MockAPIDAO());
 
             User user = uf.create("32", "Bob", "mar420");
             dao.save(user);
@@ -181,5 +200,51 @@ public class FileUserDataAccessObject implements
                     players.get(4).getPlayerID());
             return newTeamString;
         }
+
+
+
+        public Team teamStringToTeam(String teamString) {
+            if (teamString.equals("NA")) {
+                return null;
+            }
+            PlayerFactory playerFactory = new CommonPlayerFactory();
+            teamString = teamString.substring(1, teamString.length() -1); // removing square brackets
+            String[] parts = teamString.split(";");
+            String teamName = parts[0];
+
+            int[] teamPlayerIds = new int[5];
+            teamPlayerIds[0] = Integer.parseInt(parts[1]);
+            teamPlayerIds[1] = Integer.parseInt(parts[2]);
+            teamPlayerIds[2] = Integer.parseInt(parts[3]);
+            teamPlayerIds[3] = Integer.parseInt(parts[4]);
+            teamPlayerIds[4] = Integer.parseInt(parts[5]);
+
+            Player p1 = playerFactory.create(
+                    apiDAO.getNameOfPlayer(teamPlayerIds[0]), teamPlayerIds[0]);
+            Player p2 = playerFactory.create(
+                    apiDAO.getNameOfPlayer(teamPlayerIds[1]), teamPlayerIds[1]);
+            Player p3 = playerFactory.create(
+                    apiDAO.getNameOfPlayer(teamPlayerIds[2]), teamPlayerIds[2]);
+            Player p4 = playerFactory.create(
+                    apiDAO.getNameOfPlayer(teamPlayerIds[3]), teamPlayerIds[3]);
+            Player p5 = playerFactory.create(
+                    apiDAO.getNameOfPlayer(teamPlayerIds[4]), teamPlayerIds[4]);
+
+            List<Player> players = new ArrayList<>();
+            players.add(p1);
+            players.add(p2);
+            players.add(p3);
+            players.add(p4);
+            players.add(p5);
+
+            Team team = teamFactory.createTeam(teamName, players);
+
+            return team;
+
+        }
+
+
+
+
 
     }

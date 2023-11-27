@@ -13,6 +13,14 @@ public class SaveTeamOutputData {
     }
 
     String getSuccessMessage() {
-        return "User " + user.getName() + " has successfully create team " + team.getTeamName();
+        return "User " + user.getUserName() + " has successfully create team " + team.getTeamName();
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Team getTeam() {
+        return team;
     }
 }

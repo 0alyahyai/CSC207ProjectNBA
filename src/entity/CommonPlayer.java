@@ -23,4 +23,23 @@ class CommonPlayer implements Player {
     public String toString() {
         return playerName;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        // self check
+        if (this == o)
+            return true;
+        // null check
+        if (o == null)
+            return false;
+        // type check and cast
+        if (getClass() != o.getClass())
+            return false;
+        Player player = (CommonPlayer) o;
+        // field comparison
+        boolean idMatch = (playerID == player.getPlayerID());
+        boolean nameMatch = playerName.equals(player.getPlayerName());
+
+        return idMatch && nameMatch;
+    }
 }
