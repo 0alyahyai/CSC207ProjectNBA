@@ -13,6 +13,11 @@ public class APIDataAccessObject implements APIinterface {
         return null;
     }
 
+    @Override
+    public String getNameOfPlayer(int id) {
+        return null;
+    }
+
     //TODO: properly implement this method
     // currently returns a string array of length 7
     @Override

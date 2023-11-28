@@ -15,10 +15,6 @@ public interface User {
 
     //Added the following methods just to that Main runs., revisit this later and remove if necessary.
 
-    //Method commented out because it is not used because of getUserName() method.
+    boolean hasTeam();
 
-//    String getName();
-
-    //Method deemed unnecessary.
-//    String getCreationTime();
 }

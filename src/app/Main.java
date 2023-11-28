@@ -1,6 +1,8 @@
 package app;
 
+import data_access.APIinterface;
 import data_access.FileUserDataAccessObject;
+import data_access.MockAPIDAO;
 import entity.CommonUserFactory;
 import use_case.leaderboard.view.LeaderboardView;
 import use_case.login.view.LoginView;
@@ -58,11 +60,14 @@ public class Main {
         SignupViewModel signupViewModel = new SignupViewModel();
         ViewTeamViewModel viewTeamViewModel = new ViewTeamViewModel();
 
+        APIinterface apiDAO = new MockAPIDAO();
+
         FileUserDataAccessObject userDataAccessObject;
         try {
             File csvfile = new File("./users.csv");
             assert csvfile.exists();
-            userDataAccessObject = new FileUserDataAccessObject("./users.csv", new CommonUserFactory());
+            userDataAccessObject = new FileUserDataAccessObject("./users.csv", new CommonUserFactory(),
+                    apiDAO);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
