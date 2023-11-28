@@ -3,7 +3,7 @@ package data_access;
 import entity.Player;
 import entity.Stats;
 
-public interface APIInterface {
+public interface APIinterface {
 
     public Stats getStats();
 

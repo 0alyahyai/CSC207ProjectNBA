@@ -3,7 +3,7 @@ package data_access;
 import entity.Player;
 import entity.Stats;
 
-public class APIDataAccessObject implements APIInterface {
+public class APIDataAccessObject implements APIinterface {
 
     public APIDataAccessObject() {
     }

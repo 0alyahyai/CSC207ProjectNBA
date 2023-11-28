@@ -1,11 +1,7 @@
 package use_case.view_team;
 
-import entity.Player;
-import entity.Team;
 import entity.User;
-import data_access.APIInterface;
-
-import java.util.List;
+import data_access.APIinterface;
 
 public class ViewTeamInteractor implements ViewTeamInputBoundary{
 
@@ -13,10 +9,10 @@ public class ViewTeamInteractor implements ViewTeamInputBoundary{
 
     private final ViewTeamUserDataAccessInterface userDataAccessObject;
 
-    private final APIInterface api;
+    private final APIinterface api;
 
     public ViewTeamInteractor(ViewTeamOutputBoundary viewTeamOutputBoundary,
-                              ViewTeamUserDataAccessInterface userDataAccessObject, APIInterface apiDataAccessObject) {
+                              ViewTeamUserDataAccessInterface userDataAccessObject, APIinterface apiDataAccessObject) {
         this.viewTeamOutputBoundary = viewTeamOutputBoundary;
         this.userDataAccessObject = userDataAccessObject;
         this.api = apiDataAccessObject;

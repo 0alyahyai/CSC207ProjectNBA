@@ -1,6 +1,6 @@
 package app;
 
-import data_access.APIInterface;
+import data_access.APIinterface;
 import use_case.view_team.ViewTeamInputBoundary;
 import use_case.view_team.ViewTeamInteractor;
 import use_case.view_team.ViewTeamOutputBoundary;
@@ -19,7 +19,7 @@ public class LoggedInViewFactory {
     public static LoggedInView create(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
                                       ViewTeamViewModel viewTeamViewModel,
                                       ViewTeamUserDataAccessInterface userDataAccessObject,
-                                      APIInterface apiDataAccessObject) {
+                                      APIinterface apiDataAccessObject) {
         ViewTeamController viewTeamController = createViewTeamUseCase(viewManagerModel, viewTeamViewModel,
                 loggedInViewModel, userDataAccessObject, apiDataAccessObject);
 
@@ -30,7 +30,7 @@ public class LoggedInViewFactory {
     //viewTeamController is a dependency of LoggedInView
     private static ViewTeamController createViewTeamUseCase(ViewManagerModel viewManagerModel,
             ViewTeamViewModel viewTeamViewModel, LoggedInViewModel loggedInViewModel,
-            ViewTeamUserDataAccessInterface userDataAccessObject, APIInterface apiDataAccessObject){
+            ViewTeamUserDataAccessInterface userDataAccessObject, APIinterface apiDataAccessObject){
         ViewTeamOutputBoundary viewTeamOutputBoundary = new ViewTeamPresenter(viewTeamViewModel, viewManagerModel,
                 loggedInViewModel);
         ViewTeamInputBoundary viewTeamInteractor = new ViewTeamInteractor(viewTeamOutputBoundary, userDataAccessObject,
