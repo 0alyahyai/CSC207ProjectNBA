@@ -14,4 +14,9 @@ public class CommonUserFactory implements UserFactory {
     public User create(String userID, String userName, String userPassword) {
         return new CommonUser(userID, userName, userPassword);
     }
+
+    @Override
+    public User createMockUser() {
+        return create("some-id", "victor", "rendon7873");
+    }
 }
