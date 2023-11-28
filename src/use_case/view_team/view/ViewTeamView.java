@@ -27,6 +27,8 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
 
     private final DefaultTableModel tableModel;
 
+    private final JScrollPane scrollPane;
+
     public ViewTeamView(ViewTeamViewModel viewTeamViewModel, ViewManagerModel viewManagerModel) {
         this.viewTeamViewModel = viewTeamViewModel;
         this.viewManagerModel = viewManagerModel;
@@ -59,8 +61,8 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
         // TODO: fix bug: scroll pane effecting the size of other components
         // to fix this, we may need to use frames instead of panels.
         JScrollPane scrollPane = new JScrollPane(teamTable);
-        scrollPane.setPreferredSize(new Dimension(500, 200));
-
+        scrollPane.setPreferredSize(new Dimension(200, 200));
+        this.scrollPane = scrollPane;
 
 
         //creates a button to go back to the main menu
@@ -110,6 +112,9 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
                         state.getPlayerNStats(i + 1)[4], state.getPlayerNStats(i + 1)[5],
                         state.getPlayerNStats(i + 1)[6]});
             }
+            scrollPane.setPreferredSize(new Dimension(200, 300));
+            scrollPane.revalidate();
+            scrollPane.repaint();
 
         }
     }

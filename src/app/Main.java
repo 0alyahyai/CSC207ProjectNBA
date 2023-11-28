@@ -31,6 +31,7 @@ public class Main {
         JFrame application = new JFrame("Login Example");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+
         CardLayout cardLayout = new CardLayout();
 
         // ToDo: Changed Menu View to grid so options appear down a column?
@@ -40,7 +41,7 @@ public class Main {
 
         // The various View objects. Only one view is visible at a time.
         JPanel views = new JPanel(cardLayout);
-        application.add(views);
+        application.add(views, BorderLayout.CENTER);
 
         // This keeps track of and manages which view is currently showing.
         ViewManagerModel viewManagerModel = new ViewManagerModel();
