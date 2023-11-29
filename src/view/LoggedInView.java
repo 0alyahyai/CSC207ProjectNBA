@@ -1,5 +1,7 @@
 package view;
 
+import use_case.view_team.interface_adapter.ViewTeamController;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,6 +17,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
     private final ViewManagerModel viewManagerModel;
 
+    private final ViewTeamController viewTeamController;
+
     JLabel username;
 
     final JButton logOut;
@@ -23,12 +27,16 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     final JButton createTeam;
     final JButton compareTeams;
     final JButton getPlayerStats;
+
+    final JButton viewTeam;
     /**
      * A window with a title and a JButton.
      */
-    public LoggedInView(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel) {
+    public LoggedInView(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
+                        ViewTeamController viewTeamController) {
         this.loggedInViewModel = loggedInViewModel;
         this.viewManagerModel = viewManagerModel;
+        this.viewTeamController = viewTeamController;
         this.loggedInViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel("Main Menu");
@@ -43,10 +51,12 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         createTeam = new JButton("Create Team");
         compareTeams = new JButton("Compare Teams");
         getPlayerStats = new JButton("Get Player Stats");
+        viewTeam = new JButton("View Team");
         buttons.add(leaderboard);
         buttons.add(createTeam);
         buttons.add(compareTeams);
         buttons.add(getPlayerStats);
+        buttons.add(viewTeam);
         buttons.add(logOut);
         // Logs out the user when the button is clicked.
         logOut.addActionListener(
@@ -54,6 +64,19 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(logOut)) {
                             viewManagerModel.setActiveView("menu");
+                            viewManagerModel.firePropertyChanged();
+
+                        }
+                    }
+                }
+        );
+
+        viewTeam.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(viewTeam)) {
+                            viewTeamController.execute();
+                            viewManagerModel.setActiveView("view team");
                             viewManagerModel.firePropertyChanged();
 
                         }

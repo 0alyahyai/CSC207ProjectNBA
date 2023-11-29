@@ -6,15 +6,18 @@ import use_case.login.LoginUserDataAccessInterface;
 import use_case.make_team.MakeTeamDAI;
 import use_case.menu.MenuUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
+import use_case.view_team.ViewTeamUserDataAccessInterface;
 
 import java.io.*;
 import java.util.*;
 
+
 public class FileUserDataAccessObject implements
         SignupUserDataAccessInterface, LoginUserDataAccessInterface,
         LeaderboardDataAccessInterface, MenuUserDataAccessInterface,
-        MakeTeamDAI
+        MakeTeamDAI, ViewTeamUserDataAccessInterface
     {
+
 
     private final File csvFile;
 

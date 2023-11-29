@@ -9,12 +9,15 @@ import use_case.login.view.LoginView;
 import use_case.menu.interface_adapter.MenuViewModel;
 import use_case.menu.view.MenuView;
 import use_case.signup.view.SignupView;
+import use_case.view_team.interface_adapter.ViewTeamViewModel;
+import use_case.view_team.view.ViewTeamView;
 import view.ViewManagerModel;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
 import view.LoggedInViewModel;
 import use_case.login.interface_adapter.LoginViewModel;
 import use_case.signup.interface_adapter.SignupViewModel;
 import view.*;
+import data_access.APIDataAccessObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,6 +33,7 @@ public class Main {
         JFrame application = new JFrame("Login Example");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+
         CardLayout cardLayout = new CardLayout();
 
         // ToDo: Changed Menu View to grid so options appear down a column?
@@ -39,7 +43,7 @@ public class Main {
 
         // The various View objects. Only one view is visible at a time.
         JPanel views = new JPanel(cardLayout);
-        application.add(views);
+        application.add(views, BorderLayout.CENTER);
 
         // This keeps track of and manages which view is currently showing.
         ViewManagerModel viewManagerModel = new ViewManagerModel();
@@ -54,6 +58,7 @@ public class Main {
         LoginViewModel loginViewModel = new LoginViewModel();
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
+        ViewTeamViewModel viewTeamViewModel = new ViewTeamViewModel();
 
         APIinterface apiDAO = new MockAPIDAO();
 
@@ -67,6 +72,9 @@ public class Main {
             throw new RuntimeException(e);
         }
 
+        APIDataAccessObject apiDataAccessObject;
+        apiDataAccessObject = new APIDataAccessObject();
+
         SignupView signupView = SignupUseCaseFactory.create(viewManagerModel, loginViewModel, signupViewModel,
                 userDataAccessObject);
         views.add(signupView, signupView.viewName);
@@ -74,7 +82,8 @@ public class Main {
         LoginView loginView = LoginUseCaseFactory.create(viewManagerModel, loginViewModel, loggedInViewModel, userDataAccessObject);
         views.add(loginView, loginView.viewName);
 
-        LoggedInView loggedInView = new LoggedInView(loggedInViewModel, viewManagerModel);
+        LoggedInView loggedInView = LoggedInViewFactory.create(loggedInViewModel, viewManagerModel, viewTeamViewModel,
+                userDataAccessObject, apiDataAccessObject);
         views.add(loggedInView, loggedInView.viewName);
 
         MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel, loginViewModel, userDataAccessObject);
@@ -82,6 +91,10 @@ public class Main {
 
         LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(menuViewModel, viewManagerModel, leaderboardViewModel, userDataAccessObject);
         views.add(leaderboardView, leaderboardView.viewName);
+
+        ViewTeamView viewTeamView = ViewTeamUseCaseFactory.create(viewTeamViewModel, viewManagerModel);
+        views.add(viewTeamView, viewTeamView.viewName);
+
 
         viewManagerModel.setActiveView(menuView.viewName);
         viewManagerModel.firePropertyChanged();
