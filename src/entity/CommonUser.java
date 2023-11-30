@@ -43,16 +43,10 @@ class CommonUser implements User {
         this.userTeam = userTeam;
     }
 
-    //The following methods were added just so that Main runs. Revisit this later and remove if necessary.
 
-//    @Override
-//    public String getCreationTIme() {
-//        return null;
-//    }
-//
-//
-//    @Override
-//    public String getCreationTime() {
-//        return "string";
-//    }
+    @Override
+    public boolean hasTeam() {
+        return (userTeam != null);
+    }
+
 }
