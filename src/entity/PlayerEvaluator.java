@@ -12,5 +12,5 @@ public interface PlayerEvaluator {
      * @param player the player to be evaluated
      * @return a float corresponding to the "evaluation" of the player
      */
-    float evaluatePlayer(Player player);
+    float evaluatePlayer(Player player, Stats statsBoundary);
 }
