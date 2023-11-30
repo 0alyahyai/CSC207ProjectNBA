@@ -61,12 +61,30 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 }
         );
 
+        //Here VARP will code the button for Compare Teams (The add Action Listener). VARP is below
+        compareTeams.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getSource().equals(compareTeams)) {
+                            viewManagerModel.setActiveView("Compare"); //Let's go check the viewManagerModel
+                            viewManagerModel.firePropertyChanged();
+                            compareTeams.setText(viewManagerModel.getActiveView());
+                        }
+
+                    }
+                }
+
+        );
+        //VARP is above
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         this.add(title);
         this.add(usernameInfo);
         this.add(username);
         this.add(buttons);
+
+
     }
 
     /**
@@ -81,4 +99,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         LoggedInState state = (LoggedInState) evt.getNewValue();
         username.setText(state.getUsername());
     }
+
+
+
 }

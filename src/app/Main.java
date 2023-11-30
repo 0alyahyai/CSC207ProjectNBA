@@ -2,6 +2,8 @@ package app;
 
 import data_access.FileUserDataAccessObject;
 import entity.CommonUserFactory;
+import use_case.compareTeam.interface_adapter.CompareViewModel;
+import view.CompareViewOptions;
 import use_case.leaderboard.view.LeaderboardView;
 import use_case.login.view.LoginView;
 import use_case.menu.interface_adapter.MenuViewModel;
@@ -53,6 +55,10 @@ public class Main {
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
 
+        //Here VARP starts coding
+        CompareViewModel compareViewModel = new CompareViewModel();
+        //Here VARP ends coding
+
         FileUserDataAccessObject userDataAccessObject;
         try {
             File csvfile = new File("./users.csv");
@@ -80,6 +86,14 @@ public class Main {
 
         viewManagerModel.setActiveView(menuView.viewName);
         viewManagerModel.firePropertyChanged();
+
+        //Here VARP starts coding
+            CompareViewOptions compareViewOptions = new CompareViewOptions(viewManagerModel);
+            views.add(compareViewOptions, compareViewOptions.viewName);
+
+
+
+        //Here VARP ends coding
 
         application.pack();
         application.setVisible(true);
