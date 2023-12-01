@@ -4,3 +4,4 @@ out/
 users.csv
 NBAproject.iml
 target/
+.DS_Store
