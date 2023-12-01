@@ -8,9 +8,8 @@ import java.util.List;
 
 public interface LeaderboardFileUserDataAccessInterface {
     //The following methods are used to get the data from the database, this is a standin as we have not yet implemented Teams
-    String[] getUserswithTeam();
 
-    List<User> getUserswithTeam2();
+    List<User> getUserswithTeam();
 
     List<Pair<String, Float>> getOrderedNameScores(TeamComparator teamComparator);
 

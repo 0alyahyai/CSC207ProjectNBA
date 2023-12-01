@@ -69,18 +69,8 @@ public class MockDAO implements
     }
 
     //ToDo: The following method is not implemented properly. It must be completed later, it is a stand-in for now, as we have not yet implemented teams.
-    @Override
-    public String[] getUserswithTeam() {
-        String[] usersWithTeam = new String[accounts.size()];
-        int i = 0;
-        for (User user : accounts.values()) {
-            usersWithTeam[i] = user.getUserName();
-            i++;
-        }
-        return usersWithTeam;
-    }
 
-    public List<User> getUserswithTeam2() {
+    public List<User> getUserswithTeam() {
         List<User> usersWithTeam = Collections.emptyList();
         for (User user : accounts.values()) {
             if (user.hasTeam()) {

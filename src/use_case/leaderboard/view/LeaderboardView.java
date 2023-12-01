@@ -78,6 +78,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         add(title);
         add(leaderboard);
         add(buttons);
+        leaderboardController.load();
     }
 
     private void clearJOptionPane(String message) {
@@ -117,17 +118,20 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
             //Note that the place and score values are dummy values. These will be replaced
             //formulaically when we have determined how to set places/scores.
 
-            int i = 1;
-            int score = 1000;
+            int i = 0;
+            Float score = 0.0F;
             for (String user : state.getLeaderboardUsers()) {
-                JLabel place = new JLabel(i + ".");
+                JLabel place = new JLabel((i + 1) + ".");
                 JLabel userName = new JLabel(user);
-                JLabel pts = new JLabel(Integer.toString(score));
+                score = state.getLeaderboardScores()[i];
+
+                JLabel pts = new JLabel(Float.toString(score));
                 Font font1 = new Font("Arial", Font.PLAIN, 16);
                 userName.setFont(font1);
                 leaderboard.add(place);
                 leaderboard.add(userName);
                 leaderboard.add(pts);
+                i++;
             }
             leaderboard.revalidate();
             leaderboard.repaint();

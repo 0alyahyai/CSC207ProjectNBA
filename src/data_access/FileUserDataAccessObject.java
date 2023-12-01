@@ -152,19 +152,9 @@ public class FileUserDataAccessObject implements
     }
 
     //ToDo: The following method is not implemented properly. It must be completed later, it is a stand-in for now, as we have not yet implemented teams.
-    @Override
-    public String[] getUserswithTeam() {
-        String[] usersWithTeam = new String[accounts.size()];
-        int i = 0;
-        for (User user : accounts.values()) {
-            usersWithTeam[i] = user.getUserName();
-            i++;
-        }
-        return usersWithTeam;
-    }
 
-    public List<User> getUserswithTeam2() {
-        List<User> usersWithTeam = Collections.emptyList();
+    public List<User> getUserswithTeam() {
+        List<User> usersWithTeam = new ArrayList<>();
         for (User user : accounts.values()) {
             if (user.hasTeam()) {
                 usersWithTeam.add(user);
@@ -175,7 +165,7 @@ public class FileUserDataAccessObject implements
 
         @Override
         public List<Pair<String, Float>> getOrderedNameScores(TeamComparator teamComparator) {
-            List<User> usersWithTeam = getUserswithTeam2();
+            List<User> usersWithTeam = this.getUserswithTeam();
             List<Pair<String, Float>> nameScores = new ArrayList<>();
 
             for (User user : usersWithTeam) {

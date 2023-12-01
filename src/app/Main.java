@@ -99,7 +99,7 @@ public class Main {
         TeamEvaluator teamEvaluator = new TeamEvaluatorDummy(playerEvaluator);
         TeamComparator teamComparator = new TeamComparatorDummy(teamEvaluator);
 
-        MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel, loginViewModel, userDataAccessObject, teamComparator);
+        MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel, loginViewModel);
         views.add(menuView, menuView.viewName);
 
         LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(menuViewModel, viewManagerModel, leaderboardViewModel, userDataAccessObject, teamComparator);

@@ -21,11 +21,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
 
     public final String viewName = "menu";
 
-//    private final LeaderboardViewModel leaderboardViewModel;
-
     private final MenuViewModel menuViewModel;
-
-    private final LeaderboardController leaderboardController;
 
     private final MenuController menuController;
 
@@ -41,10 +37,8 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
 //    private final JButton clear;
 
 
-    public MenuView(MenuViewModel menuViewModel, MenuController menuController,
-                    LeaderboardController leaderboardController){
-        this.leaderboardController = leaderboardController;
-//        this.leaderboardViewModel = leaderboardViewModel;
+    public MenuView(MenuViewModel menuViewModel, MenuController menuController
+                    ){
         this.menuViewModel = menuViewModel;
         this.menuController = menuController;
         menuViewModel.addPropertyChangeListener(this);
@@ -75,7 +69,7 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(Leaderboard)) {
 //                            leaderboardViewModel
-                            leaderboardController.load();
+//                            leaderboardController.load();
                             menuController.execute("leaderboard");
                         }
                     }
