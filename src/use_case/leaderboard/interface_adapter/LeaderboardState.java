@@ -8,7 +8,6 @@ public class LeaderboardState {
 
     private boolean loggedIn = false;
     private String leaderboardError = null;
-    private Pair<String[], Float[]> leaderboard = null;
 
     private String[] leaderboardUsers = null;
 
@@ -18,7 +17,6 @@ public class LeaderboardState {
 
     public LeaderboardState(LeaderboardState copy) {
         leaderboardError = copy.leaderboardError;
-        leaderboard = copy.leaderboard;
         leaderboardUsers = copy.leaderboardUsers;
         leaderboardScores = copy.leaderboardScores;
         message = copy.message;
@@ -26,9 +24,6 @@ public class LeaderboardState {
 
     public LeaderboardState() {}
 
-    public Pair<String[], Float[]> getLeaderboard() {
-        return leaderboard;
-    }
     public String[] getLeaderboardUsers() {
         return leaderboardUsers;
     }
@@ -37,10 +32,9 @@ public class LeaderboardState {
         return leaderboardScores;
     }
 
-    public void setLeaderboard(Pair<String[], Float[]> leaderboard) {
-        this.leaderboard = leaderboard;
-        this.leaderboardUsers = leaderboard.getLeft();
-        this.leaderboardScores = leaderboard.getRight();
+    public void setLeaderboard(String[] leaderboardUsers, Float[] leaderboardScores) {
+        this.leaderboardUsers = leaderboardUsers;
+        this.leaderboardScores = leaderboardScores;
         this.message = convertArrayToString(this.leaderboardUsers);
     }
     public String getLeaderboardError() {

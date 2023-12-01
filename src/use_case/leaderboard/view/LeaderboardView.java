@@ -30,7 +30,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
         JPanel buttons = new JPanel();
         leaderboard = new JPanel(new GridLayout(0, 3, 10, 10));
-        if (leaderboardViewModel.getState().getLeaderboard() != null) {
+        if (leaderboardViewModel.getState().getLeaderboardUsers() != null) {
             for (String user : leaderboardViewModel.getState().getLeaderboardUsers()) {
                 JLabel userLabel = new JLabel(user);
                 Font font = new Font("Arial", Font.PLAIN, 16);

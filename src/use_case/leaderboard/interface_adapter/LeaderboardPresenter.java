@@ -28,7 +28,7 @@ public class LeaderboardPresenter implements LeaderboardOutputBoundary {
     @Override
     public void loadLeaderboard(LeaderboardOutputData leaderboard) {
         LeaderboardState leaderboardState = leaderboardViewModel.getState();
-        leaderboardState.setLeaderboard(leaderboard.getLeaderboard());
+        leaderboardState.setLeaderboard(leaderboard.getLeaderboardUsers(), leaderboard.getLeaderboardScores());
         leaderboardViewModel.firePropertyChanged();
     }
 }
