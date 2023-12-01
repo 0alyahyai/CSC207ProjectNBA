@@ -9,7 +9,9 @@ public class SearchPlayerController {
 
     public void execute(String writtenPlayerName) {
 
-        searchPlayerInputBoundary.execute();
+        SearchPlayerInputData inputData = new SearchPlayerInputData(writtenPlayerName);
+
+        searchPlayerInputBoundary.execute(inputData);
     }
 
 

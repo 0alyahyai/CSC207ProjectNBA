@@ -1,97 +1,164 @@
 package use_case.make_team.create_team;
 
+import entity.CommonPlayerFactory;
+import entity.Player;
+import use_case.make_team.create_team.addPlayer.AddPlayerController;
+import use_case.make_team.create_team.search_player.SearchPlayerController;
+import use_case.make_team.save_team.interface_adapter.SaveTeamController;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class CreateTeamView extends JFrame {
+public class CreateTeamView extends JPanel implements ActionListener, PropertyChangeListener {
 
-    // Components
-    private JTextField teamNameInput;
-    private JTextField searchPlayersInput;
-    private JTable playerTable;
-    private JButton seeStatsButton;
-    private JButton addPlayerButton;
-    private JButton submitButton;
-    private JLabel[] playerLabels;
+    // Swing-specific instance variables
+    private final JTextField teamNameInput;
+    private final JTextField playerSearchInput;
+    private final JTable playersTable;
+    private Object[][] playersModel = new Object[10][2];
+    private final JButton searchPlayerButton;
+    private final JButton seeStatsButton;
+    private final JButton addPlayerButton;
+    private final JButton submitTeamButton;
+    private final JLabel[] playerLabels;
 
-    public CreateTeamView() {
+
+    // CA instance variables
+    private final SearchPlayerController searchPlayerController;
+    private final AddPlayerController addPlayerController;
+    private final CreateTeamViewModel createTeamViewModel;
+    private final SaveTeamController saveTeamController;
+
+
+    public CreateTeamView(
+            SearchPlayerController searchPlayerController,
+            AddPlayerController addPlayerController,
+            CreateTeamViewModel createTeamViewModel,
+            SaveTeamController saveTeamController) {
+
+        // Assign CA dependencies
+        this.searchPlayerController = searchPlayerController;
+        this.addPlayerController = addPlayerController;
+        this.createTeamViewModel = createTeamViewModel;
+        this.saveTeamController = saveTeamController;
+
+        // Adding 'this' as an observer of createTeamViewModel
+        createTeamViewModel.addPropertyChangeListener(this);
+
         // Initialize components
-        teamNameInput = new JTextField(20);
-        searchPlayersInput = new JTextField(20);
-        seeStatsButton = new JButton("See Stats");
-        addPlayerButton = new JButton("Add Player");
-        submitButton = new JButton("Submit");
-        playerLabels = new JLabel[5];
+        teamNameInput = new JTextField(10);
+        playerSearchInput = new JTextField(10);
+        searchPlayerButton = new JButton(CreateTeamViewModel.SEARCH_BUTTON_LABEL);
+        seeStatsButton = new JButton(CreateTeamViewModel.STATS_BUTTON_LABEL);
+        addPlayerButton = new JButton(CreateTeamViewModel.ADD_PLAYER_BUTTON_LABEL);
+        submitTeamButton = new JButton(CreateTeamViewModel.SUBMIT_BUTTON_LABEL);
+        playersTable = new JTable(new DefaultTableModel(playersModel, new Object[]{"Name", "Sport"}));
+        playerLabels = new JLabel[5]; // Assuming 5 players
 
-        // Set up the table with a scroll pane
-        String[] columns = {"Player", "Info"}; // Example columns
-        DefaultTableModel model = new DefaultTableModel(columns, 0);
-        playerTable = new JTable(model);
-        JScrollPane scrollPane = new JScrollPane(playerTable);
+        // Set up layout and components
+        setupComponents();
+    }
 
-        // Set up the layout
-        setLayout(new BorderLayout());
+    private void setupComponents() {
+        // Adding ActionListener's
+        searchPlayerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                searchPlayerController.execute(playerSearchInput.getText());
+            }
+        });
+        seeStatsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO: SAM!
+            }
+        });
+        addPlayerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = playersTable.getSelectedRow();
+                if (selectedRow >= 0) {
+                    // Note that getValueAt returns an Object, you might need to cast it to the appropriate type
+                    String playerId = (String) playersTable.getValueAt(selectedRow, 0);
+                    String playerName = (String) playersTable.getValueAt(selectedRow, 0);
+                    System.out.println("Player Data: " + playerId + " " + playerName + ".");
 
-        // Top Panel
-        JPanel topPanel = new JPanel();
-        topPanel.add(new JLabel("Team Name:"));
+
+                    addPlayerController.execute(
+                            new CommonPlayerFactory().create(playerName, Integer.parseInt(playerId)),
+                                    createTeamViewModel.getState().getTeamSoFar()
+                    );
+                } else {
+                    System.out.println("No row is selected.");
+                }
+            }
+        });
+        submitTeamButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveTeamController.execute(
+                        null, // TODO: get the user (probably should make the interactor get it automatically)
+                        createTeamViewModel.getState().getTeamName(),
+                        createTeamViewModel.getState().getTeamSoFar()
+                );
+            }
+        });
+
+        // Top panel with team name and player search
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(new JLabel(CreateTeamViewModel.TEAM_NAME_LABEL));
         topPanel.add(teamNameInput);
-        topPanel.add(new JLabel("Search Players:"));
-        topPanel.add(searchPlayersInput);
+        topPanel.add(new JLabel(CreateTeamViewModel.PLAYER_SEARCH_LABEL));
+        topPanel.add(playerSearchInput);
 
-        // Center Panel with the table
-        JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.add(scrollPane, BorderLayout.CENTER);
+        // Center panel with a table for matching players
+        String[] columnNames = {"Player Name", "Position", "Team"}; // Example column names
+        Object[][] data = {}; // Placeholder data
+        JScrollPane scrollPane = new JScrollPane(playersTable);
 
-        // Bottom Panel with buttons and player labels
-        JPanel bottomPanel = new JPanel(new GridLayout(2, 1));
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(seeStatsButton);
-        buttonPanel.add(addPlayerButton);
+        // Right panel with search and player actions
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel.add(searchPlayerButton);
+        rightPanel.add(seeStatsButton);
+        rightPanel.add(addPlayerButton);
 
-        JPanel playerLabelPanel = new JPanel(new GridLayout(1, 5));
+        // Bottom panel with selected players and submit button
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         for (int i = 0; i < playerLabels.length; i++) {
-            playerLabels[i] = new JLabel("P" + (i + 1));
-            playerLabelPanel.add(playerLabels[i]);
+            playerLabels[i] = new JLabel("P" + (i + 1) + "...");
+            bottomPanel.add(playerLabels[i]);
         }
-
-        bottomPanel.add(buttonPanel);
-        bottomPanel.add(playerLabelPanel);
-
-        // Submit button at the bottom
-        JPanel submitPanel = new JPanel();
-        submitPanel.add(submitButton);
+        bottomPanel.add(submitTeamButton);
 
         // Add panels to the frame
-        add(topPanel, BorderLayout.NORTH);
-        add(centerPanel, BorderLayout.CENTER);
-        add(bottomPanel, BorderLayout.SOUTH);
-        add(submitPanel, BorderLayout.SOUTH);
-
-        // Prepare the frame
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
-        setVisible(true);
+        this.add(topPanel, BorderLayout.NORTH);
+        this.add(scrollPane, BorderLayout.CENTER);
+        this.add(rightPanel, BorderLayout.EAST);
+        this.add(bottomPanel, BorderLayout.SOUTH);
     }
 
-    // Methods to add action listeners
-    public void addSeeStatsActionListener(ActionListener listener) {
-        seeStatsButton.addActionListener(listener);
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
     }
 
-    public void addAddPlayerActionListener(ActionListener listener) {
-        addPlayerButton.addActionListener(listener);
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("create-team-state")) {
+            System.out.println("LOG:: Doing something with property change.....");
+            CreateTeamState state = (CreateTeamState) evt.getNewValue();
+            playersTable.removeAll();
+            Object[][] x = {{1,2}, {1,2}, {1,2}, {1,2}, {1,2}, {1,2}, {1,2}, {1,2}, {1,2}, {1,2}};
+            playersTable.setModel(new DefaultTableModel(x, new Object[]{"a", "b"}));
+//            for (Player p : state.getMatchingPlayers()) {
+//
+//            }
+        }
     }
-
-    public void addSubmitActionListener(ActionListener listener) {
-        submitButton.addActionListener(listener);
-    }
-
-    // Main method to start the application
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new CreateTeamView());
-    }
-
 }

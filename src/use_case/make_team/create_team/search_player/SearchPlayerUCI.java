@@ -1,5 +1,6 @@
 package use_case.make_team.create_team.search_player;
 
+import data_access.APIinterface;
 import entity.Player;
 import use_case.make_team.MakeTeamDAI;
 import use_case.make_team.create_team.CreateTeamOutputBoundary;
@@ -7,11 +8,11 @@ import use_case.make_team.create_team.CreateTeamOutputBoundary;
 import java.util.List;
 
 public class SearchPlayerUCI implements SearchPlayerInputBoundary {
-    private final MakeTeamDAI dao;
+    private final APIinterface apiInterface;
     private final CreateTeamOutputBoundary outputBoundary;
 
-    public SearchPlayerUCI(MakeTeamDAI dao, CreateTeamOutputBoundary outputBoundary) {
-        this.dao = dao;
+    public SearchPlayerUCI(APIinterface apiInterface, CreateTeamOutputBoundary outputBoundary) {
+        this.apiInterface = apiInterface;
         this.outputBoundary = outputBoundary;
     }
 
@@ -19,7 +20,8 @@ public class SearchPlayerUCI implements SearchPlayerInputBoundary {
     public void execute(SearchPlayerInputData inputData) {
         String writtenPlayerName = inputData.getWrittenPlayerName();
 
-        List<Player> matchingPlayers = null; // TODO: call api method to find matching players given writtenPlayerName
+        // TODO: call api method (which needs to be implemented) to find matching players given writtenPlayerName
+        List<Player> matchingPlayers = apiInterface.getAllPlayersByName();
 
         SearchPlayerOutputData outputData = new SearchPlayerOutputData(matchingPlayers);
 

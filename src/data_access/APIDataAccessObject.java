@@ -5,7 +5,9 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.io.IOException;
 import com.google.gson.reflect.TypeToken;
+import entity.CommonPlayerFactory;
 import entity.Player;
+import entity.PlayerFactory;
 import entity.Stats;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -115,5 +117,23 @@ public class APIDataAccessObject implements APIinterface {
     @Override
     public String[] viewTeamGetStats(Player player) {
         return new String[]{"1", "2", "3", "4", "5", "6", "07"};
+    }
+
+    @Override
+    public List<Player> getAllPlayersByName() {
+        PlayerFactory pf = new CommonPlayerFactory();
+        Player p1 = pf.createMockPlayer();
+        Player p2 = pf.createMockPlayer();
+        Player p3 = pf.createMockPlayer();
+        Player p4 = pf.createMockPlayer();
+
+        List<Player> list = new ArrayList<>();
+
+        list.add(p1);
+        list.add(p2);
+        list.add(p3);
+        list.add(p4);
+
+        return list;
     }
 }

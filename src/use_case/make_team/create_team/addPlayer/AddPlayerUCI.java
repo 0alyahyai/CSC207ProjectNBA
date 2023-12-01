@@ -18,15 +18,10 @@ public class AddPlayerUCI implements AddPlayerInputBoundary {
         List<Player> currentTeam = inputData.getCurrentTeam();
         Player playerToAdd = inputData.getPlayerToAdd();
 
-        if (currentTeam.size()==5) {
-            addPlayerOutputBoundary.prepareFullTeamFailView();
-        }
-        else {
-            currentTeam.add(playerToAdd);
+        currentTeam.add(playerToAdd);
 
-            AddPlayerOutputData outputData = new AddPlayerOutputData(currentTeam);
-            addPlayerOutputBoundary.updateTeamWithNewPlayer(outputData);
-        }
+        AddPlayerOutputData outputData = new AddPlayerOutputData(currentTeam);
+        addPlayerOutputBoundary.updateTeamWithNewPlayer(outputData);
 
 
     }

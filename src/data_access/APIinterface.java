@@ -3,6 +3,7 @@ package data_access;
 import entity.Player;
 import entity.Stats;
 
+import java.util.List;
 import java.util.Map;
 
 public interface APIinterface  {
@@ -30,5 +31,8 @@ public interface APIinterface  {
 
     //this method may change
     public String[] viewTeamGetStats(Player player);
+
+
+    List<Player> getAllPlayersByName();
 
 }

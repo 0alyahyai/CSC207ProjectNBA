@@ -1,8 +1,12 @@
 package data_access;
 
+import entity.CommonPlayerFactory;
 import entity.Player;
+import entity.PlayerFactory;
 import entity.Stats;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class MockAPIDAO implements APIinterface {
@@ -10,6 +14,24 @@ public class MockAPIDAO implements APIinterface {
     @Override
     public String[] viewTeamGetStats(Player player) {
         return new String[0];
+    }
+
+    @Override
+    public List<Player> getAllPlayersByName() {
+        PlayerFactory pf = new CommonPlayerFactory();
+        Player p1 = pf.createMockPlayer();
+        Player p2 = pf.createMockPlayer();
+        Player p3 = pf.createMockPlayer();
+        Player p4 = pf.createMockPlayer();
+
+        List<Player> list = new ArrayList<>();
+
+        list.add(p1);
+        list.add(p2);
+        list.add(p3);
+        list.add(p4);
+
+        return list;
     }
 
     @Override
