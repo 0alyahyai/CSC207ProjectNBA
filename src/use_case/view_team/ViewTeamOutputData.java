@@ -17,9 +17,6 @@ public class ViewTeamOutputData {
     public ViewTeamOutputData() {
     }
 
-    public ViewTeamOutputData(String failureMessage) {
-
-    }
 
     public void setPlayerNStats(int n, String[] stats) {
         switch (n) {
@@ -40,6 +37,10 @@ public class ViewTeamOutputData {
             case 5 -> player5Stats;
             default -> null;
         };
+    }
+
+    public void setFailureMessage(String failureMessage) {
+        this.failureMessage = failureMessage;
     }
 
     public String getFailureMessage() {

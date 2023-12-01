@@ -71,7 +71,28 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
         ViewTeamState state = viewTeamViewModel.getState();
         //TODO: implment this when we have state fully implemented
         if (state.getViewTeamError() != null) {
-            JOptionPane.showMessageDialog(this, state.getViewTeamError());
+
+            //create an icon safely
+            try {
+                ImageIcon icon = new ImageIcon(new File("").getAbsolutePath()
+                        + "/src/assests/icons/error.png");
+                //resize the icon
+                Image image = icon.getImage();
+                Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);
+                icon = new ImageIcon(newimg);
+
+                JOptionPane.showMessageDialog(null, state.getViewTeamError(),
+                        "Error", JOptionPane.INFORMATION_MESSAGE, icon);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, state.getViewTeamError(),
+                        "Error", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+
+            //reset the error message
+            state.setViewTeamError(null);
+            viewTeamViewModel.setState(state);
+
         }
         else {
             //remove everything from the view
@@ -88,9 +109,6 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
                     "Player Stats",
                     TitledBorder.LEFT,
                     TitledBorder.TOP);
-
-
-
 
 
             //Begins construction of the view
@@ -110,9 +128,6 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
             firstRow.setPreferredSize(new Dimension(400, 100));
 
 
-
-
-
             //add the ascii art to the first row
             //Make font very small
             Font font = new Font("Monospaced", Font.BOLD, 1);
@@ -124,6 +139,7 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
 
                 JLabel asciiLabel = new JLabel(htmlAscii);
                 asciiLabel.setBackground(Color.WHITE);
+                asciiLabel.setForeground(Color.BLACK);
                 //center the ascii art
                 asciiLabel.setHorizontalAlignment(JLabel.CENTER);
                 asciiLabel.setFont(font);
@@ -140,15 +156,17 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
             for (int i = 0; i < 5; i++) {
                 //create the formatted string
                 String playerStats = String.format("""
-                                Team Name: %s
-                                Name: %s
-                                PointsPG : %s
-                                AssistsPG : %s
-                                ReboundsPG: %s
-                                StealsPG: %s
-                                BlocksPG %s
+                                •Team Name: %s
+                                •Name: %s
+                                •PointsPG : %s
+                                •AssistsPG : %s
+                                •ReboundsPG: %s
+                                •StealsPG: %s
+                                •BlocksPG %s
                                 """,
-                        "test test test", "test", "test", "test", "test", "test", "test");
+                        state.getPlayerNStats(i)[0],state.getPlayerNStats(i)[1], state.getPlayerNStats(i)[2],
+                        state.getPlayerNStats(i)[3], state.getPlayerNStats(i)[4], state.getPlayerNStats(i)[5],
+                        state.getPlayerNStats(i)[6]);
                 //create a label with the formatted string in html format
 
                 JTextArea playerStatsTextArea = new JTextArea(playerStats);
@@ -180,6 +198,7 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
         }
     }
 
+    //helper method
     private static String getRandomAsciiString(){
         /**
          * This method returns a random ascii string from the assets folder
@@ -190,7 +209,7 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
         //gets a random integer between 1 and 10
         int randomInt = (int) (Math.random() * 5) + 1;
         //gets the file path of the random ascii string, uses the absolute path
-        String filePath = new File("").getAbsolutePath() + "/src/assests/ascii-art" + randomInt + ".txt";
+        String filePath = new File("").getAbsolutePath() + "/src/assests/ascii/ascii-art" + randomInt + ".txt";
         //reads the file
         File file = new File(filePath);
         //reads the entire txt file into a string
