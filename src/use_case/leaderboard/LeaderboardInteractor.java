@@ -1,5 +1,6 @@
 package use_case.leaderboard;
 
+
 public class LeaderboardInteractor implements LeaderboardInputBoundary{
 
     final LeaderboardOutputBoundary leaderboardPresenter;
