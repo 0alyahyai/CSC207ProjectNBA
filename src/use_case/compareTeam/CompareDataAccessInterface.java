@@ -1,8 +1,12 @@
 package use_case.compareTeam;
 
+import entity.Team;
+
+import java.util.List;
+
 public interface CompareDataAccessInterface
 
 {
 
-    // get team team by id,
+    public List<Team> geteams();
 }

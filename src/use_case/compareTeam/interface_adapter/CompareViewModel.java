@@ -1,33 +1,42 @@
 package use_case.compareTeam.interface_adapter;
 
+import entity.Team;
 import use_case.login.interface_adapter.LoginState;
 import view.ViewModel;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.List;
 
-public class CompareViewModel extends ViewModel {
-    public final String TITLE_LABEL = "Compare View";
+public class  CompareViewModel extends ViewModel {
+    public static final String popupString = "ERROR MESSAGE";
 
-    public static final String ALGORITHMONE_BUTTON_LABEL = "ALGORITHM ONE";
-    public static final String ALGORITHMTWO_BUTTON_LABEL = "ALGORITHM TWO";
-    public static final String ALGORITHMTHREE_BUTTON_LABEL = "ALGORITHM THREE";
-    public static final String CANCEL_BUTTON_LABEL = "Cancel";
+    public final String TITLE_LABEL = "Compare";
+    public int optionLenght;
 
-    private CompareState state = new CompareState();
+    public List<String> teams;
+    public String viewName;
+    public boolean possible;
+
+    private CompareState state;
 
     public CompareViewModel() {
-        super("Compare");
+        super("CompareOptions");
+
+
+
+
+
     }
 
     public void setState(CompareState state) {
+
         this.state = state;
     }
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
-    // This is what the Signup Presenter will call to let the ViewModel know
-    // to alert the View
+
     public void firePropertyChanged() {
         support.firePropertyChange("state", null, this.state);
     }

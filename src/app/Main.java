@@ -5,7 +5,7 @@ import data_access.FileUserDataAccessObject;
 import data_access.MockAPIDAO;
 import entity.CommonUserFactory;
 import use_case.compareTeam.interface_adapter.CompareViewModel;
-import view.CompareViewOptions;
+import use_case.compareTeam.viewCompareTeam.CompareViewOptions;
 import use_case.leaderboard.view.LeaderboardView;
 import use_case.login.view.LoginView;
 import use_case.menu.interface_adapter.MenuViewModel;
@@ -89,7 +89,7 @@ public class Main {
         views.add(loginView, loginView.viewName);
 
         LoggedInView loggedInView = LoggedInViewFactory.create(loggedInViewModel, viewManagerModel, viewTeamViewModel,
-                userDataAccessObject, apiDataAccessObject);
+                userDataAccessObject, apiDataAccessObject, compareViewModel);
         views.add(loggedInView, loggedInView.viewName);
 
         MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel, loginViewModel, userDataAccessObject);
@@ -106,8 +106,9 @@ public class Main {
         viewManagerModel.firePropertyChanged();
 
         //Here VARP starts coding
-            CompareViewOptions compareViewOptions = new CompareViewOptions(viewManagerModel);
-            views.add(compareViewOptions, compareViewOptions.viewName);
+
+        CompareViewOptions compareViewOptions = LoggedInViewFactory.create(viewManagerModel, compareViewModel);
+        views.add(compareViewOptions, compareViewOptions.viewName);
 
 
 

@@ -1,5 +1,6 @@
 package view;
 
+import use_case.compareTeam.interface_adapter.CompareController;
 import use_case.view_team.interface_adapter.ViewTeamController;
 
 import javax.swing.*;
@@ -19,6 +20,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
     private final ViewTeamController viewTeamController;
 
+    private final CompareController compareController;
+
     JLabel username;
 
     final JButton logOut;
@@ -33,10 +36,11 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
      * A window with a title and a JButton.
      */
     public LoggedInView(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
-                        ViewTeamController viewTeamController) {
+                        ViewTeamController viewTeamController, CompareController compareController) {
         this.loggedInViewModel = loggedInViewModel;
         this.viewManagerModel = viewManagerModel;
         this.viewTeamController = viewTeamController;
+        this.compareController = compareController;
         this.loggedInViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel("Main Menu");
@@ -76,9 +80,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource().equals(compareTeams)) {
-                            viewManagerModel.setActiveView("Compare"); //Let's go check the viewManagerModel
-                            viewManagerModel.firePropertyChanged();
-                            compareTeams.setText(viewManagerModel.getActiveView());
+                            compareController.execute();
                         }
 
                     }

@@ -1,6 +1,8 @@
 package data_access;
 
 import entity.*;
+import use_case.algorithm.AlgorithmDataAccessInterface;
+import use_case.compareTeam.CompareDataAccessInterface;
 import use_case.leaderboard.LeaderboardDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.make_team.MakeTeamDAI;
@@ -15,7 +17,7 @@ import java.util.*;
 public class FileUserDataAccessObject implements
         SignupUserDataAccessInterface, LoginUserDataAccessInterface,
         LeaderboardDataAccessInterface, MenuUserDataAccessInterface,
-        MakeTeamDAI, ViewTeamUserDataAccessInterface
+        MakeTeamDAI, ViewTeamUserDataAccessInterface, CompareDataAccessInterface, AlgorithmDataAccessInterface
     {
 
 
@@ -246,8 +248,97 @@ public class FileUserDataAccessObject implements
 
         }
 
+        // VARP starts coding
+        @Override
+        public List<Team> geteams(){
+             List<String> usernames = this.getUsernamesExceptActiveUser();
+             List<Team> teams = new ArrayList<>();
+             for (String username : usernames){
+                 if (this.getTeamOfUser(username) != null) {
+                     teams.add(this.getTeamOfUser(username));
+                 }
+             }
+             return teams;
+
+        }
+
+        public List<String> getUsernamesExceptActiveUser() {
+            List<String> usernames = new ArrayList<>();
+            String activeUsername = (activeUser != null) ? activeUser.getUserName() : null;
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
+                String row;
+
+                // Skip the header row
+                reader.readLine();
+
+                while ((row = reader.readLine()) != null) {
+                    String[] col = row.split(",");
+
+                    // First column is the username
+                    String username = col[headers.get("username")];
+
+                    // Add username to the list if it's not the active user's username
+                    if (!username.equals(activeUsername)) {
+                        usernames.add(username);
+                    }
+                }
+            } catch (IOException e) {
+                // In case, there is no file or something
+                e.printStackTrace();
+            }
+
+            return usernames;
+        }
+
+        @Override
+        public ArrayList<Team> getteams(String teamname) throws IOException{
+            String userNameOne = findUserByTeam(teamname);
+            Team otherTeam = this.getTeamOfUser(userNameOne);
+            Team thisTeam = this.getTeamOfUser(activeUser.getUserName());
+            ArrayList<Team> teamList = new ArrayList<>();
+            teamList.add(thisTeam);
+            teamList.add(otherTeam);
+            return teamList;
 
 
+        }
 
+        @Override
+        public ArrayList<Double> getData(Team team) {
+            ArrayList<Double> numbers = new ArrayList<Double>();
+            numbers.add(1.2);
+            numbers.add(15.7);
+            numbers.add(90.1);
+            return numbers;
+
+            //TODO this is a dummy implementation
+        }
+
+        public String findUserByTeam(String teamName) throws IOException {
+            try (BufferedReader br = new BufferedReader(new FileReader(this.csvFile))) {
+                String line;
+
+                // Skip the header row
+                br.readLine();
+
+                while ((line = br.readLine()) != null) {
+                    String[] columns = line.split(",");
+
+                    // Assuming the last column contains the array and first column contains the username. We substreact
+                    // first character given that it is a "["
+                    if (columns.length >= 4) {
+                        String[] teamArray = columns[3].split(";");
+                        if (teamArray.length > 0 && teamArray[0].substring(1).equals(teamName)) {
+                            return columns[0]; // Return the username
+                        }
+                    }
+                }
+            }
+            return null; // Return null if no matching user is found
+
+
+        }
+        // VARP ends coding
 
     }
