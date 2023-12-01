@@ -1,21 +1,18 @@
 package data_access;
 
 import entity.*;
-import use_case.leaderboard.LeaderboardDataAccessInterface;
+import org.apache.commons.lang3.tuple.Pair;
+import use_case.leaderboard.LeaderboardFileUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.make_team.MakeTeamDAI;
 import use_case.menu.MenuUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
-import java.io.*;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MockDAO implements
         SignupUserDataAccessInterface, LoginUserDataAccessInterface,
-        LeaderboardDataAccessInterface, MenuUserDataAccessInterface,
+        LeaderboardFileUserDataAccessInterface, MenuUserDataAccessInterface,
         MakeTeamDAI {
 
     private final Map<String, Integer> headers = new LinkedHashMap<>();
@@ -82,6 +79,32 @@ public class MockDAO implements
         }
         return usersWithTeam;
     }
+
+    public List<User> getUserswithTeam2() {
+        List<User> usersWithTeam = Collections.emptyList();
+        for (User user : accounts.values()) {
+            if (user.hasTeam()) {
+                usersWithTeam.add(user);
+            }
+        }
+        return usersWithTeam;
+    }
+
+    @Override
+    public List<Pair<String, Float>> getOrderedNameScores(TeamComparator teamComparator) {
+        return null;
+    }
+
+    @Override
+    public String[] getOrderedNames(TeamComparator teamComparator) {
+        return new String[0];
+    }
+
+    @Override
+    public Float[] getOrderedScores(TeamComparator teamComparator) {
+        return new Float[0];
+    }
+
 
     @Override
     public boolean saveTeam(User user, Team team) {

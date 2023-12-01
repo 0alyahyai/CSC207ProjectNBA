@@ -1,18 +1,23 @@
 package use_case.leaderboard;
 
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.List;
+
 public class LeaderboardOutputData {
 
     private final boolean useCaseFailed;
 
-    private final String[] leaderboard;
+    private final Pair<String[], Float[]> leaderboard;
 
-    public LeaderboardOutputData(String[] leaderboard, boolean useCaseFailed) {
+
+    public LeaderboardOutputData(Pair<String[], Float[]> leaderboard, boolean useCaseFailed) {
 
         this.useCaseFailed = useCaseFailed;
         this.leaderboard = leaderboard;
     }
 
-    public String[] getLeaderboard() {
+    public Pair<String[], Float[]> getLeaderboard() {
         return leaderboard;
     }
 

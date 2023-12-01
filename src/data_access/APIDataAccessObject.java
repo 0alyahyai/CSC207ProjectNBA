@@ -5,8 +5,8 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.io.IOException;
 import com.google.gson.reflect.TypeToken;
-import entity.Player;
-import entity.Stats;
+import entity.*;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -14,8 +14,9 @@ import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.Map;
 import com.google.gson.Gson;
+import use_case.leaderboard.LeaderboardAPIaccessInterface;
 
-public class APIDataAccessObject implements APIinterface {
+public class APIDataAccessObject implements APIinterface, LeaderboardAPIaccessInterface {
 
     //make java doc
     /**
@@ -115,5 +116,20 @@ public class APIDataAccessObject implements APIinterface {
     @Override
     public String[] viewTeamGetStats(Player player) {
         return new String[]{"1", "2", "3", "4", "5", "6", "07"};
+    }
+
+    //Todo: The following methods I implemented for the leaderboard. We will need to find a way to set teamId, for now I just pass in the userId.
+    public Player makePlayerFromId(int id){
+        PlayerFactory Factory = new CommonPlayerFactory();
+        return Factory.create(getNameOfPlayer(id), id);
+    }
+
+    public Team makeTeamFromIdList(List<Integer> idList, String teamId){
+        Player[] players = new Player[5];
+        for (int i: idList){
+            players[i] = makePlayerFromId(i);
+        }
+        TeamFactory Factory = new CommonTeamFactory();
+        return Factory.createTeam(teamId, List.of(players));
     }
 }

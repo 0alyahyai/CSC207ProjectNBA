@@ -4,6 +4,12 @@ import data_access.APIinterface;
 import data_access.FileUserDataAccessObject;
 import data_access.MockAPIDAO;
 import entity.CommonUserFactory;
+import entity.PlayerEvaluator;
+import entity.TeamComparator;
+import entity.TeamEvaluator;
+import entity.dummys.PlayerEvaluatorDummy;
+import entity.dummys.TeamComparatorDummy;
+import entity.dummys.TeamEvaluatorDummy;
 import use_case.leaderboard.view.LeaderboardView;
 import use_case.login.view.LoginView;
 import use_case.menu.interface_adapter.MenuViewModel;
@@ -89,10 +95,14 @@ public class Main {
                 userDataAccessObject, apiDataAccessObject);
         views.add(loggedInView, loggedInView.viewName);
 
-        MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel, loginViewModel, userDataAccessObject);
+        PlayerEvaluator playerEvaluator = new PlayerEvaluatorDummy();
+        TeamEvaluator teamEvaluator = new TeamEvaluatorDummy(playerEvaluator);
+        TeamComparator teamComparator = new TeamComparatorDummy(teamEvaluator);
+
+        MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel, loginViewModel, userDataAccessObject, teamComparator);
         views.add(menuView, menuView.viewName);
 
-        LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(menuViewModel, viewManagerModel, leaderboardViewModel, userDataAccessObject);
+        LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(menuViewModel, viewManagerModel, leaderboardViewModel, userDataAccessObject, teamComparator);
         views.add(leaderboardView, leaderboardView.viewName);
 
         ViewTeamView viewTeamView = ViewTeamUseCaseFactory.create(viewTeamViewModel, viewManagerModel);

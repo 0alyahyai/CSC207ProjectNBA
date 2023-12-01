@@ -31,7 +31,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         JPanel buttons = new JPanel();
         leaderboard = new JPanel(new GridLayout(0, 3, 10, 10));
         if (leaderboardViewModel.getState().getLeaderboard() != null) {
-            for (String user : leaderboardViewModel.getState().getLeaderboard()) {
+            for (String user : leaderboardViewModel.getState().getLeaderboardUsers()) {
                 JLabel userLabel = new JLabel(user);
                 Font font = new Font("Arial", Font.PLAIN, 16);
                 userLabel.setFont(font);
@@ -119,7 +119,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
             int i = 1;
             int score = 1000;
-            for (String user : state.getLeaderboard()) {
+            for (String user : state.getLeaderboardUsers()) {
                 JLabel place = new JLabel(i + ".");
                 JLabel userName = new JLabel(user);
                 JLabel pts = new JLabel(Integer.toString(score));
