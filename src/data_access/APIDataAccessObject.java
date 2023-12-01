@@ -1,9 +1,7 @@
 package data_access;
 
 //import all packages required to make API calls
-import java.lang.reflect.Array;
 import java.util.*;
-import java.io.IOException;
 import com.google.gson.reflect.TypeToken;
 import entity.*;
 

@@ -1,8 +1,6 @@
 package data_access;
 
 import entity.*;
-import org.apache.commons.lang3.tuple.Pair;
-import use_case.leaderboard.LeaderboardFileUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.make_team.MakeTeamDAI;
 import use_case.menu.MenuUserDataAccessInterface;
@@ -12,7 +10,7 @@ import java.util.*;
 
 public class MockDAO implements
         SignupUserDataAccessInterface, LoginUserDataAccessInterface,
-        LeaderboardFileUserDataAccessInterface, MenuUserDataAccessInterface,
+        MenuUserDataAccessInterface,
         MakeTeamDAI {
 
     private final Map<String, Integer> headers = new LinkedHashMap<>();
@@ -67,34 +65,6 @@ public class MockDAO implements
     public void setActiveUser(User user) {
         activeUser = user;
     }
-
-    //ToDo: The following method is not implemented properly. It must be completed later, it is a stand-in for now, as we have not yet implemented teams.
-
-    public List<User> getUserswithTeam() {
-        List<User> usersWithTeam = Collections.emptyList();
-        for (User user : accounts.values()) {
-            if (user.hasTeam()) {
-                usersWithTeam.add(user);
-            }
-        }
-        return usersWithTeam;
-    }
-
-    @Override
-    public List<Pair<String, Float>> getOrderedNameScores(TeamComparator teamComparator) {
-        return null;
-    }
-
-    @Override
-    public String[] getOrderedNames(TeamComparator teamComparator) {
-        return new String[0];
-    }
-
-    @Override
-    public Float[] getOrderedScores(TeamComparator teamComparator) {
-        return new Float[0];
-    }
-
 
     @Override
     public boolean saveTeam(User user, Team team) {

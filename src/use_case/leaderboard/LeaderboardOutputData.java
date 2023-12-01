@@ -2,8 +2,6 @@ package use_case.leaderboard;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.List;
-
 public class LeaderboardOutputData {
 
     private final boolean useCaseFailed;

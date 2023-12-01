@@ -163,7 +163,7 @@ public class FileUserDataAccessObject implements
         return usersWithTeam;
     }
 
-        @Override
+    //The following is a helper for the class methods in LeaderboardOutputBoundary
         public List<Pair<String, Float>> getOrderedNameScores(TeamComparator teamComparator) {
             List<User> usersWithTeam = this.getUserswithTeam();
             List<Pair<String, Float>> nameScores = new ArrayList<>();
