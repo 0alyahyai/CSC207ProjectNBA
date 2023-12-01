@@ -116,4 +116,10 @@ public class APIDataAccessObject implements APIinterface {
     public String[] viewTeamGetStats(Player player) {
         return new String[]{"1", "2", "3", "4", "5", "6", "07"};
     }
+
+
+    public static void main(String[] args) {
+        APIinterface dao = new APIDataAccessObject();
+        System.out.println(dao.getPlayerStats(236));
+    }
 }
