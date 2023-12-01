@@ -1,19 +1,19 @@
 package data_access;
 
 //import all packages required to make API calls
-import java.lang.reflect.Array;
-import java.util.*;
-import java.io.IOException;
+
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import entity.Player;
 import entity.Stats;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.Map;
-import com.google.gson.Gson;
+import java.util.TreeMap;
 
 public class APIDataAccessObject implements APIinterface {
 
