@@ -47,6 +47,8 @@ public class ViewTeamInteractor implements ViewTeamInputBoundary{
                     new String[]{String.format("Player %d", i), "1", "2", "3", "4", "5", "6"});
 
         }
+
+
         viewTeamOutputBoundary.prepareSuccessView(outputData);
 
 
