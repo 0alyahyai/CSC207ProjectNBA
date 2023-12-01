@@ -6,6 +6,7 @@ import view.ViewManagerModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,11 +35,16 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
         this.viewManagerModel = viewManagerModel;
         viewTeamViewModel.addPropertyChangeListener(this);
 
+
         JLabel title = new JLabel("View Team");
+        title.setFont(new Font("Arial", Font.BOLD, 18)); // Set custom font for title
+        title.setHorizontalAlignment(SwingConstants.CENTER); // Center-align the title
+        title.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0)); // Add padding around the title
         title.setAlignmentX(CENTER_ALIGNMENT);
 
         //Make layout so that table headers are always visible
         setLayout(new BorderLayout());
+        //Add a text field to each cell in the grid
 
 
         //creates a table with the corresponding column names ensuring that the table is not editable and
@@ -49,6 +55,12 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
                 "Assists Per Game", "Rebounds Per Game", "Steals Per Game", "Blocks Per Game"});
         tableModel.setRowCount(0);
         teamTable = new JTable(tableModel);
+        teamTable.getTableHeader().setReorderingAllowed(false);
+        teamTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+        teamTable.setRowHeight(25);
+        teamTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Disable auto-resizing
+        configureColumnWidths(teamTable);
+
 
         //auto resizes the columns to fit the data
 
@@ -61,13 +73,19 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
         // TODO: fix bug: scroll pane effecting the size of other components
         // to fix this, we may need to use frames instead of panels.
         JScrollPane scrollPane = new JScrollPane(teamTable);
-        scrollPane.setPreferredSize(new Dimension(200, 200));
+        // Scroll Pane Customization
+        scrollPane.setPreferredSize(new Dimension(800, 200)); // Adjust the preferred size
+        scrollPane.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1)); // Add border to scroll pane
         this.scrollPane = scrollPane;
 
 
         //creates a button to go back to the main menu
         JPanel buttons = new JPanel();
         back = new JButton("Back");
+        // Button Customization
+        back.setFont(new Font("Arial", Font.PLAIN, 14));
+        back.setBackground(new Color(85, 194, 218)); // Light blue background
+        back.setOpaque(false);
         buttons.add(back);
 
 
@@ -118,4 +136,17 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
 
         }
     }
+
+    private void configureColumnWidths(JTable table) {
+        TableColumn column;
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            column = table.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(200); // Wider first column
+            } else {
+                column.setPreferredWidth(150);
+            }
+        }
+    }
+
 }
