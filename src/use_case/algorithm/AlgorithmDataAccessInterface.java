@@ -4,10 +4,10 @@ import entity.Team;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 public interface AlgorithmDataAccessInterface {
 
     public ArrayList<Team> getteams(String teamname) throws IOException;
-    public ArrayList<Double> getData(Team team);
+
 }

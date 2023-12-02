@@ -1,4 +1,7 @@
-package entity;
+package use_case.entity_helpers;
+
+import entity.Player;
+import entity.Stats;
 
 /**
  * Interface (whose implementations are) used to evaluate a Player with the offered 'evaluatePlayer(Player)' method.
@@ -12,5 +15,5 @@ public interface PlayerEvaluator {
      * @param player the player to be evaluated
      * @return a float corresponding to the "evaluation" of the player
      */
-    float evaluatePlayer(Player player, Stats statsBoundary);
+    float evaluatePlayer(Player player);
 }

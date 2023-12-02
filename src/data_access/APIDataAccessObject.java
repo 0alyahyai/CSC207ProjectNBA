@@ -103,6 +103,11 @@ public class APIDataAccessObject implements APIinterface {
     @Override
     public Stats getStats() {
         return null;
+
+
+
+
+
     }
 
     @Override
@@ -118,8 +123,6 @@ public class APIDataAccessObject implements APIinterface {
     }
 
 
-    public static void main(String[] args) {
-        APIinterface dao = new APIDataAccessObject();
-        System.out.println(dao.getPlayerStats(236));
-    }
+
 }
+

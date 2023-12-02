@@ -126,6 +126,8 @@ public class CompareViewOptions extends JPanel implements ActionListener, Proper
             //VARP is above
 
         } else {
+
+
             add(buttonPanel, BorderLayout.SOUTH);
 
             viewManagerModel.setActiveView("logged in");

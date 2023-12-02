@@ -304,17 +304,6 @@ public class FileUserDataAccessObject implements
 
         }
 
-        @Override
-        public ArrayList<Double> getData(Team team) {
-            ArrayList<Double> numbers = new ArrayList<Double>();
-            numbers.add(1.2);
-            numbers.add(15.7);
-            numbers.add(90.1);
-            return numbers;
-
-            //TODO this is a dummy implementation
-        }
-
         public String findUserByTeam(String teamName) throws IOException {
             try (BufferedReader br = new BufferedReader(new FileReader(this.csvFile))) {
                 String line;

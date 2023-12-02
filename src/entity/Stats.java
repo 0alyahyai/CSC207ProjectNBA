@@ -7,6 +7,6 @@ package entity;
 public interface Stats {
 
 
-    public void setStats(String[] stats);
+    public void getStats(String[] stats);
 
 }
