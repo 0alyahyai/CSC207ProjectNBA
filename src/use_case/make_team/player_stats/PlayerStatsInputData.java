@@ -11,4 +11,8 @@ public class PlayerStatsInputData {
     public PlayerStatsInputData(Player player) {
         this.player = player;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
 }

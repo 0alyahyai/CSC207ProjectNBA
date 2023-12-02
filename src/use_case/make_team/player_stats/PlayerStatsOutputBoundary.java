@@ -4,7 +4,7 @@ public interface PlayerStatsOutputBoundary {
 
     void prepareSuccessView(PlayerStatsOutputData playerStatsOutputData);
 
-    void prepareFailView(PlayerStatsOutputData playerStatsOutputData);
+//    void prepareFailView(PlayerStatsOutputData playerStatsOutputData);
 
 
 }
