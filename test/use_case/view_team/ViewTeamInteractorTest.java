@@ -1,6 +1,5 @@
 package use_case.view_team;
 
-
 import data_access.APIinterface;
 import entity.CommonTeamFactory;
 import entity.CommonUserFactory;
