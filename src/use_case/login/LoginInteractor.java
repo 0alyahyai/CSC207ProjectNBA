@@ -51,7 +51,8 @@ public class LoginInteractor implements LoginInputBoundary {
                 User user = userDataAccessObject.get(loginInputData.getUsername());
                 userDataAccessObject.setActiveUser(user);
 
-                LoginOutputData loginOutputData = new LoginOutputData(user.getUserName(), false);
+                LoginOutputData loginOutputData = new LoginOutputData(user.getUserName(), false,
+                        user.getUserID());
                 loginPresenter.prepareSuccessView(loginOutputData);
             }
         }
