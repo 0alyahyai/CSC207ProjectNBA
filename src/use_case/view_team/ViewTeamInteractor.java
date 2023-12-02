@@ -5,6 +5,7 @@ import entity.Team;
 import entity.User;
 import data_access.APIinterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ViewTeamInteractor implements ViewTeamInputBoundary{
@@ -45,26 +46,14 @@ public class ViewTeamInteractor implements ViewTeamInputBoundary{
                 Player player = players.get(i);
                 int id = player.getPlayerID();
                 String name = api.getNameOfPlayer(id);
-                String[] stats = api.viewTeamGetStats(id).toArray(new String[0]);
-                outputData.setPlayerNStats(i,
-                        new String[]{name, stats[0], stats[1], stats[2], stats[3], stats[4], stats[5]});
+                ArrayList<String> stats = api.viewTeamGetStats(id);
+                outputData.setPlayerNStats(i + 1, stats);
             }
             viewTeamOutputBoundary.prepareSuccessView(outputData);
 
         }
 
 
-
-        //dummy data for now
-
-//        ViewTeamOutputData outputData = new ViewTeamOutputData();
-//        for (int i = 1; i <= 5; i++) {
-//            outputData.setPlayerNStats(i,
-//                    new String[]{String.format("Player %d", i), "1", "2", "3", "4", "5", "6"});
-//
-//        }
-//
-//        viewTeamOutputBoundary.prepareSuccessView(outputData);
 
     }
 
