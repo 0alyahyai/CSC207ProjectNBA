@@ -17,6 +17,10 @@ public class LeaderboardController {
         leaderboardUseCaseInteractor.toLoggedIn();
     }
 
+    public void setActiveUser () {
+        leaderboardUseCaseInteractor.setActiveUser();
+    }
+
     public void load () {
         leaderboardUseCaseInteractor.load();
     }

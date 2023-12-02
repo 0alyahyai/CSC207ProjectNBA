@@ -3,6 +3,11 @@ package use_case.leaderboard.view;
 import use_case.leaderboard.interface_adapter.LeaderboardController;
 import use_case.leaderboard.interface_adapter.LeaderboardState;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
+import use_case.login.view.LoginView;
+import view.LoggedInState;
+import view.LoggedInView;
+import view.LoggedInViewModel;
+import view.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,10 +25,11 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
     private final JPanel leaderboard;
     private final JButton back;
 
-    public LeaderboardView(LeaderboardViewModel leaderboardViewModel, LeaderboardController leaderboardController) {
+    public LeaderboardView(LoggedInViewModel loggedInViewModel, LeaderboardViewModel leaderboardViewModel, LeaderboardController leaderboardController) {
         this.leaderboardViewModel = leaderboardViewModel;
         this.leaderboardController = leaderboardController;
         leaderboardViewModel.addPropertyChangeListener(this);
+        loggedInViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(LeaderboardViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -94,6 +100,18 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getNewValue() instanceof LoggedInState) {
+            LoggedInState state = (LoggedInState) evt.getNewValue();
+            if (state.isLoggedIn()) {
+                leaderboardController.setActiveUser();
+                return;
+            }
+           LeaderboardState leaderboardState = leaderboardViewModel.getState();
+            leaderboardState.setActiveUserID(null);
+
+           return;
+        }
+
         LeaderboardState state = (LeaderboardState) evt.getNewValue();
         if (state.getLeaderboardError() != null) {
             JOptionPane.showMessageDialog(this, state.getLeaderboardError());

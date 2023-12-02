@@ -6,4 +6,6 @@ public interface LeaderboardInputBoundary {
     void load();
 
     void toLoggedIn();
+
+    void setActiveUser();
 }

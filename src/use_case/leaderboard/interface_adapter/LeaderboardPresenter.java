@@ -40,4 +40,11 @@ public class LeaderboardPresenter implements LeaderboardOutputBoundary {
                 leaderboard.getLeaderboardScores(), leaderboard.getActiveUserID());
         leaderboardViewModel.firePropertyChanged();
     }
+
+    @Override
+    public void setActiveUser(LeaderboardOutputData leaderboard) {
+        LeaderboardState leaderboardState = leaderboardViewModel.getState();
+        leaderboardState.setActiveUserID(leaderboard.getActiveUserID());
+        leaderboardViewModel.firePropertyChanged();
+    }
 }

@@ -20,6 +20,16 @@ public class LeaderboardInteractor implements LeaderboardInputBoundary{
         leaderboardPresenter.toLoggedIn();
     }
 
+    @Override
+    public void setActiveUser() {
+        String[] leaderboardUsers = new String[0];
+        Float[] leaderboardScores = new Float[0];
+        String[] leaderboardIds = new String[0];
+        String activeUserID = LeaderboardDataAccessObject.getActiveUserID();
+        LeaderboardOutputData leaderboardOutputData = new LeaderboardOutputData(leaderboardUsers, leaderboardIds, leaderboardScores, activeUserID, true);
+        leaderboardPresenter.setActiveUser(leaderboardOutputData);
+    }
+
     public void load() {
         String[] leaderboardUsers = LeaderboardDataAccessObject.getOrderedNames(teamComparator);
         Float[] leaderboardScores = LeaderboardDataAccessObject.getOrderedScores(teamComparator);

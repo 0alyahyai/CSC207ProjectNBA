@@ -21,12 +21,12 @@ public class LeaderboardUseCaseFactory {
 
     public LeaderboardUseCaseFactory() {}
 
-    public static LeaderboardView create(String menuViewName,String loggedInViewName, ViewManagerModel viewManagerModel,
+    public static LeaderboardView create(LoggedInViewModel loggedInViewModel, String menuViewName,String loggedInViewName, ViewManagerModel viewManagerModel,
                                   LeaderboardViewModel leaderboardViewModel, LeaderboardFileUserDataAccessInterface userDataAccessObject, TeamComparator teamComparator) {
 
         try {
             LeaderboardController leaderboardController = createLeaderboardUseCase(viewManagerModel, leaderboardViewModel, menuViewName, loggedInViewName, userDataAccessObject, teamComparator);
-            return new LeaderboardView(leaderboardViewModel, leaderboardController);
+            return new LeaderboardView(loggedInViewModel, leaderboardViewModel, leaderboardController);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }
