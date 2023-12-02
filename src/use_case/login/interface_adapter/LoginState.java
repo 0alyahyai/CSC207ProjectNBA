@@ -6,6 +6,8 @@ public class LoginState {
     private String password = "";
     private String passwordError = null;
 
+
+
     public LoginState(LoginState copy) {
         username = copy.username;
         usernameError = copy.usernameError;
@@ -47,4 +49,5 @@ public class LoginState {
     public void setPasswordError(String passwordError) {
         this.passwordError = passwordError;
     }
+
 }

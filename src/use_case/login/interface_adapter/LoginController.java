@@ -23,8 +23,7 @@ public class LoginController {
     //constructor. It then calls the execute method of the loginUseCaseInteractor object, passing the loginInputData
     //object as a parameter.
     public void execute(String username, String password) {
-        LoginInputData loginInputData = new LoginInputData(
-                username, password);
+        LoginInputData loginInputData = new LoginInputData(username, password);
 
         loginUseCaseInteractor.execute(loginInputData);
     }

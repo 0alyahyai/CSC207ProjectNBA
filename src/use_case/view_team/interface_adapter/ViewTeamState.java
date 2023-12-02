@@ -1,5 +1,6 @@
 package use_case.view_team.interface_adapter;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class ViewTeamState {
@@ -10,15 +11,15 @@ public class ViewTeamState {
     // The array is in the following order: ["Player's Team Name", "Player name", "Points Per Game",
     //                "Assists Per Game", "Rebounds Per Game", "Steals Per Game", "Blocks Per Game"]
 
-    private String[] player1Stats;
+    private ArrayList<String> player1Stats;
 
-    private String[] player2Stats;
+    private ArrayList<String> player2Stats;
 
-    private String[] player3Stats;
+    private ArrayList<String> player3Stats;
 
-    private String[] player4Stats;
+    private ArrayList<String> player4Stats;
 
-    private String[] player5Stats;
+    private ArrayList<String> player5Stats;
 
     private String message = null;
 
@@ -30,7 +31,7 @@ public class ViewTeamState {
 
     public ViewTeamState() {}
 
-    public void setPlayerNStats(int n, String[] stats) {
+    public void setPlayerNStats(int n, ArrayList<String> stats) {
         switch (n) {
             case 1 -> player1Stats = stats;
             case 2 -> player2Stats = stats;
@@ -40,7 +41,7 @@ public class ViewTeamState {
         }
     }
 
-    public String[] getPlayerNStats(int n) {
+    public ArrayList<String> getPlayerNStats(int n) {
         return switch (n) {
             case 1 -> player1Stats;
             case 2 -> player2Stats;

@@ -94,8 +94,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(viewTeam)) {
                             viewTeamController.execute();
-                            viewManagerModel.setActiveView("view team");
-                            viewManagerModel.firePropertyChanged();
+//                            viewManagerModel.setActiveView("view team");
+//                            viewManagerModel.firePropertyChanged();
 
                         }
                     }

@@ -3,14 +3,14 @@ package data_access;
 import entity.Player;
 import entity.Stats;
 
+import java.util.ArrayList;
 import java.util.Map;
+
+//TODO: delete this class
 
 public class MockAPIDAO implements APIinterface {
 
-    @Override
-    public String[] viewTeamGetStats(Player player) {
-        return new String[0];
-    }
+
 
     @Override
     public Map<String, Object> searchPlayer(String name) {
@@ -23,6 +23,11 @@ public class MockAPIDAO implements APIinterface {
     }
 
     @Override
+    public Map<String, Object> getGeneralPlayerInfo(int id) {
+        return null;
+    }
+
+    @Override
     public Stats getStats() {
         return null;
     }
@@ -30,5 +35,10 @@ public class MockAPIDAO implements APIinterface {
     @Override
     public String getNameOfPlayer(int id) {
         return "SOME PLAYER NAME for id " + id;
+    }
+
+    @Override
+    public ArrayList<String> viewTeamGetStats(int id) {
+        return null;
     }
 }
