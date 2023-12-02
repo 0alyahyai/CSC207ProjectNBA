@@ -1,9 +1,5 @@
 package use_case.leaderboard.interface_adapter;
 
-import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.List;
-
 public class LeaderboardState {
 
     private boolean loggedIn = false;

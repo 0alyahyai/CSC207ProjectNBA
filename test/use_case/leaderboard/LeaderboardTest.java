@@ -332,8 +332,10 @@ public class LeaderboardTest {
     }
 
     //this is a test method for load when no users have teams
+
+    //ToDo: The following test is currently faulty because the order of names on the leaderboard is random, This will be fixed once I can work with a Non Dummy Team Comparator.
     @Test
-    public void loadTestNoUsersWithTeams() throws IOException {
+    public void loadTestUsersWithTeams() throws IOException {
         User[] users = addTwoUsersWithTeams();
         testMain();
         JButton toLeaderboard = getLeaderboardButtonMenu();

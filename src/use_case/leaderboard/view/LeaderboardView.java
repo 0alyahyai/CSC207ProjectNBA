@@ -110,9 +110,9 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
             }
 
             //Add new labels for the leaderboard
-            JLabel placeLabel = new JLabel("Place");
+            JLabel placeLabel = new JLabel("Rank");
             JLabel userLabel = new JLabel("User");
-            JLabel ptsLabel = new JLabel("Points");
+            JLabel ptsLabel = new JLabel("Score");
             //Set font for labels
             Font font = new Font("Arial", Font.BOLD, 16);
             placeLabel.setFont(font);
@@ -132,10 +132,12 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
             int j = -1;  // Initialize to -1 to indicate not found
 
             // Iterate through the array to find the index of currUserId
-            for (int k = 0; k < UserIds.length; k++) {
-                if (UserIds[k].equals(currUserId)) {
-                    j = k;
-                    break;  // Exit the loop once found
+            if (currUserId != null) {
+                for (int k = 0; k < UserIds.length; k++) {
+                    if (UserIds[k].equals(currUserId)) {
+                        j = k;
+                        break;  // Exit the loop once found
+                    }
                 }
             }
 
