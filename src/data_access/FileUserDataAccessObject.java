@@ -217,56 +217,6 @@ public class FileUserDataAccessObject implements
         return orderedUserIDs;
     }
 
-    //The following is a helper for the class methods in LeaderboardOutputBoundary
-//        public List<Pair<String, Float>> getOrderedNameScores(TeamComparator teamComparator) {
-//            List<User> usersWithTeam = this.getUserswithTeam();
-//            List<Pair<String, Float>> nameScores = new ArrayList<>();
-//
-//            for (User user : usersWithTeam) {
-//                String userName = user.getUserName();
-//                Team userTeam = user.getUserTeam();
-//                Float score = teamComparator.getTeamScore(userTeam);
-//                Pair<String, Float> nameScore = Pair.of(userName, score);
-//
-//                int i = 0;
-//                boolean added = false;
-//
-//                while (i < nameScores.size()) {
-//                    if (nameScores.get(i).getValue() < score) {
-//                        nameScores.add(i, nameScore);
-//                        added = true;
-//                        break;
-//                    }
-//                    i++;
-//                }
-//
-//                if (!added) {
-//                    nameScores.add(nameScore);
-//                }
-//            }
-//            return nameScores;
-//        }
-//
-//        @Override
-//        public String[] getOrderedNames(TeamComparator teamComparator) {
-//            List<Pair<String, Float>> nameScores = getOrderedNameScores(teamComparator);
-//            String[] orderedNames = new String[nameScores.size()];
-//            for (int i = 0; i < nameScores.size(); i++) {
-//                orderedNames[i] = nameScores.get(i).getKey();
-//            }
-//            return orderedNames;
-//        }
-//
-//        @Override
-//        public Float[] getOrderedScores(TeamComparator teamComparator) {
-//            List<Pair<String, Float>> nameScores = getOrderedNameScores(teamComparator);
-//            Float[] orderedScores = new Float[nameScores.size()];
-//            for (int i = 0; i < nameScores.size(); i++) {
-//                orderedScores[i] = nameScores.get(i).getValue();
-//            }
-//            return orderedScores;
-//        }
-
         @Override
         public boolean saveTeam(User user, Team team) {
 //            List<Player> players = team.getTeamPlayers();
