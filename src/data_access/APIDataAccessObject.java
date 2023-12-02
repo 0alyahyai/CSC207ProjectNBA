@@ -142,6 +142,11 @@ public class APIDataAccessObject implements APIinterface {
 
     @Override
     public ArrayList<String> viewTeamGetStats(int id) {
+        /**
+         * This method is responsible for getting the stats of a player in the current season
+         * @param id
+         * @return ArrayList<String>
+         */
 
         ArrayList<String> viewStats = new ArrayList<String>();
 

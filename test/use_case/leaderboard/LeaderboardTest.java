@@ -6,12 +6,12 @@ import entity.*;
 import entity.dummys.PlayerEvaluatorDummy;
 import entity.dummys.TeamComparatorDummy;
 import entity.dummys.TeamEvaluatorDummy;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
 import use_case.leaderboard.view.LeaderboardView;
 import use_case.login.interface_adapter.LoginViewModel;
 import use_case.login.view.LoginView;
-import use_case.make_team.MakeTeamDAI;
 import use_case.menu.interface_adapter.MenuViewModel;
 import use_case.menu.view.MenuView;
 import use_case.signup.interface_adapter.SignupViewModel;
@@ -26,6 +26,7 @@ import view.ViewManagerModel;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import static org.junit.Assert.assertNotNull;
@@ -37,6 +38,24 @@ public class LeaderboardTest {
     private LeaderboardViewModel leaderboardViewModel;
 
     LeaderboardTest() throws IOException {
+    }
+
+    //The following clears the csv file after each test
+    @AfterEach
+    public void tearDown() throws IOException {
+        String filePath = "./users.csv";
+
+        try {
+            // Open the FileWriter with append mode set to false (clearing the file)
+            FileWriter fileWriter = new FileWriter(filePath, false);
+
+            // Close the FileWriter to save changes
+            fileWriter.close();
+
+            System.out.println("CSV file cleared successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     void testMain() throws IOException {
@@ -109,6 +128,9 @@ public class LeaderboardTest {
 
     public void addTwoUsers() {
         UserFactory uf = new CommonUserFactory();
+        User[] users = new User[5];
+        users[0] = uf.create("123", "Peter", "password");
+        users[1] = uf.create("321", "Omar", "password");
         APIinterface apiDAO = new APIDataAccessObject();
         FileUserDataAccessObject fudao;
         try {
@@ -116,10 +138,60 @@ public class LeaderboardTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        fudao.save(uf.create("123", "Peter", "password"));
-        fudao.save(uf.create("321", "Peter", "password"));
+        fudao.save(users[0]);
+        fudao.save(users[1]);
     }
 
+    public User[] addTwoUsersWithTeams() {
+        TeamFactory tf = new CommonTeamFactory();
+        UserFactory uf = new CommonUserFactory();
+        User[] users = new User[5];
+
+        User user1 = uf.create("123", "Peter", "password");
+        User user2 = uf.create("321", "Omar", "password");
+        Team team1 = tf.createMockTeam();
+        Team team2 = tf.createMockTeam();
+        user1.setTeam(team1);
+        user2.setTeam(team2);
+
+        users[0] = user1;
+        users[1] = user2;
+        APIinterface apiDAO = new APIDataAccessObject();
+        FileUserDataAccessObject fudao;
+        try {
+            fudao = new FileUserDataAccessObject("./users.csv", uf, apiDAO);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        fudao.save(users[0]);
+        fudao.save(users[1]);
+        return users;
+    }
+
+    //This returns the Leaderboard from the leaderboard view
+    public JPanel getLeaderboard() {
+        JFrame app = null;
+        Window[] windows = Window.getWindows();
+        for (Window window : windows) {
+            if (window instanceof JFrame) {
+                app = (JFrame) window;
+            }
+        }
+
+        assertNotNull(app); // found the window?
+
+        Component root = app.getComponent(0);
+
+        Component cp = ((JRootPane) root).getContentPane();
+
+        JPanel jp = (JPanel) cp;
+
+        JPanel jp2 = (JPanel) jp.getComponent(0);
+
+        LeaderboardView sv = (LeaderboardView) jp2.getComponent(4);
+
+        return (JPanel) sv.getComponent(1); // this should be the LeaderBoard
+    }
 
     //This returns the back button from the leaderboard view
 
@@ -239,19 +311,38 @@ public class LeaderboardTest {
     //This is a test to check if the back button works in the leaderboard view when not logged in
     @Test
     public void LeaderboardBackButtonLoggedIn() throws IOException {
-//        testMain();
-//        JButton toLeaderboard = getLeaderboardButtonMenu();
-//        JButton button = getBackButtonLeaderboard();
-//        toLeaderboard.doClick();
-//        button.doClick();
-//        assert (viewManagerModel.getActiveView().equals("Logged In"));
+        testMain();
+        leaderboardViewModel.getState().setActiveUserID("123");
+        JButton toLeaderboard = getLeaderboardButtonMenu();
+        JButton button = getBackButtonLeaderboard();
+        toLeaderboard.doClick();
+        button.doClick();
+        assert (viewManagerModel.getActiveView().equals("logged in"));
     }
 
-    //this is a test method for load
+    //This is a test method for load when there are no users
+    @Test
+    public void loadTestNoUsers() throws IOException {
+        testMain();
+        JButton toLeaderboard = getLeaderboardButtonMenu();
+        toLeaderboard.doClick();
+        JPanel leaderboard = getLeaderboard();
+        JLabel userLabel = (JLabel) leaderboard.getComponent(0);
+        assert (userLabel.getText().equals("No users yet!"));
+    }
+
+    //this is a test method for load when no users have teams
     @Test
     public void loadTestNoUsersWithTeams() throws IOException {
-        addTwoUsers();
+        User[] users = addTwoUsersWithTeams();
         testMain();
+        JButton toLeaderboard = getLeaderboardButtonMenu();
+        toLeaderboard.doClick();
+        JPanel leaderboard = getLeaderboard();
+        JLabel userLabel1 = (JLabel) leaderboard.getComponent(0 + 2*2);
+        JLabel userLabel2 = (JLabel) leaderboard.getComponent(1 + 2*3);
+        assert (userLabel1.getText().equals(users[0].getUserName()));
+        assert (userLabel2.getText().equals(users[1].getUserName()));
     }
 
 

@@ -28,15 +28,16 @@ public class LeaderboardState {
 
     public LeaderboardState() {}
 
-    public String getLoggedInUserID() {return activeUserID;}
+    public void setActiveUserID(String activeUserID) {this.activeUserID = activeUserID;}
+    public String getActiveUserID() {return activeUserID;}
 
-    public boolean isLoggedIn() {return getLoggedInUserID() != null;}
+    public boolean isLoggedIn() {return getActiveUserID() != null;}
 
     public void setLeaderboard(String[] leaderboardUsers, String[] leaderboardIDs, Float[] leaderboardScores, String activeUserID) {
         this.leaderboardUsers = leaderboardUsers;
         this.leaderboardScores = leaderboardScores;
         this.leaderboardUserIDs = leaderboardIDs;
-        this.message = convertArrayToString(this.leaderboardUsers);
+//        this.message = convertArrayToString(this.leaderboardUsers);
         this.activeUserID = activeUserID;
     }
 
@@ -58,15 +59,15 @@ public class LeaderboardState {
         this.message = leaderboardError;
     }
 
-    public String getMessage() {
-        return message;
-    }
-    public String convertArrayToString(String[] leaderboard) {
-        String LeaderboardString = "";
-        for (String user : leaderboard) {
-            LeaderboardString += user + "\n";
-        }
-        return LeaderboardString;
-    }
+//    public String getMessage() {
+//        return message;
+//    }
+//    public String convertArrayToString(String[] leaderboard) {
+//        String LeaderboardString = "";
+//        for (String user : leaderboard) {
+//            LeaderboardString += user + "\n";
+//        }
+//        return LeaderboardString;
+//    }
 
 }

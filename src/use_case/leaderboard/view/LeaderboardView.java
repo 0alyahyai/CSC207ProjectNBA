@@ -68,9 +68,9 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(back)) {
                             if (leaderboardViewModel.getState().isLoggedIn()) {
-                                leaderboardController.toMenu();
-                            } else
                                 leaderboardController.toLoggedIn();
+                            } else
+                                leaderboardController.toMenu();
                         }
                     }
                 }
@@ -84,9 +84,6 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         leaderboardController.load();
     }
 
-    private void clearJOptionPane(String message) {
-        JOptionPane.showMessageDialog(this, message);
-    }
 
     /**
      * React to a button click that results in evt.
@@ -103,6 +100,15 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         } else {
             //Remove everything from leaderboard
             leaderboard.removeAll();
+
+            if (state.getLeaderboardUsers() == null) {
+                JLabel userLabel = new JLabel("No users yet!");
+                Font font = new Font("Arial", Font.PLAIN, 16);
+                userLabel.setFont(font);
+                leaderboard.add(userLabel);
+                return;
+            }
+
             //Add new labels for the leaderboard
             JLabel placeLabel = new JLabel("Place");
             JLabel userLabel = new JLabel("User");
@@ -122,7 +128,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
             //formulaically when we have determined how to set places/scores.
 
             String[] UserIds = state.getLeaderboardUserIDs();
-            String currUserId = state.getLoggedInUserID();
+            String currUserId = state.getActiveUserID();
             int j = -1;  // Initialize to -1 to indicate not found
 
             // Iterate through the array to find the index of currUserId

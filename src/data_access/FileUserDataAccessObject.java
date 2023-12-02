@@ -147,6 +147,9 @@ public class FileUserDataAccessObject implements
      * @return the active userID
      */
     public String getActiveUserID() {
+        if (activeUser == null) {
+            return null;
+        }
         return activeUser.getUserID();
     }
 
@@ -203,6 +206,9 @@ public class FileUserDataAccessObject implements
         String[] orderedNames = new String[userScores.size()];
         for (int i = 0; i < userScores.size(); i++) {
             orderedNames[i] = userScores.get(i).getUsername();
+        }
+        if (orderedNames.length == 0) {
+            return null;
         }
         return orderedNames;
     }
