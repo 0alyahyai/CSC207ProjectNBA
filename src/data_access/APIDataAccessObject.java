@@ -76,7 +76,10 @@ public class APIDataAccessObject implements APIinterface {
         }
     }
 
-
+    @Override
+    public Map<String, Object> getGeneralPlayerInfo(int id) {
+        return null;
+    }
 
 
     //create a helper turning the json into a map
@@ -108,11 +111,9 @@ public class APIDataAccessObject implements APIinterface {
         return null;
     }
 
-    //TODO: Decide on what should happen to this method. It is likely now obsolete, instead being replaced by the
-    // getPlayerStats method.
     @Override
-    public String[] viewTeamGetStats(Player player) {
-        return new String[]{"1", "2", "3", "4", "5", "6", "07"};
+    public ArrayList<String> viewTeamGetStats(int id) {
+        return null;
     }
 
     //Todo: The following methods I implemented for the leaderboard. We will need to find a way to set teamId, for now I just pass in the userId.

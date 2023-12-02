@@ -58,7 +58,7 @@ public class LeaderboardTest {
     @Test
     public void backTest() {
         LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(menuViewModel, viewManagerModel,
-                leaderboardViewModel, (LeaderboardFileUserDataAccessInterface) dao, TeamComparatorFactory.create());
+                leaderboardViewModel, (LeaderboardFileUserDataAccessInterface) dao, teamComparatorFactory.create());
 
 //        leaderboardView.back();
     }
@@ -67,7 +67,7 @@ public class LeaderboardTest {
     @Test
     public void loadTest() {
         LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(menuViewModel, viewManagerModel,
-                leaderboardViewModel, (LeaderboardFileUserDataAccessInterface) dao, TeamComparatorFactory.create());
+                leaderboardViewModel, (LeaderboardFileUserDataAccessInterface) dao, teamComparatorFactory.create());
 
 //        leaderboardView.load();
 
