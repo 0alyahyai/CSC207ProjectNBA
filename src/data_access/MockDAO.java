@@ -1,21 +1,16 @@
 package data_access;
 
 import entity.*;
-import use_case.leaderboard.LeaderboardDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.make_team.MakeTeamDAI;
 import use_case.menu.MenuUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
-import java.io.*;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MockDAO implements
         SignupUserDataAccessInterface, LoginUserDataAccessInterface,
-        LeaderboardDataAccessInterface, MenuUserDataAccessInterface,
+        MenuUserDataAccessInterface,
         MakeTeamDAI {
 
     private final Map<String, Integer> headers = new LinkedHashMap<>();
@@ -69,18 +64,6 @@ public class MockDAO implements
     @Override
     public void setActiveUser(User user) {
         activeUser = user;
-    }
-
-    //ToDo: The following method is not implemented properly. It must be completed later, it is a stand-in for now, as we have not yet implemented teams.
-    @Override
-    public String[] getUserswithTeam() {
-        String[] usersWithTeam = new String[accounts.size()];
-        int i = 0;
-        for (User user : accounts.values()) {
-            usersWithTeam[i] = user.getUserName();
-            i++;
-        }
-        return usersWithTeam;
     }
 
     @Override
