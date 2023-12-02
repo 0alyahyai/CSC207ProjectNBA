@@ -9,10 +9,12 @@ public class LoginInputData {
     final private String username;
     final private String password;
 
+
     //Constructor:
     public LoginInputData(String username, String password) {
         this.username = username;
         this.password = password;
+
     }
 
     //Getter Methods:
@@ -23,5 +25,7 @@ public class LoginInputData {
     String getPassword() {
         return password;
     }
+
+
 
 }
