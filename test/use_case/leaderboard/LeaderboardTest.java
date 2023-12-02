@@ -12,6 +12,7 @@ import use_case.login.interface_adapter.LoginViewModel;
 import use_case.make_team.MakeTeamDAI;
 import use_case.menu.interface_adapter.MenuViewModel;
 import use_case.signup.interface_adapter.SignupViewModel;
+import view.LoggedInViewModel;
 import view.ViewManagerModel;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class LeaderboardTest {
     private ViewManagerModel viewManagerModel;
     private SignupViewModel signupViewModel;
     private LeaderboardViewModel leaderboardViewModel;
-    private LoginViewModel loginViewModel;
+    private LoggedInViewModel loggedInViewModel;
 
     private TeamComparatorFactory teamComparatorFactory;
 
@@ -44,7 +45,7 @@ public class LeaderboardTest {
         viewManagerModel = new ViewManagerModel();
         signupViewModel = new SignupViewModel();
         leaderboardViewModel = new LeaderboardViewModel();
-        loginViewModel = new LoginViewModel();
+        loggedInViewModel = new LoggedInViewModel();
         teamComparatorFactory = new TeamComparatorDummyFactory();
 
         userFactory = new CommonUserFactory();
@@ -57,7 +58,7 @@ public class LeaderboardTest {
     //This is a test method for back
     @Test
     public void backTest() {
-        LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(menuViewModel, viewManagerModel,
+        LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(menuViewModel.getViewName(), loggedInViewModel.getViewName(), viewManagerModel,
                 leaderboardViewModel, (LeaderboardFileUserDataAccessInterface) dao, teamComparatorFactory.create());
 
 //        leaderboardView.back();
@@ -66,7 +67,7 @@ public class LeaderboardTest {
     //this is a test method for load
     @Test
     public void loadTest() {
-        LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(menuViewModel, viewManagerModel,
+        LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(menuViewModel.getViewName(), loggedInViewModel.getViewName(), viewManagerModel,
                 leaderboardViewModel, (LeaderboardFileUserDataAccessInterface) dao, teamComparatorFactory.create());
 
 //        leaderboardView.load();

@@ -3,6 +3,7 @@ package app;
 
 import entity.TeamComparator;
 import use_case.menu.interface_adapter.MenuViewModel;
+import view.LoggedInViewModel;
 import view.ViewManagerModel;
 import use_case.leaderboard.interface_adapter.LeaderboardController;
 import use_case.leaderboard.interface_adapter.LeaderboardPresenter;
@@ -20,11 +21,11 @@ public class LeaderboardUseCaseFactory {
 
     public LeaderboardUseCaseFactory() {}
 
-    public static LeaderboardView create(MenuViewModel menuViewModel, ViewManagerModel viewManagerModel,
+    public static LeaderboardView create(String menuViewName,String loggedInViewName, ViewManagerModel viewManagerModel,
                                   LeaderboardViewModel leaderboardViewModel, LeaderboardFileUserDataAccessInterface userDataAccessObject, TeamComparator teamComparator) {
 
         try {
-            LeaderboardController leaderboardController = createLeaderboardUseCase(viewManagerModel, leaderboardViewModel, menuViewModel, userDataAccessObject, teamComparator);
+            LeaderboardController leaderboardController = createLeaderboardUseCase(viewManagerModel, leaderboardViewModel, menuViewName, loggedInViewName, userDataAccessObject, teamComparator);
             return new LeaderboardView(leaderboardViewModel, leaderboardController);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
@@ -34,10 +35,10 @@ public class LeaderboardUseCaseFactory {
     }
 
     public static LeaderboardController createLeaderboardUseCase(ViewManagerModel viewManagerModel, LeaderboardViewModel leaderboardViewModel,
-                                                                 MenuViewModel menuViewModel, LeaderboardFileUserDataAccessInterface userDataAccessObject, TeamComparator teamComparator) throws IOException {
+                                                                 String menuViewName, String loggedInViewName, LeaderboardFileUserDataAccessInterface userDataAccessObject, TeamComparator teamComparator) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
-        LeaderboardOutputBoundary leaderboardOutputBoundary = new LeaderboardPresenter(leaderboardViewModel, viewManagerModel, menuViewModel);
+        LeaderboardOutputBoundary leaderboardOutputBoundary = new LeaderboardPresenter(leaderboardViewModel, viewManagerModel, menuViewName, loggedInViewName);
 
         LeaderboardInputBoundary leaderboardInteractor = new LeaderboardInteractor(leaderboardOutputBoundary, userDataAccessObject, teamComparator);
 
