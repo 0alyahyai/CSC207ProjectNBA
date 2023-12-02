@@ -1,7 +1,6 @@
 package data_access;
 
 import entity.*;
-import org.apache.commons.lang3.tuple.Pair;
 import use_case.leaderboard.LeaderboardFileUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.make_team.MakeTeamDAI;
