@@ -143,6 +143,14 @@ public class FileUserDataAccessObject implements
     }
 
     /**
+     * Return the active user.
+     * @return the active userID
+     */
+    public String getActiveUserID() {
+        return activeUser.getUserID();
+    }
+
+    /**
      * Set the active user.
      * @param user the user to set as active
      */

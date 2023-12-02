@@ -1,7 +1,6 @@
 package use_case.leaderboard;
 
 import entity.TeamComparator;
-import org.apache.commons.lang3.tuple.Pair;
 
 public class LeaderboardInteractor implements LeaderboardInputBoundary{
 
@@ -14,15 +13,20 @@ public class LeaderboardInteractor implements LeaderboardInputBoundary{
         this.LeaderboardDataAccessObject = leaderboardDataAccessObject;
         this.teamComparator = teamComparator;
     }
-    public void back() {
+    public void toMenu() {
         leaderboardPresenter.toMenu();
+    }
+    public void toLoggedIn() {
+        leaderboardPresenter.toLoggedIn();
     }
 
     public void load() {
         String[] leaderboardUsers = LeaderboardDataAccessObject.getOrderedNames(teamComparator);
         Float[] leaderboardScores = LeaderboardDataAccessObject.getOrderedScores(teamComparator);
         String[] leaderboardIds = LeaderboardDataAccessObject.getOrderedIDs(teamComparator);
-        LeaderboardOutputData leaderboardOutputData = new LeaderboardOutputData(leaderboardUsers, leaderboardIds, leaderboardScores, false);
+        String activeUserID = LeaderboardDataAccessObject.getActiveUserID();
+        LeaderboardOutputData leaderboardOutputData = new LeaderboardOutputData(leaderboardUsers, leaderboardIds, leaderboardScores, activeUserID, false);
         leaderboardPresenter.loadLeaderboard(leaderboardOutputData);
     }
+
 }

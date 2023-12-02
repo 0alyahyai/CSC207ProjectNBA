@@ -68,9 +68,9 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(back)) {
                             if (leaderboardViewModel.getState().isLoggedIn()) {
-                                leaderboardController.back();
+                                leaderboardController.toMenu();
                             } else
-                                leaderboardController.back();
+                                leaderboardController.toLoggedIn();
                         }
                     }
                 }

@@ -9,7 +9,7 @@ public class LeaderboardState {
     private boolean loggedIn = false;
     private String leaderboardError = null;
 
-    private String loggedInUserID = null;
+    private String activeUserID = null;
 
     private String[] leaderboardUsers = null;
     private String[] leaderboardUserIDs = null;
@@ -22,23 +22,22 @@ public class LeaderboardState {
         leaderboardError = copy.leaderboardError;
         leaderboardUsers = copy.leaderboardUsers;
         leaderboardScores = copy.leaderboardScores;
-        loggedInUserID = copy.loggedInUserID;
+        activeUserID = copy.activeUserID;
         message = copy.message;
     }
 
     public LeaderboardState() {}
 
-    public void setLoggedInUserID(String loggedInUserID) {this.loggedInUserID = loggedInUserID;}
+    public String getLoggedInUserID() {return activeUserID;}
 
-    public String getLoggedInUserID() {return loggedInUserID;}
+    public boolean isLoggedIn() {return getLoggedInUserID() != null;}
 
-    public boolean isLoggedIn() {return loggedIn;}
-
-    public void setLeaderboard(String[] leaderboardUsers, String[] leaderboardIDs,Float[] leaderboardScores) {
+    public void setLeaderboard(String[] leaderboardUsers, String[] leaderboardIDs, Float[] leaderboardScores, String activeUserID) {
         this.leaderboardUsers = leaderboardUsers;
         this.leaderboardScores = leaderboardScores;
         this.leaderboardUserIDs = leaderboardIDs;
         this.message = convertArrayToString(this.leaderboardUsers);
+        this.activeUserID = activeUserID;
     }
 
     public String[] getLeaderboardUsers() {

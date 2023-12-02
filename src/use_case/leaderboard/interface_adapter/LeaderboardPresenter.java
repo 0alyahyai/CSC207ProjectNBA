@@ -1,11 +1,8 @@
 package use_case.leaderboard.interface_adapter;
 
-import use_case.menu.interface_adapter.MenuViewModel;
-import view.LoggedInViewModel;
 import view.ViewManagerModel;
 import use_case.leaderboard.LeaderboardOutputBoundary;
 import use_case.leaderboard.LeaderboardOutputData;
-import view.ViewModel;
 
 public class LeaderboardPresenter implements LeaderboardOutputBoundary {
 
@@ -30,7 +27,8 @@ public class LeaderboardPresenter implements LeaderboardOutputBoundary {
         viewManagerModel.firePropertyChanged();
     }
 
-    public void toLoggedInMenu() {
+    @Override
+    public void toLoggedIn() {
         viewManagerModel.setActiveView(loggedInViewName);
         viewManagerModel.firePropertyChanged();
     }
@@ -38,7 +36,8 @@ public class LeaderboardPresenter implements LeaderboardOutputBoundary {
     @Override
     public void loadLeaderboard(LeaderboardOutputData leaderboard) {
         LeaderboardState leaderboardState = leaderboardViewModel.getState();
-        leaderboardState.setLeaderboard(leaderboard.getLeaderboardUsers(), leaderboard.getLeaderboardIds(), leaderboard.getLeaderboardScores());
+        leaderboardState.setLeaderboard(leaderboard.getLeaderboardUsers(), leaderboard.getLeaderboardIds(),
+                leaderboard.getLeaderboardScores(), leaderboard.getActiveUserID());
         leaderboardViewModel.firePropertyChanged();
     }
 }
