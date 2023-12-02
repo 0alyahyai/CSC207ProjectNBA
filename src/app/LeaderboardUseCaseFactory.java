@@ -18,7 +18,7 @@ import java.io.IOException;
 
 public class LeaderboardUseCaseFactory {
 
-    private LeaderboardUseCaseFactory() {}
+    public LeaderboardUseCaseFactory() {}
 
     public static LeaderboardView create(MenuViewModel menuViewModel, ViewManagerModel viewManagerModel,
                                   LeaderboardViewModel leaderboardViewModel, LeaderboardFileUserDataAccessInterface userDataAccessObject, TeamComparator teamComparator) {

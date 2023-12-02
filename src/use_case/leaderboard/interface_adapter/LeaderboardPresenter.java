@@ -25,10 +25,15 @@ public class LeaderboardPresenter implements LeaderboardOutputBoundary {
         viewManagerModel.firePropertyChanged();
     }
 
+    public void toLoggedInMenu() {
+        viewManagerModel.setActiveView(menuViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
+    }
+
     @Override
     public void loadLeaderboard(LeaderboardOutputData leaderboard) {
         LeaderboardState leaderboardState = leaderboardViewModel.getState();
-        leaderboardState.setLeaderboard(leaderboard.getLeaderboardUsers(), leaderboard.getLeaderboardScores());
+        leaderboardState.setLeaderboard(leaderboard.getLeaderboardUsers(), leaderboard.getLeaderboardIds(), leaderboard.getLeaderboardScores());
         leaderboardViewModel.firePropertyChanged();
     }
 }

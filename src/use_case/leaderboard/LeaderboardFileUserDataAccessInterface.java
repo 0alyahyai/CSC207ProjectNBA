@@ -8,4 +8,6 @@ public interface LeaderboardFileUserDataAccessInterface {
     String[] getOrderedNames(TeamComparator teamComparator);
 
     Float[] getOrderedScores(TeamComparator teamComparator);
+
+    String[] getOrderedIDs(TeamComparator teamComparator);
 }

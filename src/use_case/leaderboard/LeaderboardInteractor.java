@@ -21,7 +21,8 @@ public class LeaderboardInteractor implements LeaderboardInputBoundary{
     public void load() {
         String[] leaderboardUsers = LeaderboardDataAccessObject.getOrderedNames(teamComparator);
         Float[] leaderboardScores = LeaderboardDataAccessObject.getOrderedScores(teamComparator);
-        LeaderboardOutputData leaderboardOutputData = new LeaderboardOutputData(leaderboardUsers, leaderboardScores, false);
+        String[] leaderboardIds = LeaderboardDataAccessObject.getOrderedIDs(teamComparator);
+        LeaderboardOutputData leaderboardOutputData = new LeaderboardOutputData(leaderboardUsers, leaderboardIds, leaderboardScores, false);
         leaderboardPresenter.loadLeaderboard(leaderboardOutputData);
     }
 }

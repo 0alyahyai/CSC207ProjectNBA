@@ -71,6 +71,17 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 }
         );
 
+        leaderboard.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(leaderboard)) {
+                            viewManagerModel.setActiveView("leaderboard");
+                            viewManagerModel.firePropertyChanged();
+                        }
+                    }
+                }
+        );
+
         viewTeam.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {

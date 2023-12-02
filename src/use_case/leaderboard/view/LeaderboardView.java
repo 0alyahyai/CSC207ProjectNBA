@@ -67,7 +67,10 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(back)) {
-                            leaderboardController.back();
+                            if (leaderboardViewModel.getState().isLoggedIn()) {
+                                leaderboardController.back();
+                            } else
+                                leaderboardController.back();
                         }
                     }
                 }
@@ -118,12 +121,26 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
             //Note that the place and score values are dummy values. These will be replaced
             //formulaically when we have determined how to set places/scores.
 
+            String[] UserIds = state.getLeaderboardUserIDs();
+            String currUserId = state.getLoggedInUserID();
+            int j = -1;  // Initialize to -1 to indicate not found
+
+            // Iterate through the array to find the index of currUserId
+            for (int k = 0; k < UserIds.length; k++) {
+                if (UserIds[k].equals(currUserId)) {
+                    j = k;
+                    break;  // Exit the loop once found
+                }
+            }
+
             int i = 0;
             Float score = 0.0F;
             for (String user : state.getLeaderboardUsers()) {
                 JLabel place = new JLabel((i + 1) + ".");
                 JLabel userName = new JLabel(user);
                 score = state.getLeaderboardScores()[i];
+
+                userName.putClientProperty("id", state.getLeaderboardUserIDs()[i]);
 
                 JLabel pts = new JLabel(Float.toString(score));
                 Font font1 = new Font("Arial", Font.PLAIN, 16);
@@ -132,6 +149,10 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
                 leaderboard.add(userName);
                 leaderboard.add(pts);
                 i++;
+                if (i == j){
+                    userName.setForeground(Color.RED);
+                    pts.setForeground(Color.RED);
+                }
             }
             leaderboard.revalidate();
             leaderboard.repaint();

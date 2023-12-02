@@ -11,6 +11,4 @@ public interface Team {
 
     // A team has exactly five players
     List<Player> getTeamPlayers();
-//ToDo: Remove dependency on this method
-//    int getTeamScore();
 }
