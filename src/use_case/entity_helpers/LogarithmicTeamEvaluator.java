@@ -1,4 +1,9 @@
 package use_case.entity_helpers;
 
-public class LogarithmicTeamEvaluator {
+import data_access.APIinterface;
+import entity.Team;
+
+public class LogarithmicTeamEvaluator{
+
+
 }

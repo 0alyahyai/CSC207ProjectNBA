@@ -36,6 +36,8 @@ public class AlgorithmInteractor implements AlgorithmInputBoundary{
               Team activeTeam = teams.get(0);
               Team otherTeam = teams.get(0);
 
+              TeamC
+
 
 
 

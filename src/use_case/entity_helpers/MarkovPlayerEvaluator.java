@@ -1,5 +1,12 @@
 package use_case.entity_helpers;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
+
+import data_access.APIDataAccessObject;
+import entity.CommonPlayerFactory;
+import entity.Team;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.DecompositionSolver;
 import org.apache.commons.math3.linear.MatrixUtils;
@@ -13,27 +20,108 @@ import use_case.algorithm.AlgorithmDataAccessInterface;
 
 import java.util.ArrayList;
 
+import static java.lang.Math.sqrt;
+
 public class MarkovPlayerEvaluator implements PlayerEvaluator{
     public APIinterface apIinterface; //these are parameters
 
-    public MarkovPlayerEvaluator(AlgorithmDataAccessInterface algorithmDataAccessInterface,APIinterface apIinterface){
+    public MarkovPlayerEvaluator(APIinterface apIinterface){
         this.apIinterface = apIinterface;
 
     }
 
+//    public static void main(String[] args) {
+//        CommonPlayerFactory factory = new CommonPlayerFactory();
+//        Player player = factory.create("Buddy Hield", 236);
+//        AlgorithmDataAccessInterface algorithmDataAccessInterface = new AlgorithmDataAccessInterface() {
+//            @Override
+//            public ArrayList<Team> getteams(String teamname) throws IOException {
+//                return null;
+//            }
+//        };
+//        APIinterface apIinterface = new APIDataAccessObject();
+//        MarkovPlayerEvaluator markovPlayerEvaluator = new MarkovPlayerEvaluator(algorithmDataAccessInterface,apIinterface);
+//        System.out.println(markovPlayerEvaluator.evaluatePlayer(player));
+//
+//    }
     @Override
     public float evaluatePlayer(Player player) {
-        this.apIinterface.getPlayerStats(player.getPlayerID());
+        Map<String, Object> dataMap = this.apIinterface.getPlayerStats(player.getPlayerID());
 
 
-        ArrayList<Double> arrayOfStat1;
-        ArrayList<Double> arrayOfStat2;
-        ArrayList<Double> arrayOfStat3;
-        //TODO VICTOR HERE WE GET THE VALUES WANTED (SOME LISTS) TO PLUG IN AFTER AND PONDERAR.HACEMOS HELPER PARA LAS TRES.
-//        return 1/3*(MarkovPlayerEvaluator.MarkovApproximation(arrayOfStat1)+MarkovPlayerEvaluator.MarkovApproximation(arrayOfStat2)+MarkovPlayerEvaluator.MarkovApproximation(arrayOfStat3));
-        return 0F;
+        ArrayList<Double> pointsArray = MarkovPlayerEvaluator.extractPoints(dataMap);
+        ArrayList<Double> reboundsArray = MarkovPlayerEvaluator.extractTotalRebounds(dataMap);
+        ArrayList<Double> assistsArray = MarkovPlayerEvaluator.extractAssists(dataMap);
+        Double Points = MarkovPlayerEvaluator.MarkovApproximation(pointsArray);
+        Double Rebounds = MarkovPlayerEvaluator.MarkovApproximation(reboundsArray);
+        Double Assists = MarkovPlayerEvaluator.MarkovApproximation(assistsArray);
+        return (float) ((Points + Rebounds + Assists)/3);
 
     }
+    public static ArrayList<Double> extractAssists(Map<String, Object> dataMap) {
+        ArrayList<Double> assistsList = new ArrayList<>();
+
+        if (dataMap == null || !dataMap.containsKey("response") || !(dataMap.get("response") instanceof List)) {
+            return assistsList; // Returns an empty list if the map is empty or does not contain the key "response"
+        }
+
+        List<?> responseList = (List<?>) dataMap.get("response");
+
+        for (Object gameData : responseList) {
+            if (gameData instanceof Map) {
+                Map<?, ?> gameMap = (Map<?, ?>) gameData;
+                if (gameMap.containsKey("assists") && gameMap.get("assists") instanceof Number) {
+                    assistsList.add(((Number) gameMap.get("assists")).doubleValue());
+                }
+            }
+        }
+
+        return assistsList;
+    }
+
+
+    public static ArrayList<Double> extractPoints(Map<String, Object> dataMap) {
+        ArrayList<Double> pointsList = new ArrayList<>();
+
+        if (dataMap == null || !dataMap.containsKey("response") || !(dataMap.get("response") instanceof List)) {
+            return pointsList; // Returns an empty list if the map is empty or does not contain the key "response"
+        }
+
+        List<?> responseList = (List<?>) dataMap.get("response");
+
+        for (Object gameData : responseList) {
+            if (gameData instanceof Map) {
+                Map<?, ?> gameMap = (Map<?, ?>) gameData;
+                if (gameMap.containsKey("points") && gameMap.get("points") instanceof Number) {
+                    pointsList.add(((Number) gameMap.get("points")).doubleValue());
+                }
+            }
+        }
+
+        return pointsList;
+    }
+
+    public static ArrayList<Double> extractTotalRebounds(Map<String, Object> dataMap) {
+        ArrayList<Double> reboundsList = new ArrayList<>();
+
+        if (dataMap == null || !dataMap.containsKey("response") || !(dataMap.get("response") instanceof List)) {
+            return reboundsList; // Returns an empty list if the map is empty or does not contain the key "response"
+        }
+
+        List<?> responseList = (List<?>) dataMap.get("response");
+
+        for (Object gameData : responseList) {
+            if (gameData instanceof Map) {
+                Map<?, ?> gameMap = (Map<?, ?>) gameData;
+                if (gameMap.containsKey("totReb") && gameMap.get("totReb") instanceof Number) {
+                    reboundsList.add(((Number) gameMap.get("totReb")).doubleValue());
+                }
+            }
+        }
+
+        return reboundsList;
+    }
+
 
     public static Double MarkovApproximation(ArrayList<Double> arrayOfStats){
         //The stats are arranged chronologically. That makes everything easier.
@@ -75,14 +163,6 @@ public class MarkovPlayerEvaluator implements PlayerEvaluator{
 
 
         }
-
-
-
-
-
-
-
-
     }
     public static int getRandomIndex(Double[] probabilities) {
         double randomValue = Math.random(); // Generate a random number between 0.0 and 1.0
@@ -151,7 +231,7 @@ public class MarkovPlayerEvaluator implements PlayerEvaluator{
                     for (int z = 0; z < arrayOfStats.size() - 1; z++){
                         if (MarkovPlayerEvaluator.whatInterval(arrayOfStats.get(z), meanX, sigmaX) - 1 == i
                                 && MarkovPlayerEvaluator.whatInterval(arrayOfStats.get(z + 1), meanX, sigmaX) - 1 == j){
-                            pseudoentry = pseudoentry + (double)0;
+                            pseudoentry = pseudoentry + (double)1;
                         }
                     }
 
@@ -161,11 +241,15 @@ public class MarkovPlayerEvaluator implements PlayerEvaluator{
              //We have have a pseudo entry
             for(int j = 0; j < 6; j++){
                 //Only compute from here to the others
-                MarkovProbabilities[i][j] = 0.5 + (0.70*column[j]/MarkovPlayerEvaluator.getSum(column));
-
+                if(MarkovPlayerEvaluator.getSum(column) != 0){
+                    MarkovProbabilities[i][j] = 0.05 + (0.70 * column[j] / MarkovPlayerEvaluator.getSum(column));
+                }else{
+                    MarkovProbabilities[i][j] = (double)1/6;
+                }
 
 
             }
+
 
 
 
@@ -217,14 +301,15 @@ public class MarkovPlayerEvaluator implements PlayerEvaluator{
         for(int i = 0; i < arrayOfStats.size(); i++){
             meanX = meanX + arrayOfStats.get(i);
         }
-        return meanX;
+        return meanX/arrayOfStats.size();
     }
     public static Double getSigma(ArrayList<Double> arrayOfStats, Double meanX){
         Double sigmaX = (double) 0;
         for(int i = 0; i < arrayOfStats.size(); i++){
-            sigmaX = (sigmaX + arrayOfStats.get(i)) * (sigmaX + arrayOfStats.get(i));
+            sigmaX = sigmaX + (meanX - arrayOfStats.get(i)) * (meanX - arrayOfStats.get(i));
         }
-        return sigmaX/arrayOfStats.size();
+        return sqrt(sigmaX/arrayOfStats.size());
     }
+
 
 }
