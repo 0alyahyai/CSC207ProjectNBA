@@ -68,7 +68,7 @@ public class APIDataAccessObject implements APIinterface {
                     HttpResponse.BodyHandlers.ofString());
             //turn response into map
             Map<String, Object> responseMap = jsonToMap(response.body());
-             return responseMap;
+            return responseMap;
         } catch (Exception e) {
             //TODO: handle exception
             System.out.println("Error: " + e);
@@ -78,7 +78,27 @@ public class APIDataAccessObject implements APIinterface {
 
     @Override
     public Map<String, Object> getGeneralPlayerInfo(int id) {
-        return null;
+        //create url
+        String url = String.format("https://api-nba-v1.p.rapidapi.com/players?id=%s", id);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("X-RapidAPI-Key", "98c71baf05mshcd7f570f965f6d0p15d3b7jsn83f75950498e")
+                .header("X-RapidAPI-Host", "api-nba-v1.p.rapidapi.com")
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        try{
+            HttpResponse<String> response = HttpClient.newHttpClient().send(request,
+                    HttpResponse.BodyHandlers.ofString());
+            //turn response into map
+            Map<String, Object> responseMap = jsonToMap(response.body());
+            return responseMap;
+        } catch (Exception e) {
+            //TODO: handle exception
+            System.out.println("Error: " + e);
+            return null;
+        }
     }
 
 
@@ -108,12 +128,82 @@ public class APIDataAccessObject implements APIinterface {
 
     @Override
     public String getNameOfPlayer(int id) {
-        return null;
+
+        Map<String, Object> generalInfo = getGeneralPlayerInfo(id);
+        ArrayList<Map<String, Object>> responseArray = (ArrayList<Map<String, Object>>) generalInfo.get("response");
+
+        if (responseArray.size() == 0) {
+            return "Player not found";
+        } else {
+            Map<String, Object> playerInfo = responseArray.get(0);
+            return (String) playerInfo.get("firstname") + " " + (String) playerInfo.get("lastname");
+        }
     }
 
     @Override
     public ArrayList<String> viewTeamGetStats(int id) {
-        return null;
+
+        ArrayList<String> viewStats = new ArrayList<String>();
+
+        Map<String, Object> playerStats = getPlayerStats(id);
+
+        //create the response array
+        ArrayList<Map<String, Object>> responseArray = (ArrayList<Map<String, Object>>) playerStats.get("response");
+
+        //intialise all needed stats
+        String teamName = "[Player has not played any games yet.]";
+        String name = "";
+        double pointsPG = 0;
+        double assistsPG = 0;
+        double reboundsPG = 0;
+        double stealsPG = 0;
+        double blocksPG = 0;
+
+        //add the player's team name
+        if (responseArray.size() != 0) {
+            // get the last game played
+            Map<String, Object> lastGame = responseArray.get(responseArray.size() - 1);
+            //team info of the last game
+            Map<String, Object> teamInfo = (Map<String, Object>) lastGame.get("team");
+            teamName = (String) teamInfo.get("name");
+            //adding the team name to the viewStats array
+
+        }
+        viewStats.add(teamName);
+
+        //add the player's name
+        name = getNameOfPlayer(id);
+        viewStats.add(name);
+
+        //creating the numerical stats
+
+        for (int i = 0; i < responseArray.size(); i++) {
+            Map<String, Object> game = responseArray.get(i);
+            pointsPG += (double) game.get("points");
+            assistsPG += (double) game.get("assists");
+            reboundsPG += (double) game.get("totReb");
+            stealsPG += (double) game.get("steals");
+            blocksPG += (double) game.get("blocks");
+        }
+
+        //getting the averages
+        if (responseArray.size() != 0) {
+
+            float numGames = responseArray.size();
+            pointsPG /= numGames;
+            assistsPG /= numGames;
+            reboundsPG /= numGames;
+            stealsPG /= numGames;
+            blocksPG /= numGames;
+
+        }
+        viewStats.add(String.format("%.2f", pointsPG));
+        viewStats.add(String.format("%.2f", assistsPG));
+        viewStats.add(String.format("%.2f", reboundsPG));
+        viewStats.add(String.format("%.2f", stealsPG));
+        viewStats.add(String.format("%.2f", blocksPG));
+
+        return viewStats;
     }
 
     //Todo: The following methods I implemented for the leaderboard. We will need to find a way to set teamId, for now I just pass in the userId.
