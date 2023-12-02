@@ -1,5 +1,11 @@
 package use_case.entity_helpers;
-
+import java.util.Random;
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.DecompositionSolver;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.RealVector;
+import org.apache.commons.math3.linear.SingularValueDecomposition;
 import data_access.APIinterface;
 import entity.Player;
 import entity.Stats;
@@ -20,8 +26,12 @@ public class MarkovPlayerEvaluator implements PlayerEvaluator{
         this.apIinterface.getPlayerStats(player.getPlayerID());
 
 
+        ArrayList<Double> arrayOfStat1;
+        ArrayList<Double> arrayOfStat2;
+        ArrayList<Double> arrayOfStat3;
+        //TODO VICTOR HERE WE GET THE VALUES WANTED (SOME LISTS) TO PLUG IN AFTER AND PONDERAR.HACEMOS HELPER PARA LAS TRES.
+//        return 1/3*(MarkovPlayerEvaluator.MarkovApproximation(arrayOfStat1)+MarkovPlayerEvaluator.MarkovApproximation(arrayOfStat2)+MarkovPlayerEvaluator.MarkovApproximation(arrayOfStat3));
         return 0F;
-
 
     }
 
@@ -33,6 +43,7 @@ public class MarkovPlayerEvaluator implements PlayerEvaluator{
         Double[][] markovMatrix = MarkovPlayerEvaluator.makeStochastic(markovMatrixNotRounded);
 
 
+
         //
         //
         //
@@ -42,10 +53,83 @@ public class MarkovPlayerEvaluator implements PlayerEvaluator{
         //
         //
         //where are we. Where is the player in the last mach:
-        MarkovPlayerEvaluator.whatInterval(arrayOfStats.get(arrayOfStats.size()-1), meanX, sigmaX);
+        Double[] vector = MarkovPlayerEvaluator.findStationaryDistribution(markovMatrix);
+        int index = MarkovPlayerEvaluator.getRandomIndex(vector); //Number from 0 to 5
+
+
+            switch(index) {
+                case 0:
+                    return meanX - 3/2*sigmaX;
+                case 1:
+                    return meanX - 1*sigmaX;
+                case 2:
+                    return meanX - 1/4*sigmaX;
+                case 3:
+                    return meanX + 1/4*sigmaX;
+                case 4:
+                    return meanX + 1*sigmaX;
+                case 5:
+                    return meanX + 3/2*sigmaX;
+                default:
+                    return meanX;
+
+
+        }
 
 
 
+
+
+
+
+
+    }
+    public static int getRandomIndex(Double[] probabilities) {
+        double randomValue = Math.random(); // Generate a random number between 0.0 and 1.0
+        double sum = 0;
+
+        for (int i = 0; i < probabilities.length; i++) {
+            sum += probabilities[i];
+            if (randomValue <= sum) {
+                return i; // Return the index as soon as the accumulated sum exceeds the random value
+            }
+        }
+
+        return probabilities.length - 1; // In case of rounding errors, return the last index
+    }
+
+    public static Double[] findStationaryDistribution(Double[][] matrix) {
+        int size = matrix.length;
+        RealMatrix coefficients = new Array2DRowRealMatrix(size, size);
+
+        // Subtract the identity matrix from the transition matrix
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                double value = matrix[j][i] != null ? matrix[j][i] : 0.0;
+                coefficients.setEntry(i, j, value - (i == j ? 1.0 : 0.0));
+            }
+        }
+
+        // Replace the last row with ones for the sum-to-one constraint
+        for (int i = 0; i < size; i++) {
+            coefficients.setEntry(size - 1, i, 1.0);
+        }
+
+        // Create a constant vector with the last entry as 1 (sum-to-one constraint)
+        double[] constants = new double[size];
+        constants[size - 1] = 1.0;
+
+        // Solve the linear system
+        DecompositionSolver solver = new SingularValueDecomposition(coefficients).getSolver();
+        RealVector solution = solver.solve(new Array2DRowRealMatrix(constants).getColumnVector(0));
+
+        // Convert the solution to Double[]
+        Double[] stationaryDistribution = new Double[size];
+        for (int i = 0; i < size; i++) {
+            stationaryDistribution[i] = solution.getEntry(i);
+        }
+
+        return stationaryDistribution;
     }
 
     public static Double[][] getMarkovProbabilities(ArrayList<Double> arrayOfStats, Double meanX, Double sigmaX ){
