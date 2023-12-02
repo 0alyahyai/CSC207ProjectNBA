@@ -37,6 +37,10 @@ public class ViewTeamPresenter implements ViewTeamOutputBoundary {
     //TODO: implement
     @Override
     public void prepareFailview(ViewTeamOutputData outputData) {
+        ViewTeamState viewTeamState = viewTeamViewModel.getState();
+        viewTeamState.setViewTeamError(outputData.getFailureMessage());
+        viewTeamViewModel.firePropertyChanged();
+        // view not changed
 
     }
 }
