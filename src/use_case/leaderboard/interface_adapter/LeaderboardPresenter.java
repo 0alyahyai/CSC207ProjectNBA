@@ -10,7 +10,7 @@ public class LeaderboardPresenter implements LeaderboardOutputBoundary {
     private final LeaderboardViewModel leaderboardViewModel;
 
     private final MenuViewModel menuViewModel;
-    private ViewManagerModel viewManagerModel;
+    private final ViewManagerModel viewManagerModel;
 
     public LeaderboardPresenter(LeaderboardViewModel leaderboardViewModel, ViewManagerModel viewManagerModel,
                                 MenuViewModel menuViewModel) {
@@ -25,10 +25,15 @@ public class LeaderboardPresenter implements LeaderboardOutputBoundary {
         viewManagerModel.firePropertyChanged();
     }
 
+    public void toLoggedInMenu() {
+        viewManagerModel.setActiveView(menuViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
+    }
+
     @Override
     public void loadLeaderboard(LeaderboardOutputData leaderboard) {
         LeaderboardState leaderboardState = leaderboardViewModel.getState();
-        leaderboardState.setLeaderboard(leaderboard.getLeaderboard());
+        leaderboardState.setLeaderboard(leaderboard.getLeaderboardUsers(), leaderboard.getLeaderboardIds(), leaderboard.getLeaderboardScores());
         leaderboardViewModel.firePropertyChanged();
     }
 }

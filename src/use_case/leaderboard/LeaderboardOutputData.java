@@ -4,16 +4,25 @@ public class LeaderboardOutputData {
 
     private final boolean useCaseFailed;
 
-    private final String[] leaderboard;
+    private final String[] leaderboardUsers;
+    private final String[] leaderboardIds;
+    private final Float[] leaderboardScores;
 
-    public LeaderboardOutputData(String[] leaderboard, boolean useCaseFailed) {
+
+    public LeaderboardOutputData(String[] leaderboardUsers, String[] leaderboardIds, Float[] leaderboardScores, boolean useCaseFailed) {
 
         this.useCaseFailed = useCaseFailed;
-        this.leaderboard = leaderboard;
+        this.leaderboardUsers = leaderboardUsers;
+        this.leaderboardIds = leaderboardIds;
+        this.leaderboardScores = leaderboardScores;
     }
 
-    public String[] getLeaderboard() {
-        return leaderboard;
+    public String[] getLeaderboardUsers() {
+        return leaderboardUsers;
     }
+
+    public String[] getLeaderboardIds() { return leaderboardIds; }
+
+    public Float[] getLeaderboardScores() {return leaderboardScores;}
 
 }
