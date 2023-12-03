@@ -3,18 +3,18 @@ package use_case.leaderboard.view;
 import use_case.leaderboard.interface_adapter.LeaderboardController;
 import use_case.leaderboard.interface_adapter.LeaderboardState;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
-import use_case.login.view.LoginView;
 import view.LoggedInState;
-import view.LoggedInView;
 import view.LoggedInViewModel;
-import view.ViewManagerModel;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 
 public class LeaderboardView extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -36,6 +36,18 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
         JPanel buttons = new JPanel();
         leaderboard = new JPanel(new GridLayout(0, 3, 10, 10));
+
+        // Create an EmptyBorder with left and right margins (10 pixels each)
+        int leftMargin = 15;
+        int rightMargin = 15;
+        int topMargin = 10;
+        int bottomMargin = 10;
+        Border marginBorder = new EmptyBorder(topMargin, leftMargin, bottomMargin, rightMargin);
+
+        // Set the border of the leaderboard panel to the EmptyBorder
+        leaderboard.setBorder(marginBorder);
+
+
         if (leaderboardViewModel.getState().getLeaderboardUsers() != null) {
             for (String user : leaderboardViewModel.getState().getLeaderboardUsers()) {
                 JLabel userLabel = new JLabel(user);
@@ -44,10 +56,35 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
                 leaderboard.add(userLabel);
             }
         } else {
-            JLabel userLabel = new JLabel("No users yet!");
+//            Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
+            JLabel leftSpacer = new JLabel();
+            JLabel userLabel = new JLabel("No users with teams yet!");
+            JLabel rightSpacer = new JLabel();
+
+//            leftSpacer.setBorder(border);
+//            userLabel.setBorder(border);
+//            rightSpacer.setBorder(border);
+
+            try {
+                ImageIcon icon = new ImageIcon(new File("").getAbsolutePath()
+                        + "/src/assests/icons/error.png");
+                //resize the icon
+                Image image = icon.getImage();
+                Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);
+                ImageIcon errorIcon = new ImageIcon(newimg);
+                userLabel.setIcon(errorIcon);
+
+            } catch (Exception ignored) {
+
+            }
+
+            userLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
             Font font = new Font("Arial", Font.PLAIN, 16);
             userLabel.setFont(font);
+            leaderboard.add(leftSpacer);
             leaderboard.add(userLabel);
+            leaderboard.add(rightSpacer);
         }
 
         back = new JButton(LeaderboardViewModel.BACK_BUTTON_LABEL);
@@ -108,7 +145,6 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
             }
            LeaderboardState leaderboardState = leaderboardViewModel.getState();
             leaderboardState.setActiveUserID(null);
-
            return;
         }
 
@@ -120,10 +156,37 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
             leaderboard.removeAll();
 
             if (state.getLeaderboardUsers() == null) {
-                JLabel userLabel = new JLabel("No users yet!");
-                Font font = new Font("Arial", Font.PLAIN, 16);
-                userLabel.setFont(font);
+//                Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
+                JLabel leftSpacer = new JLabel();
+                JLabel userLabel = new JLabel("No users with teams yet!");
+                JLabel rightSpacer = new JLabel();
+
+//                leftSpacer.setBorder(border);
+//                userLabel.setBorder(border);
+//                rightSpacer.setBorder(border);
+
+                // Set the icon for the label
+                try {
+                    ImageIcon icon = new ImageIcon(new File("").getAbsolutePath()
+                            + "/src/assests/icons/error.png");
+                    //resize the icon
+                    Image image = icon.getImage();
+                    Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);
+                    ImageIcon errorIcon = new ImageIcon(newimg);
+                    userLabel.setIcon(errorIcon);
+
+                } catch (Exception ignored) {
+
+                }
+
+                userLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+                userLabel.setFont(new Font("Open Sans", Font.BOLD, 14));
+
+                leaderboard.add(leftSpacer);
                 leaderboard.add(userLabel);
+                leaderboard.add(rightSpacer);
+
                 return;
             }
 
@@ -165,20 +228,57 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
                 JLabel place = new JLabel((i + 1) + ".");
                 JLabel userName = new JLabel(user);
                 score = state.getLeaderboardScores()[i];
+                JLabel pts = new JLabel(Float.toString(score));
 
                 userName.putClientProperty("id", state.getLeaderboardUserIDs()[i]);
 
-                JLabel pts = new JLabel(Float.toString(score));
+                if (i == 0){
+                    place.setForeground(Color.GREEN);
+                    userName.setForeground(Color.GREEN);
+                    pts.setForeground(Color.GREEN);
+                    userName.setFont(new Font("Arial", Font.BOLD, 16));
+                    place.setFont(new Font("Arial", Font.BOLD, 16));
+                    pts.setFont(new Font("Arial", Font.BOLD, 16));
+
+                    try {
+                        ImageIcon icon = new ImageIcon(new File("").getAbsolutePath()
+                                + "/src/assests/icons/crown.png");
+                        //resize the icon
+                        Image image = icon.getImage();
+                        Image newimg = image.getScaledInstance(50, 30,  java.awt.Image.SCALE_SMOOTH);
+                        ImageIcon errorIcon = new ImageIcon(newimg);
+                        userName.setIcon(errorIcon);
+
+                    } catch (Exception ignored) {
+
+                    }
+                }
+                if (i == j){
+                    place.setForeground(Color.BLUE);
+                    userName.setForeground(Color.BLUE);
+                    pts.setForeground(Color.BLUE);
+
+                    try {
+                        ImageIcon icon = new ImageIcon(new File("").getAbsolutePath()
+                                + "/src/assests/icons/dot-filled.png");
+                        //resize the icon
+                        Image image = icon.getImage();
+                        Image newimg = image.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH);
+                        ImageIcon errorIcon = new ImageIcon(newimg);
+                        userName.setIcon(errorIcon);
+
+                    } catch (Exception ignored) {
+
+                    }
+                }
+
                 Font font1 = new Font("Arial", Font.PLAIN, 16);
                 userName.setFont(font1);
                 leaderboard.add(place);
                 leaderboard.add(userName);
                 leaderboard.add(pts);
+
                 i++;
-                if (i == j){
-                    userName.setForeground(Color.RED);
-                    pts.setForeground(Color.RED);
-                }
             }
             leaderboard.revalidate();
             leaderboard.repaint();
