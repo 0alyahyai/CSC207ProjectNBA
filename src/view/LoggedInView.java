@@ -66,7 +66,20 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                         if (evt.getSource().equals(logOut)) {
                             viewManagerModel.setActiveView("menu");
                             viewManagerModel.firePropertyChanged();
+                            LoggedInState currState = loggedInViewModel.getState();
+                            currState.setLoggedIn(false);
+                            loggedInViewModel.firePropertyChanged();
+                        }
+                    }
+                }
+        );
 
+        leaderboard.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(leaderboard)) {
+                            viewManagerModel.setActiveView("leaderboard");
+                            viewManagerModel.firePropertyChanged();
                         }
                     }
                 }

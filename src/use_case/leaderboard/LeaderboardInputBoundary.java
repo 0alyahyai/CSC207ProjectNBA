@@ -1,7 +1,11 @@
 package use_case.leaderboard;
 
 public interface LeaderboardInputBoundary {
-    void back();
+    void toMenu();
 
     void load();
+
+    void toLoggedIn();
+
+    void setActiveUser();
 }
