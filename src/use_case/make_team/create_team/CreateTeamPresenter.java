@@ -14,17 +14,19 @@ public class CreateTeamPresenter implements CreateTeamOutputBoundary{
 
     @Override
     public void showMatchingPlayers(SearchPlayerOutputData searchPlayerOutputData) {
-        CreateTeamState state = createTeamViewModel.getState();
-        state.setMatchingPlayers(searchPlayerOutputData.getMatchingPlayers());
-        createTeamViewModel.firePropertyChanged();
+//        CreateTeamState state = createTeamViewModel.getState();
+//        state.setMatchingPlayers(searchPlayerOutputData.getMatchingPlayers());
+//        createTeamViewModel.firePropertyChanged();
+        createTeamViewModel.setSearchResults(searchPlayerOutputData.getMatchingPlayers());
     }
 
 
     @Override
     public void updateTeamWithNewPlayer(AddPlayerOutputData addPlayerOutputData) {
-        CreateTeamState state = createTeamViewModel.getState();
-        state.setTeamSoFar(addPlayerOutputData.getUpdatedTeam());
-        createTeamViewModel.firePropertyChanged();
+//        CreateTeamState state = createTeamViewModel.getState();
+//        state.setTeamSoFar(addPlayerOutputData.getUpdatedTeam());
+//        createTeamViewModel.firePropertyChanged();
+        createTeamViewModel.setCurrentTeam(addPlayerOutputData.getUpdatedTeam());
     }
 
 }

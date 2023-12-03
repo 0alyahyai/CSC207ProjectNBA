@@ -1,9 +1,11 @@
 package use_case.make_team.create_team;
 
+import entity.Player;
 import view.ViewModel;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.List;
 
 public class CreateTeamViewModel extends ViewModel {
     public static final String VIEW_NAME = "Create Team View";
@@ -39,6 +41,16 @@ public class CreateTeamViewModel extends ViewModel {
         this.state = state;
     }
 
+    public void setSearchResults(List<Player> matchingPlayers) {
+        this.state.setMatchingPlayers(matchingPlayers);
+        propertyChangeSupport.firePropertyChange("player-matches", null, matchingPlayers);
+    }
+
+    public void setCurrentTeam(List<Player> teamSoFar) {
+        this.state.setTeamSoFar(teamSoFar);
+        propertyChangeSupport.firePropertyChange("updated-team", null, teamSoFar);
+    }
+
     @Override
     public void firePropertyChanged() {
         propertyChangeSupport.firePropertyChange("create-team-state", null, state);
@@ -48,4 +60,6 @@ public class CreateTeamViewModel extends ViewModel {
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         propertyChangeSupport.addPropertyChangeListener(listener);
     }
+
+//    public static PlayerListToListOfStrings
 }

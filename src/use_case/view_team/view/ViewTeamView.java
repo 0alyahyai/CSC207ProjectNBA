@@ -164,10 +164,10 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
                                 •StealsPG: %s
                                 •BlocksPG %s
                                 """,
-                        state.getPlayerNStats(i).get(0), state.getPlayerNStats(i).get(1),
-                        state.getPlayerNStats(i).get(2), state.getPlayerNStats(i).get(3),
-                        state.getPlayerNStats(i).get(4), state.getPlayerNStats(i).get(5),
-                        state.getPlayerNStats(i).get(6));
+                        state.getPlayerNStats(i+1).get(0), state.getPlayerNStats(i+1).get(1),
+                        state.getPlayerNStats(i+1).get(2), state.getPlayerNStats(i+1).get(3),
+                        state.getPlayerNStats(i+1).get(4), state.getPlayerNStats(i+1).get(5),
+                        state.getPlayerNStats(i+1).get(6));
                 //create a label with the formatted string in html format
 
                 JTextArea playerStatsTextArea = new JTextArea(playerStats);

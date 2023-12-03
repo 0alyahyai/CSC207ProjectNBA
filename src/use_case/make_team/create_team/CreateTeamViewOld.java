@@ -1,30 +1,30 @@
 package use_case.make_team.create_team;
 
 import entity.CommonPlayerFactory;
-import entity.Player;
 import use_case.make_team.create_team.addPlayer.AddPlayerController;
 import use_case.make_team.create_team.search_player.SearchPlayerController;
 import use_case.make_team.save_team.interface_adapter.SaveTeamController;
 
-import java.util.List;
-
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class CreateTeamView extends JPanel implements ActionListener, PropertyChangeListener {
+public class CreateTeamViewOld extends JPanel implements ActionListener, PropertyChangeListener {
+
+    // Swing-specific instance variables
     private final JTextField teamNameInput;
     private final JTextField playerSearchInput;
-    private final JComboBox<Player> playerDropdown;
+    private final JTable playersTable;
+    private Object[][] playersModel = new Object[10][2];
     private final JButton searchPlayerButton;
     private final JButton seeStatsButton;
     private final JButton addPlayerButton;
     private final JButton submitTeamButton;
     private final JLabel[] playerLabels;
-    private final JButton backButton;
 
 
     // CA instance variables
@@ -34,7 +34,7 @@ public class CreateTeamView extends JPanel implements ActionListener, PropertyCh
     private final SaveTeamController saveTeamController;
 
 
-    public CreateTeamView(
+    public CreateTeamViewOld(
             SearchPlayerController searchPlayerController,
             AddPlayerController addPlayerController,
             CreateTeamViewModel createTeamViewModel,
@@ -56,9 +56,8 @@ public class CreateTeamView extends JPanel implements ActionListener, PropertyCh
         seeStatsButton = new JButton(CreateTeamViewModel.STATS_BUTTON_LABEL);
         addPlayerButton = new JButton(CreateTeamViewModel.ADD_PLAYER_BUTTON_LABEL);
         submitTeamButton = new JButton(CreateTeamViewModel.SUBMIT_BUTTON_LABEL);
-        playerDropdown = new JComboBox<>();
+        playersTable = new JTable(new DefaultTableModel(playersModel, new Object[]{"Name", "Sport"}));
         playerLabels = new JLabel[5]; // Assuming 5 players
-        backButton = new JButton("Back");
 
         // Set up layout and components
         setupComponents();
@@ -81,26 +80,31 @@ public class CreateTeamView extends JPanel implements ActionListener, PropertyCh
         addPlayerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Player playerToAdd = (Player) playerDropdown.getSelectedItem();
-                addPlayerController.execute(playerToAdd, createTeamViewModel.getState().getTeamSoFar());
+                int selectedRow = playersTable.getSelectedRow();
+                if (selectedRow >= 0) {
+                    // Note that getValueAt returns an Object, you might need to cast it to the appropriate type
+                    String playerId = (String) playersTable.getValueAt(selectedRow, 0);
+                    String playerName = (String) playersTable.getValueAt(selectedRow, 0);
+                    System.out.println("Player Data: " + playerId + " " + playerName + ".");
+
+
+                    addPlayerController.execute(
+                            new CommonPlayerFactory().create(playerName, Integer.parseInt(playerId)),
+                                    createTeamViewModel.getState().getTeamSoFar()
+                    );
+                } else {
+                    System.out.println("No row is selected.");
+                }
             }
         });
         submitTeamButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (createTeamViewModel.getState().getTeamSoFar().size() != 5) {
-                    JOptionPane.showMessageDialog(null, "MUST HAVE FIVE PLAYERS!",
-                            "ERROR", JOptionPane.ERROR_MESSAGE);
-                }
-                else {
-                    saveTeamController.execute(
-                            null, // TODO: get the user (probably should make the interactor get it automatically)
-                            teamNameInput.getText(),
-                            createTeamViewModel.getState().getTeamSoFar()
-                    );
-                }
-
-
+                saveTeamController.execute(
+                        null, // TODO: get the user (probably should make the interactor get it automatically)
+                        createTeamViewModel.getState().getTeamName(),
+                        createTeamViewModel.getState().getTeamSoFar()
+                );
             }
         });
 
@@ -114,7 +118,7 @@ public class CreateTeamView extends JPanel implements ActionListener, PropertyCh
         // Center panel with a table for matching players
         String[] columnNames = {"Player Name", "Position", "Team"}; // Example column names
         Object[][] data = {}; // Placeholder data
-//        JScrollPane scrollPane = new JScrollPane(playersTable);
+        JScrollPane scrollPane = new JScrollPane(playersTable);
 
         // Right panel with search and player actions
         JPanel rightPanel = new JPanel();
@@ -133,7 +137,7 @@ public class CreateTeamView extends JPanel implements ActionListener, PropertyCh
 
         // Add panels to the frame
         this.add(topPanel, BorderLayout.NORTH);
-        this.add(playerDropdown, BorderLayout.CENTER);
+        this.add(scrollPane, BorderLayout.CENTER);
         this.add(rightPanel, BorderLayout.EAST);
         this.add(bottomPanel, BorderLayout.SOUTH);
     }
@@ -145,20 +149,17 @@ public class CreateTeamView extends JPanel implements ActionListener, PropertyCh
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("updated-team")) {
-            List<Player> updatedTeam = (List<Player>) evt.getNewValue();
-            for (int i = 0; i < updatedTeam.size(); i++) {
-                playerLabels[i].setText("P1: " + updatedTeam.get(i));
-            }
-
-        }
-        else if (evt.getPropertyName().equals("player-matches")) {
-            playerDropdown.removeAllItems();
-            List<Player> playerMatches = (List<Player>) evt.getNewValue();
-            for (Player p : playerMatches) {
-                playerDropdown.addItem(p);
-            }
+        if (evt.getPropertyName().equals("create-team-state")) {
+            System.out.println("LOG:: Doing something with property change.....");
+            CreateTeamState state = (CreateTeamState) evt.getNewValue();
+            playersTable.removeAll();
+            Object[][] x = {{1,2}, {1,2}, {1,2}, {1,2}, {1,2}, {1,2}, {1,2}, {1,2}, {1,2}, {1,2}};
+            playersTable.setModel(new DefaultTableModel(x, new Object[]{"a", "b"}));
+//            for (Player p : state.getMatchingPlayers()) {
+//
+//            }
         }
     }
-}
 
+
+}

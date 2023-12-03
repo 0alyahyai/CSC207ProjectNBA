@@ -65,7 +65,7 @@ public class Main {
         SignupViewModel signupViewModel = new SignupViewModel();
         ViewTeamViewModel viewTeamViewModel = new ViewTeamViewModel();
 
-        APIinterface apiDAO = new MockAPIDAO();
+        APIinterface apiDAO = new APIDataAccessObject();
 
         FileUserDataAccessObject userDataAccessObject;
         try {

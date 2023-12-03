@@ -34,7 +34,7 @@ public class MockAPIDAO implements APIinterface {
     }
 
     @Override
-    public Map<String, Object> searchPlayer(String name) {
+    public List<Player> searchPlayer(String name) {
         return null;
     }
 

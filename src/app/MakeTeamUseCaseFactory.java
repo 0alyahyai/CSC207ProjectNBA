@@ -1,6 +1,7 @@
 package app;
 
 import data_access.APIinterface;
+import entity.CommonPlayerFactory;
 import entity.CommonTeamFactory;
 import entity.TeamFactory;
 import use_case.make_team.MakeTeamDAI;
@@ -19,14 +20,6 @@ import use_case.make_team.save_team.SaveTeamOutputBoundary;
 import use_case.make_team.save_team.SaveTeamUCI;
 import use_case.make_team.save_team.interface_adapter.SaveTeamController;
 import use_case.make_team.save_team.interface_adapter.SaveTeamPresenter;
-import use_case.view_team.ViewTeamInputBoundary;
-import use_case.view_team.ViewTeamInteractor;
-import use_case.view_team.ViewTeamOutputBoundary;
-import use_case.view_team.ViewTeamUserDataAccessInterface;
-import use_case.view_team.interface_adapter.ViewTeamController;
-import use_case.view_team.interface_adapter.ViewTeamPresenter;
-import use_case.view_team.interface_adapter.ViewTeamViewModel;
-import view.LoggedInViewModel;
 import view.ViewManagerModel;
 
 public class MakeTeamUseCaseFactory {
@@ -55,7 +48,8 @@ public class MakeTeamUseCaseFactory {
             APIinterface apiDAO
     ) {
         CreateTeamOutputBoundary createTeamPresenter = new CreateTeamPresenter(createTeamViewModel);
-        SearchPlayerInputBoundary searchPlayerInputBoundary = new SearchPlayerUCI(apiDAO,createTeamPresenter);
+        SearchPlayerInputBoundary searchPlayerInputBoundary = new SearchPlayerUCI(apiDAO,createTeamPresenter,
+                new CommonPlayerFactory());
 
         return new SearchPlayerController(searchPlayerInputBoundary);
     }

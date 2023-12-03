@@ -3,11 +3,10 @@ package data_access;
 //import all packages required to make API calls
 import java.util.*;
 
+import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
-import entity.CommonPlayerFactory;
-import entity.Player;
-import entity.PlayerFactory;
-import entity.Stats;
+import entity.*;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -27,7 +26,9 @@ public class APIDataAccessObject implements APIinterface {
 
 
     @Override
-    public Map<String, Object> searchPlayer(String name) {
+    public List<Player> searchPlayer(String name) {
+        PlayerFactory playerFactory = new CommonPlayerFactory();
+
         //create url
         String url = String.format("https://api-nba-v1.p.rapidapi.com/players?search=%s", name);
 
@@ -42,7 +43,21 @@ public class APIDataAccessObject implements APIinterface {
                     HttpResponse.BodyHandlers.ofString());
             //turn response into map
             Map<String, Object> responseMap = jsonToMap(response.body());
-            return responseMap;
+            List<Map> result = (List<Map>) responseMap.get("response");
+            List<Player> matchingPlayers = new ArrayList<>();
+
+            for (Map m : result) {
+                int id = (int) (double) m.get("id");
+                String playerName = m.get("firstname") + " " + m.get("lastname");
+
+                Player p = playerFactory.create(playerName, id);
+
+                matchingPlayers.add(p);
+            }
+
+            System.out.println("matchingPlayers: " + matchingPlayers);
+            return matchingPlayers;
+
         } catch (Exception e) {
             //TODO: handle exception
             System.out.println("Error: " + e);
@@ -230,6 +245,14 @@ public class APIDataAccessObject implements APIinterface {
         list.add(p4);
 
         return list;
+    }
+
+
+    public static void main(String[] args) {
+        APIinterface dao = new APIDataAccessObject();
+
+        System.out.println(dao.searchPlayer("Leb"));
+        System.out.println(dao.getNameOfPlayer(2504));
     }
 
 }

@@ -15,7 +15,7 @@ public interface APIinterface  {
      * @param name
      * @return Map<String, Object>
      */
-    public  Map<String, Object> searchPlayer(String name);
+    public  List<Player> searchPlayer(String name);
 
 
     /**

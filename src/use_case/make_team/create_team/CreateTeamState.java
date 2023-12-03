@@ -2,13 +2,14 @@ package use_case.make_team.create_team;
 
 import entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CreateTeamState {
     private String teamName;
     private String searchedPlayer; // the name of the player currently being searched
-    private List<Player> teamSoFar;
-    private List<Player> matchingPlayers; // Players matching to the 'searchedPlayer' string
+    private List<Player> teamSoFar = new ArrayList<>();
+    private List<Player> matchingPlayers = new ArrayList<>(); // Players matching to the 'searchedPlayer' string
 
     // Getters and Setters
     public String getTeamName() {

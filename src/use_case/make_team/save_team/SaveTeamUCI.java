@@ -28,7 +28,8 @@ public class SaveTeamUCI implements SaveTeamInputBoundary{
 
         Team newTeam = teamFactory.createTeam(teamName, players);
 
-        boolean success = dao.saveTeam(inputData.getUser(), newTeam);
+        // TODO: can refactor SaveTeamInputData to not include a user, since we are now getting it from the DAO
+        boolean success = dao.saveTeam(dao.getActiveUser(), newTeam);
 
         if (success) {
             SaveTeamOutputData outputData = new SaveTeamOutputData(user, newTeam);
