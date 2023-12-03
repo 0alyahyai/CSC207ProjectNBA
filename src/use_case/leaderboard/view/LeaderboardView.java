@@ -3,7 +3,9 @@ package use_case.leaderboard.view;
 import use_case.leaderboard.interface_adapter.LeaderboardController;
 import use_case.leaderboard.interface_adapter.LeaderboardState;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
+import use_case.login.view.LoginView;
 import view.LoggedInState;
+import view.LoggedInView;
 import view.LoggedInViewModel;
 import view.ViewManagerModel;
 
