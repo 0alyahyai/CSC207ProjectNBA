@@ -40,7 +40,7 @@ public class LeaderboardTest {
     LeaderboardTest() throws IOException {
     }
 
-    //The following clears the csv file after each test
+//    The following clears the csv file after each test
     @AfterEach
     public void tearDown() throws IOException {
         String filePath = "./users.csv";
@@ -58,11 +58,7 @@ public class LeaderboardTest {
         }
     }
 
-    public static void testMain() throws IOException {
-        // Build the main program window, the main panel containing the
-        // various cards, and the layout, and stitch them together.
-
-
+    public void testMain() throws IOException {
 
         // The main application window.
         JFrame application = new JFrame("Login Example");
@@ -83,13 +79,14 @@ public class LeaderboardTest {
         // This keeps track of and manages which view is currently showing.
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
-
+        this.viewManagerModel = viewManagerModel;
         // The data for the views, such as username and password, are in the ViewModels.
         // This information will be changed by a presenter object that is reporting the
         // results from the use case. The ViewModels are observable, and will
         // be observed by the Views.
         MenuViewModel menuViewModel = new MenuViewModel();
         LeaderboardViewModel leaderboardViewModel = new LeaderboardViewModel();
+        this.leaderboardViewModel = leaderboardViewModel;
         LoginViewModel loginViewModel = new LoginViewModel();
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
@@ -343,8 +340,8 @@ public class LeaderboardTest {
         JButton toLeaderboard = getLeaderboardButtonMenu();
         toLeaderboard.doClick();
         JPanel leaderboard = getLeaderboard();
-        JLabel userLabel = (JLabel) leaderboard.getComponent(0);
-        assert (userLabel.getText().equals("No users yet!"));
+        JLabel userLabel = (JLabel) leaderboard.getComponent(1);
+        assert (userLabel.getText().equals("No users with teams yet!"));
     }
 
     //this is a test method for load when no users have teams
@@ -354,6 +351,20 @@ public class LeaderboardTest {
     public void loadTestUsersWithTeams() throws IOException {
         User[] users = addTwoUsersWithTeams();
         testMain();
+        JButton toLeaderboard = getLeaderboardButtonMenu();
+        toLeaderboard.doClick();
+        JPanel leaderboard = getLeaderboard();
+        JLabel userLabel1 = (JLabel) leaderboard.getComponent(0 + 2*2);
+        JLabel userLabel2 = (JLabel) leaderboard.getComponent(1 + 2*3);
+        assert (userLabel1.getText().equals(users[0].getUserName()));
+        assert (userLabel2.getText().equals(users[1].getUserName()));
+    }
+
+    @Test
+    public void leaderboardLoggedInWithTeam() throws IOException {
+        User[] users = addTwoUsersWithTeams();
+        testMain();
+        leaderboardViewModel.getState().setActiveUserID(users[1].getUserID());
         JButton toLeaderboard = getLeaderboardButtonMenu();
         toLeaderboard.doClick();
         JPanel leaderboard = getLeaderboard();
