@@ -1,7 +1,7 @@
 package data_access;
 
 import entity.*;
-import use_case.leaderboard.LeaderboardDataAccessInterface;
+import use_case.leaderboard.LeaderboardFileUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.make_team.MakeTeamDAI;
 import use_case.menu.MenuUserDataAccessInterface;
@@ -14,7 +14,7 @@ import java.util.*;
 
 public class FileUserDataAccessObject implements
         SignupUserDataAccessInterface, LoginUserDataAccessInterface,
-        LeaderboardDataAccessInterface, MenuUserDataAccessInterface,
+        LeaderboardFileUserDataAccessInterface, MenuUserDataAccessInterface,
         MakeTeamDAI, ViewTeamUserDataAccessInterface
     {
 
@@ -62,9 +62,6 @@ public class FileUserDataAccessObject implements
                     String username = String.valueOf(col[headers.get("username")]);
                     String password = String.valueOf(col[headers.get("password")]);
                     String userid = String.valueOf((col[headers.get("user_id")]));
-
-                    System.out.println(col.length);
-
 
                     String userTeamString = String.valueOf((col[headers.get("team")]));
                     Team team = teamStringToTeam(userTeamString);
@@ -142,6 +139,17 @@ public class FileUserDataAccessObject implements
     }
 
     /**
+     * Return the active user.
+     * @return the active userID
+     */
+    public String getActiveUserID() {
+        if (activeUser == null) {
+            return null;
+        }
+        return activeUser.getUserID();
+    }
+
+    /**
      * Set the active user.
      * @param user the user to set as active
      */
@@ -150,24 +158,77 @@ public class FileUserDataAccessObject implements
         activeUser = user;
     }
 
-    //ToDo: The following method is not implemented properly. It must be completed later, it is a stand-in for now, as we have not yet implemented teams.
-    @Override
-    public String[] getUserswithTeam() {
-        String[] usersWithTeam = new String[accounts.size()];
-        int i = 0;
+    public List<User> getUserswithTeam() {
+        List<User> usersWithTeam = new ArrayList<>();
         for (User user : accounts.values()) {
-            usersWithTeam[i] = user.getUserName();
-            i++;
+            if (user.hasTeam()) {
+                usersWithTeam.add(user);
+            }
         }
         return usersWithTeam;
     }
 
+    public List<UserScore> getOrderedUserScores(TeamComparator teamComparator) {
+        List<User> usersWithTeam = this.getUserswithTeam();
+        List<UserScore> userScores = new ArrayList<>();
+
+        for (User user : usersWithTeam) {
+            String userName = user.getUserName();
+            Team userTeam = user.getUserTeam();
+            Float score = teamComparator.getTeamScore(userTeam);
+            UserScore userScore = new UserScore(userName, user.getUserID(), score);
+
+            int i = 0;
+            boolean added = false;
+
+            while (i < userScores.size()) {
+                if (userScores.get(i).getScore() < score) {
+                    userScores.add(i, userScore);
+                    added = true;
+                    break;
+                }
+                i++;
+            }
+
+            if (!added) {
+                userScores.add(userScore);
+            }
+        }
+        return userScores;
+    }
+
+    public String[] getOrderedNames(TeamComparator teamComparator) {
+        List<UserScore> userScores = getOrderedUserScores(teamComparator);
+        String[] orderedNames = new String[userScores.size()];
+        for (int i = 0; i < userScores.size(); i++) {
+            orderedNames[i] = userScores.get(i).getUsername();
+        }
+        if (orderedNames.length == 0) {
+            return null;
+        }
+        return orderedNames;
+    }
+
+    public Float[] getOrderedScores(TeamComparator teamComparator) {
+        List<UserScore> userScores = getOrderedUserScores(teamComparator);
+        Float[] orderedScores = new Float[userScores.size()];
+        for (int i = 0; i < userScores.size(); i++) {
+            orderedScores[i] = userScores.get(i).getScore();
+        }
+        return orderedScores;
+    }
+
+    public String[] getOrderedIDs(TeamComparator teamComparator) {
+        List<UserScore> userScores = getOrderedUserScores(teamComparator);
+        String[] orderedUserIDs = new String[userScores.size()];
+        for (int i = 0; i < userScores.size(); i++) {
+            orderedUserIDs[i] = userScores.get(i).getUserId();
+        }
+        return orderedUserIDs;
+    }
+
         @Override
         public boolean saveTeam(User user, Team team) {
-//            List<Player> players = team.getTeamPlayers();
-//            String newTeam = String.format("[%s;%s;%s;%s;%s;%s]",
-//                    team.getTeamName(), players.get(0), players.get(1), players.get(2), players.get(3), players.get(4));
-//            System.out.println(newTeam);
             user.setTeam(team);
             this.save();
             return true;
@@ -180,15 +241,15 @@ public class FileUserDataAccessObject implements
         }
 
         public static void main(String[] args) throws IOException {
-            UserFactory uf = new CommonUserFactory();
-            FileUserDataAccessObject dao = new FileUserDataAccessObject("./users.csv",
-                    uf, new MockAPIDAO());
-
-            User user = uf.create("32", "Bob", "mar420");
-            dao.save(user);
-
-            TeamFactory tf = new CommonTeamFactory();
-            dao.saveTeam(user, tf.createMockTeam());
+//            UserFactory uf = new CommonUserFactory();
+//            FileUserDataAccessObject dao = new FileUserDataAccessObject("./users.csv",
+//                    uf, new MockAPIDAO());
+//
+//            User user = uf.create("32", "Bob", "mar420");
+//            dao.save(user);
+//
+//            TeamFactory tf = new CommonTeamFactory();
+//            dao.saveTeam(user, tf.createMockTeam());
         }
 
 

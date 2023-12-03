@@ -17,4 +17,11 @@ public interface MakeTeamDAI {
     boolean saveTeam(User user, Team team);
 
     Team getTeamOfUser(String userID);
+
+    /**
+     * Return the active user.
+     * @return the active user
+     */
+    User getActiveUser();
+
 }

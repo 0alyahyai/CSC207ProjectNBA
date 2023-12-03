@@ -4,8 +4,16 @@ import data_access.APIinterface;
 import data_access.FileUserDataAccessObject;
 import data_access.MockAPIDAO;
 import entity.CommonUserFactory;
+import entity.PlayerEvaluator;
+import entity.TeamComparator;
+import entity.TeamEvaluator;
+import entity.dummys.PlayerEvaluatorDummy;
+import entity.dummys.TeamComparatorDummy;
+import entity.dummys.TeamEvaluatorDummy;
 import use_case.leaderboard.view.LeaderboardView;
 import use_case.login.view.LoginView;
+import use_case.make_team.create_team.CreateTeamView;
+import use_case.make_team.create_team.CreateTeamViewModel;
 import use_case.menu.interface_adapter.MenuViewModel;
 import use_case.menu.view.MenuView;
 import use_case.signup.view.SignupView;
@@ -23,7 +31,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -63,7 +70,7 @@ public class Main {
         SignupViewModel signupViewModel = new SignupViewModel();
         ViewTeamViewModel viewTeamViewModel = new ViewTeamViewModel();
 
-        APIinterface apiDAO = new MockAPIDAO();
+        APIinterface apiDAO = new APIDataAccessObject();
 
         FileUserDataAccessObject userDataAccessObject;
         try {
@@ -89,15 +96,30 @@ public class Main {
                 userDataAccessObject, apiDataAccessObject);
         views.add(loggedInView, loggedInView.viewName);
 
-        MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel, loginViewModel, userDataAccessObject);
+        PlayerEvaluator playerEvaluator = new PlayerEvaluatorDummy();
+        TeamEvaluator teamEvaluator = new TeamEvaluatorDummy(playerEvaluator);
+        TeamComparator teamComparator = new TeamComparatorDummy(teamEvaluator);
+
+        MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel, loginViewModel);
         views.add(menuView, menuView.viewName);
 
-        LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(menuViewModel, viewManagerModel, leaderboardViewModel, userDataAccessObject);
+        LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(loggedInViewModel, menuView.viewName, loggedInView.viewName, viewManagerModel, leaderboardViewModel, userDataAccessObject, teamComparator);
         views.add(leaderboardView, leaderboardView.viewName);
 
         ViewTeamView viewTeamView = ViewTeamUseCaseFactory.create(viewTeamViewModel, viewManagerModel);
         views.add(viewTeamView, viewTeamView.viewName);
 
+
+        // Make-Team Usecase
+        CreateTeamViewModel createTeamViewModel = new CreateTeamViewModel();
+        CreateTeamView createTeamView =
+                MakeTeamUseCaseFactory.createCreateTeamView(
+                        createTeamViewModel,
+                        apiDAO,
+                        userDataAccessObject,
+                        viewManagerModel
+                );
+        views.add(createTeamView, CreateTeamViewModel.VIEW_NAME);
 
         viewManagerModel.setActiveView(menuView.viewName);
         viewManagerModel.firePropertyChanged();

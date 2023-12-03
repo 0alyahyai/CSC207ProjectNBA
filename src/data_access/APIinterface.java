@@ -3,6 +3,7 @@ package data_access;
 import entity.Player;
 import entity.Stats;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public interface APIinterface  {
      * @param name
      * @return Map<String, Object>
      */
-    public  Map<String, Object> searchPlayer(String name);
+    public  List<Player> searchPlayer(String name);
 
 
     /**
@@ -51,5 +52,11 @@ public interface APIinterface  {
      */
     public ArrayList<String> viewTeamGetStats(int id);
 
+
     public ArrayList<ArrayList<Integer>> getPlayerStatsforgraph(int id);
+
+
+    List<Player> getAllPlayersByName();
+
+
 }

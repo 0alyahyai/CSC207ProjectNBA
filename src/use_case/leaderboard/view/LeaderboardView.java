@@ -3,6 +3,11 @@ package use_case.leaderboard.view;
 import use_case.leaderboard.interface_adapter.LeaderboardController;
 import use_case.leaderboard.interface_adapter.LeaderboardState;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
+import use_case.login.view.LoginView;
+import view.LoggedInState;
+import view.LoggedInView;
+import view.LoggedInViewModel;
+import view.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,18 +25,19 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
     private final JPanel leaderboard;
     private final JButton back;
 
-    public LeaderboardView(LeaderboardViewModel leaderboardViewModel, LeaderboardController leaderboardController) {
+    public LeaderboardView(LoggedInViewModel loggedInViewModel, LeaderboardViewModel leaderboardViewModel, LeaderboardController leaderboardController) {
         this.leaderboardViewModel = leaderboardViewModel;
         this.leaderboardController = leaderboardController;
         leaderboardViewModel.addPropertyChangeListener(this);
+        loggedInViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(LeaderboardViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JPanel buttons = new JPanel();
         leaderboard = new JPanel(new GridLayout(0, 3, 10, 10));
-        if (leaderboardViewModel.getState().getLeaderboard() != null) {
-            for (String user : leaderboardViewModel.getState().getLeaderboard()) {
+        if (leaderboardViewModel.getState().getLeaderboardUsers() != null) {
+            for (String user : leaderboardViewModel.getState().getLeaderboardUsers()) {
                 JLabel userLabel = new JLabel(user);
                 Font font = new Font("Arial", Font.PLAIN, 16);
                 userLabel.setFont(font);
@@ -67,7 +73,10 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(back)) {
-                            leaderboardController.back();
+                            if (leaderboardViewModel.getState().isLoggedIn()) {
+                                leaderboardController.toLoggedIn();
+                            } else
+                                leaderboardController.toMenu();
                         }
                     }
                 }
@@ -78,11 +87,9 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         add(title);
         add(leaderboard);
         add(buttons);
+        leaderboardController.load();
     }
 
-    private void clearJOptionPane(String message) {
-        JOptionPane.showMessageDialog(this, message);
-    }
 
     /**
      * React to a button click that results in evt.
@@ -93,16 +100,37 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getNewValue() instanceof LoggedInState) {
+            LoggedInState state = (LoggedInState) evt.getNewValue();
+            if (state.isLoggedIn()) {
+                leaderboardController.setActiveUser();
+                return;
+            }
+           LeaderboardState leaderboardState = leaderboardViewModel.getState();
+            leaderboardState.setActiveUserID(null);
+
+           return;
+        }
+
         LeaderboardState state = (LeaderboardState) evt.getNewValue();
         if (state.getLeaderboardError() != null) {
             JOptionPane.showMessageDialog(this, state.getLeaderboardError());
         } else {
             //Remove everything from leaderboard
             leaderboard.removeAll();
+
+            if (state.getLeaderboardUsers() == null) {
+                JLabel userLabel = new JLabel("No users yet!");
+                Font font = new Font("Arial", Font.PLAIN, 16);
+                userLabel.setFont(font);
+                leaderboard.add(userLabel);
+                return;
+            }
+
             //Add new labels for the leaderboard
-            JLabel placeLabel = new JLabel("Place");
+            JLabel placeLabel = new JLabel("Rank");
             JLabel userLabel = new JLabel("User");
-            JLabel ptsLabel = new JLabel("Points");
+            JLabel ptsLabel = new JLabel("Score");
             //Set font for labels
             Font font = new Font("Arial", Font.BOLD, 16);
             placeLabel.setFont(font);
@@ -117,17 +145,40 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
             //Note that the place and score values are dummy values. These will be replaced
             //formulaically when we have determined how to set places/scores.
 
-            int i = 1;
-            int score = 1000;
-            for (String user : state.getLeaderboard()) {
-                JLabel place = new JLabel(i + ".");
+            String[] UserIds = state.getLeaderboardUserIDs();
+            String currUserId = state.getActiveUserID();
+            int j = -1;  // Initialize to -1 to indicate not found
+
+            // Iterate through the array to find the index of currUserId
+            if (currUserId != null) {
+                for (int k = 0; k < UserIds.length; k++) {
+                    if (UserIds[k].equals(currUserId)) {
+                        j = k;
+                        break;  // Exit the loop once found
+                    }
+                }
+            }
+
+            int i = 0;
+            Float score = 0.0F;
+            for (String user : state.getLeaderboardUsers()) {
+                JLabel place = new JLabel((i + 1) + ".");
                 JLabel userName = new JLabel(user);
-                JLabel pts = new JLabel(Integer.toString(score));
+                score = state.getLeaderboardScores()[i];
+
+                userName.putClientProperty("id", state.getLeaderboardUserIDs()[i]);
+
+                JLabel pts = new JLabel(Float.toString(score));
                 Font font1 = new Font("Arial", Font.PLAIN, 16);
                 userName.setFont(font1);
                 leaderboard.add(place);
                 leaderboard.add(userName);
                 leaderboard.add(pts);
+                i++;
+                if (i == j){
+                    userName.setForeground(Color.RED);
+                    pts.setForeground(Color.RED);
+                }
             }
             leaderboard.revalidate();
             leaderboard.repaint();

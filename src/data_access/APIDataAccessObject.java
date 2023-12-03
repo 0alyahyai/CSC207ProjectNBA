@@ -2,10 +2,9 @@ package data_access;
 
 //import all packages required to make API calls
 import java.util.*;
-
 import com.google.gson.reflect.TypeToken;
-import entity.Player;
-import entity.Stats;
+import entity.*;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -25,7 +24,9 @@ public class APIDataAccessObject implements APIinterface {
 
 
     @Override
-    public Map<String, Object> searchPlayer(String name) {
+    public List<Player> searchPlayer(String name) {
+        PlayerFactory playerFactory = new CommonPlayerFactory();
+
         //create url
         String url = String.format("https://api-nba-v1.p.rapidapi.com/players?search=%s", name);
 
@@ -40,7 +41,21 @@ public class APIDataAccessObject implements APIinterface {
                     HttpResponse.BodyHandlers.ofString());
             //turn response into map
             Map<String, Object> responseMap = jsonToMap(response.body());
-            return responseMap;
+            List<Map> result = (List<Map>) responseMap.get("response");
+            List<Player> matchingPlayers = new ArrayList<>();
+
+            for (Map m : result) {
+                int id = (int) (double) m.get("id");
+                String playerName = m.get("firstname") + " " + m.get("lastname");
+
+                Player p = playerFactory.create(playerName, id);
+
+                matchingPlayers.add(p);
+            }
+
+            System.out.println("matchingPlayers: " + matchingPlayers);
+            return matchingPlayers;
+
         } catch (Exception e) {
             //TODO: handle exception
             System.out.println("Error: " + e);
@@ -69,7 +84,7 @@ public class APIDataAccessObject implements APIinterface {
                     HttpResponse.BodyHandlers.ofString());
             //turn response into map
             Map<String, Object> responseMap = jsonToMap(response.body());
-             return responseMap;
+            return responseMap;
         } catch (Exception e) {
             //TODO: handle exception
             System.out.println("Error: " + e);
@@ -77,7 +92,6 @@ public class APIDataAccessObject implements APIinterface {
         }
     }
 
-    //This method can be used to find position of player easily.
     @Override
     public Map<String, Object> getGeneralPlayerInfo(int id) {
         //create url
@@ -130,6 +144,7 @@ public class APIDataAccessObject implements APIinterface {
 
     @Override
     public String getNameOfPlayer(int id) {
+
         Map<String, Object> generalInfo = getGeneralPlayerInfo(id);
         ArrayList<Map<String, Object>> responseArray = (ArrayList<Map<String, Object>>) generalInfo.get("response");
 
@@ -151,65 +166,65 @@ public class APIDataAccessObject implements APIinterface {
 
         ArrayList<String> viewStats = new ArrayList<String>();
 
-            Map<String, Object> playerStats = getPlayerStats(id);
+        Map<String, Object> playerStats = getPlayerStats(id);
 
-            //create the response array
-            ArrayList<Map<String, Object>> responseArray = (ArrayList<Map<String, Object>>) playerStats.get("response");
+        //create the response array
+        ArrayList<Map<String, Object>> responseArray = (ArrayList<Map<String, Object>>) playerStats.get("response");
 
-            //intialise all needed stats
-            String teamName = "[Player has not played any games yet.]";
-            String name = "";
-            double pointsPG = 0;
-            double assistsPG = 0;
-            double reboundsPG = 0;
-            double stealsPG = 0;
-            double blocksPG = 0;
+        //intialise all needed stats
+        String teamName = "[Player has not played any games yet.]";
+        String name = "";
+        double pointsPG = 0;
+        double assistsPG = 0;
+        double reboundsPG = 0;
+        double stealsPG = 0;
+        double blocksPG = 0;
 
-            //add the player's team name
-            if (responseArray.size() != 0) {
-                // get the last game played
-                Map<String, Object> lastGame = responseArray.get(responseArray.size() - 1);
-                //team info of the last game
-                Map<String, Object> teamInfo = (Map<String, Object>) lastGame.get("team");
-                teamName = (String) teamInfo.get("name");
-                //adding the team name to the viewStats array
+        //add the player's team name
+        if (responseArray.size() != 0) {
+            // get the last game played
+            Map<String, Object> lastGame = responseArray.get(responseArray.size() - 1);
+            //team info of the last game
+            Map<String, Object> teamInfo = (Map<String, Object>) lastGame.get("team");
+            teamName = (String) teamInfo.get("name");
+            //adding the team name to the viewStats array
 
-            }
-            viewStats.add(teamName);
+        }
+        viewStats.add(teamName);
 
-            //add the player's name
-            name = getNameOfPlayer(id);
-            viewStats.add(name);
+        //add the player's name
+        name = getNameOfPlayer(id);
+        viewStats.add(name);
 
-            //creating the numerical stats
+        //creating the numerical stats
 
-            for (int i = 0; i < responseArray.size(); i++) {
-                Map<String, Object> game = responseArray.get(i);
-                pointsPG += (double) game.get("points");
-                assistsPG += (double) game.get("assists");
-                reboundsPG += (double) game.get("totReb");
-                stealsPG += (double) game.get("steals");
-                blocksPG += (double) game.get("blocks");
-            }
+        for (int i = 0; i < responseArray.size(); i++) {
+            Map<String, Object> game = responseArray.get(i);
+            pointsPG += (double) game.get("points");
+            assistsPG += (double) game.get("assists");
+            reboundsPG += (double) game.get("totReb");
+            stealsPG += (double) game.get("steals");
+            blocksPG += (double) game.get("blocks");
+        }
 
-            //getting the averages
-            if (responseArray.size() != 0) {
+        //getting the averages
+        if (responseArray.size() != 0) {
 
-                float numGames = responseArray.size();
-                pointsPG /= numGames;
-                assistsPG /= numGames;
-                reboundsPG /= numGames;
-                stealsPG /= numGames;
-                blocksPG /= numGames;
+            float numGames = responseArray.size();
+            pointsPG /= numGames;
+            assistsPG /= numGames;
+            reboundsPG /= numGames;
+            stealsPG /= numGames;
+            blocksPG /= numGames;
 
-            }
-            viewStats.add(String.format("%.2f", pointsPG));
-            viewStats.add(String.format("%.2f", assistsPG));
-            viewStats.add(String.format("%.2f", reboundsPG));
-            viewStats.add(String.format("%.2f", stealsPG));
-            viewStats.add(String.format("%.2f", blocksPG));
+        }
+        viewStats.add(String.format("%.2f", pointsPG));
+        viewStats.add(String.format("%.2f", assistsPG));
+        viewStats.add(String.format("%.2f", reboundsPG));
+        viewStats.add(String.format("%.2f", stealsPG));
+        viewStats.add(String.format("%.2f", blocksPG));
 
-            return viewStats;
+        return viewStats;
     }
 
     @Override
@@ -268,4 +283,46 @@ public class APIDataAccessObject implements APIinterface {
 
         }
 
+
+    // Dummy method
+    @Override
+    public List<Player> getAllPlayersByName() {
+        PlayerFactory pf = new CommonPlayerFactory();
+        Player p1 = pf.createMockPlayer();
+        Player p2 = pf.createMockPlayer();
+        Player p3 = pf.createMockPlayer();
+        Player p4 = pf.createMockPlayer();
+
+        List<Player> list = new ArrayList<>();
+
+        list.add(p1);
+        list.add(p2);
+        list.add(p3);
+        list.add(p4);
+
+        return list;
     }
+
+
+    public static void main(String[] args) {
+        APIinterface dao = new APIDataAccessObject();
+
+        System.out.println(dao.searchPlayer("Leb"));
+        System.out.println(dao.getNameOfPlayer(2504));
+    }
+
+    //Todo: The following methods I implemented for the leaderboard. We will need to find a way to set teamId, for now I just pass in the userId.
+    public Player makePlayerFromId(int id){
+        PlayerFactory Factory = new CommonPlayerFactory();
+        return Factory.create(getNameOfPlayer(id), id);
+    }
+
+    public Team makeTeamFromIdList(List<Integer> idList, String teamId){
+        Player[] players = new Player[5];
+        for (int i: idList){
+            players[i] = makePlayerFromId(i);
+        }
+        TeamFactory Factory = new CommonTeamFactory();
+        return Factory.createTeam(teamId, List.of(players));
+    }
+}
