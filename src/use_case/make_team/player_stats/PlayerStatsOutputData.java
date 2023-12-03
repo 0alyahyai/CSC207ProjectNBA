@@ -1,22 +1,23 @@
 package use_case.make_team.player_stats;
 
 //import entity.Stats;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerStatsOutputData {
 
-    private List<Float> playerStats;
+    private ArrayList<ArrayList<Integer>> playerStats;
 
 
     public PlayerStatsOutputData() {
         ;
     }
 
-    public void setPlayerStats(List<Float> stats){
+    public void setPlayerStats(ArrayList<ArrayList<Integer>> stats){
         this.playerStats = stats;
     }
 
-    public List<Float> getPlayerStats() {
+    public ArrayList<ArrayList<Integer>> getPlayerStats() {
         return this.playerStats;
 
     }

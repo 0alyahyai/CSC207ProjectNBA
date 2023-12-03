@@ -2,3 +2,9 @@
 CSC207ProjectNBA.iml
 out/
 users.csv
+target/
+NBAproject.iml
+.DS_Store
+src/.DS_Store
+src/use_case/.DS_Store
+src/use_case/make_team/.DS_Store

@@ -1,21 +1,22 @@
 package use_case.make_team.player_stats.interface_adapater;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerStatsState {
 
-    private List<Float> playerStats;
+    private ArrayList<ArrayList<Integer>> playerStats;
 
 
     public PlayerStatsState() {
         ;
     }
 
-    public void setPlayerStats(List<Float> stats){
+    public void setPlayerStats(ArrayList<ArrayList<Integer>> stats){
         this.playerStats = stats;
     }
 
-    public List<Float> getPlayerStats() {
+    public ArrayList<ArrayList<Integer>> getPlayerStats() {
         return this.playerStats;
 
     }

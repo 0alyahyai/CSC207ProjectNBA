@@ -17,7 +17,7 @@ public class PlayerStatsController {
     }
 
     public void execute(Player player){
-        PlayerStatsInputData playerStatsInputData = new PlayerStatsInputData(player);
+        PlayerStatsInputData playerStatsInputData = new PlayerStatsInputData(player.getPlayerID());
         playerStatsInputBoundary.execute(playerStatsInputData);
     }
 }

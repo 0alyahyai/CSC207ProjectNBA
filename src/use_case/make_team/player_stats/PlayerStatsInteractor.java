@@ -1,6 +1,8 @@
 package use_case.make_team.player_stats;
 
-import entity.Player;
+import data_access.APIinterface;
+
+
 
 public class PlayerStatsInteractor implements PlayerStatsInputBoundary{
 
@@ -8,22 +10,25 @@ public class PlayerStatsInteractor implements PlayerStatsInputBoundary{
 
     private final PlayerStatsOutputBoundary playerStatsOutputBoundary;
 
-    private final PlayerStatsDataAccessInterface playerStatsDataAccessInterface;
+    private final APIinterface apIinterface;
 
-    public PlayerStatsInteractor(PlayerStatsInputData playerStatsInputData, PlayerStatsOutputData playerStatsOutputData, PlayerStatsOutputBoundary playerStatsOutputBoundary, PlayerStatsDataAccessInterface playerStatsDataAccessInterface) {
+
+public PlayerStatsInteractor(PlayerStatsInputData playerStatsInputData, PlayerStatsOutputData playerStatsOutputData, PlayerStatsOutputBoundary playerStatsOutputBoundary, APIinterface apIinterface ) {
         this.playerStatsInputData = playerStatsInputData;
         this.playerStatsOutputBoundary = playerStatsOutputBoundary;
+        this.apIinterface = apIinterface;
 
-        this.playerStatsDataAccessInterface = playerStatsDataAccessInterface;
     }
 
     @Override
     public void execute(PlayerStatsInputData playerStatsInputData) {
 
-        Player player = playerStatsInputData.getPlayer();
+        int playerid = playerStatsInputData.getPlayerid();
+
+
 
         PlayerStatsOutputData playerStatsOutputData = new PlayerStatsOutputData();
-        playerStatsOutputData.setPlayerStats(playerStatsDataAccessInterface.extractPlayerStats(player));
+        playerStatsOutputData.setPlayerStats(apIinterface.getPlayerStatsforgraph(playerid));
         playerStatsOutputBoundary.prepareSuccessView(playerStatsOutputData);
 
     }

@@ -1,18 +1,16 @@
 package use_case.make_team.player_stats;
 
-import entity.Player;
-
 
 public class PlayerStatsInputData {
 
-    private final Player player;
+    private final int playerid;
 
 
-    public PlayerStatsInputData(Player player) {
-        this.player = player;
+    public PlayerStatsInputData(int playerid) {
+        this.playerid = playerid;
     }
 
-    public Player getPlayer() {
-        return player;
+    public int getPlayerid() {
+        return this.playerid;
     }
 }
