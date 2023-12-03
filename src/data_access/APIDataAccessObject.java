@@ -217,35 +217,55 @@ public class APIDataAccessObject implements APIinterface {
 
         ArrayList<ArrayList<Integer>> playerStats = new ArrayList();
 
+
         Map<String, Object> map = getPlayerStats(id);
 
         ArrayList<Map<String, Object>> responseArray = (ArrayList<Map<String, Object>>) map.get("response");
 
-        int pointsPG = 0;
-        int assistsPG = 0;
-        int reboundsPG = 0;
-        int stealsPG = 0;
-        int blocksPG = 0;
 
-        for (int i = 0; i < responseArray.size(); i++) {
-            Map<String, Object> game = responseArray.get(i);
-            pointsPG = (int) game.get("points");
-            assistsPG = (int) game.get("assists");
-            reboundsPG = (int) game.get("totReb");
-            stealsPG = (int) game.get("steals");
-            blocksPG = (int) game.get("blocks");
-            ArrayList<Integer> listtoadd = new ArrayList<>();
-            listtoadd.add(pointsPG);
-            listtoadd.add(assistsPG);
-            listtoadd.add(reboundsPG);
-            listtoadd.add(stealsPG);
-            listtoadd.add(blocksPG);
-            playerStats.add(listtoadd);
+            int pointsPG = 0;
+            int assistsPG = 0;
+            int reboundsPG = 0;
+            int stealsPG = 0;
+            int blocksPG = 0;
+
+            if (responseArray.size() != 0) {
+
+                for (int i = 0; i < responseArray.size(); i++) {
+                    Map<String, Object> game = responseArray.get(i);
+                    pointsPG = (int) game.get("points");
+                    assistsPG = (int) game.get("assists");
+                    reboundsPG = (int) game.get("totReb");
+                    stealsPG = (int) game.get("steals");
+                    blocksPG = (int) game.get("blocks");
+                    ArrayList<Integer> listtoadd = new ArrayList<>();
+                    listtoadd.add(pointsPG);
+                    listtoadd.add(assistsPG);
+                    listtoadd.add(reboundsPG);
+                    listtoadd.add(stealsPG);
+                    listtoadd.add(blocksPG);
+                    playerStats.add(listtoadd);
+
+
+                }
+            }
+            else {
+
+                ArrayList<Integer> listtoadd = new ArrayList<>();
+                listtoadd.add(0);
+                listtoadd.add(0);
+                listtoadd.add(0);
+                listtoadd.add(0);
+                listtoadd.add(0);
+                playerStats.add(listtoadd);
+
+            }
+
+
+
+                return playerStats;
 
 
         }
 
-        return playerStats;
-
     }
-}

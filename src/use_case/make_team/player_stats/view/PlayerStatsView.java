@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PlayerStatsView extends JPanel {
@@ -53,8 +54,11 @@ public class PlayerStatsView extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g.setColor(Color.RED);
+        g.drawRect(10, 10, 100, 100);
+
         drawGraph(g);
-        drawAdditionalText(g);
+//        drawAdditionalText(g);
     }
 
     private void drawGraph(Graphics g) {
@@ -68,16 +72,25 @@ public class PlayerStatsView extends JPanel {
         // Example: Drawing the graph (Replace with actual logic)
         // Fetch data from viewModel and draw the graph here
 
-        PlayerStatsState state = viewModel.getState();
+//        PlayerStatsState state = viewModel.getState();
 
-        ArrayList<ArrayList<Integer>> stats = state.getPlayerStats();
+        ArrayList<ArrayList<Integer>> listOfLists = new ArrayList<>();
 
+        // Manually adding lists of integers
+        listOfLists.add(new ArrayList<>(Arrays.asList(1, 3, 5, 7)));
+        listOfLists.add(new ArrayList<>(Arrays.asList(2, 4, 6, 8)));
+        listOfLists.add(new ArrayList<>(Arrays.asList(10, 9, 8, 7)));
+        listOfLists.add(new ArrayList<>(Arrays.asList(3, 6, 9, 12)));
+
+        ArrayList<ArrayList<Integer>> stats = listOfLists;
+//        ArrayList<ArrayList<Integer>> stats = state.getPlayerStats();
+////
         for (List<Integer> statlist : stats) {
-            int prevY = 1;
-            int prevX = 0;
+            int prevY = 10 ;
+            int prevX = 10 ;
             for (Integer stat : statlist) {
-                int x = stat;
-                int y = prevY + 1;
+                int x = prevX + stat + 20;
+                int y = prevY + 20;
 
                 g.drawLine(prevX, prevY, x, y);
                 g.fillOval(x - 2, y - 2, 4, 4);
@@ -89,16 +102,42 @@ public class PlayerStatsView extends JPanel {
 
         }
 
-
-
-
     }
 
-    private void drawAdditionalText(Graphics g) {
-        // Example text, replace with actual data from viewModel
-        String additionalText = "Replace with actual stats from viewModel";
-        g.setColor(Color.BLACK);
-        g.drawString(additionalText, 10, getHeight() - 30);
+
+
+//    private void drawAdditionalText(Graphics g) {
+//        // Example text, replace with actual data from viewModel
+//        String additionalText = "Replace with actual stats from viewModel";
+//        g.setColor(Color.BLACK);
+//        g.drawString(additionalText, 10, getHeight() - 30);
+//    }
+
+    public void updateView(PlayerStatsViewModel newViewModel) {
+        this.viewModel = newViewModel;
+        repaint(); // Redraw the panel with new data
+    }
+
+
+
+    public static void main(String[] args) {
+
+        fff(new PlayerStatsViewModel(), new ViewManagerModel());
+    }
+    public static void fff(PlayerStatsViewModel viewModel, ViewManagerModel viewManagerModel) {
+        JFrame frame = new JFrame("Player Statistics");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        PlayerStatsView playerStatsView = new PlayerStatsView(viewModel, viewManagerModel);
+        frame.add(playerStatsView);
+
+        frame.setSize(400, 300); // Set a specific size
+        frame.validate(); // Layout components
+
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+
+        System.out.println("PlayerStatsView size: " + playerStatsView.getSize());
     }
 
 

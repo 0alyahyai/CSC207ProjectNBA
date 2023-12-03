@@ -16,8 +16,9 @@ public class PlayerStatsController {
         this.playerStatsInputBoundary = playerStatsInputBoundary;
     }
 
-    public void execute(Player player){
-        PlayerStatsInputData playerStatsInputData = new PlayerStatsInputData(player.getPlayerID());
+    public void execute(int playerid){
+        PlayerStatsInputData playerStatsInputData = new PlayerStatsInputData(playerid);
         playerStatsInputBoundary.execute(playerStatsInputData);
     }
 }
+
