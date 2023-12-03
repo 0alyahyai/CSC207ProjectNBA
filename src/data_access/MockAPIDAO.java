@@ -64,7 +64,7 @@ public class MockAPIDAO implements APIinterface {
     }
 
     @Override
-    public ArrayList<ArrayList<Integer>> getPlayerStatsforgraph(int id) {
+    public ArrayList<ArrayList<Double>> getPlayerStatsforgraph(int id) {
         return null;
     }
 }

@@ -53,7 +53,7 @@ public interface APIinterface  {
     public ArrayList<String> viewTeamGetStats(int id);
 
 
-    public ArrayList<ArrayList<Integer>> getPlayerStatsforgraph(int id);
+    public ArrayList<ArrayList<Double>> getPlayerStatsforgraph(int id);
 
 
     List<Player> getAllPlayersByName();

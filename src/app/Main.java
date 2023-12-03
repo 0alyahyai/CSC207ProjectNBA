@@ -14,6 +14,8 @@ import use_case.leaderboard.view.LeaderboardView;
 import use_case.login.view.LoginView;
 import use_case.make_team.create_team.CreateTeamView;
 import use_case.make_team.create_team.CreateTeamViewModel;
+import use_case.make_team.player_stats.interface_adapater.PlayerStatsViewModel;
+import use_case.make_team.player_stats.view.PlayerStatsView;
 import use_case.menu.interface_adapter.MenuViewModel;
 import use_case.menu.view.MenuView;
 import use_case.signup.view.SignupView;
@@ -110,6 +112,12 @@ public class Main {
         views.add(viewTeamView, viewTeamView.viewName);
 
 
+        // Player Stats use case
+        PlayerStatsViewModel playerStatsViewModel = new PlayerStatsViewModel();
+        PlayerStatsView playerStatsView = new PlayerStatsView(playerStatsViewModel, viewManagerModel);
+        views.add(playerStatsView, playerStatsView.viewName);
+
+
         // Make-Team Usecase
         CreateTeamViewModel createTeamViewModel = new CreateTeamViewModel();
         CreateTeamView createTeamView =
@@ -117,9 +125,15 @@ public class Main {
                         createTeamViewModel,
                         apiDAO,
                         userDataAccessObject,
-                        viewManagerModel
+                        viewManagerModel,
+                        playerStatsViewModel
+
                 );
         views.add(createTeamView, CreateTeamViewModel.VIEW_NAME);
+
+
+
+
 
         viewManagerModel.setActiveView(menuView.viewName);
         viewManagerModel.firePropertyChanged();

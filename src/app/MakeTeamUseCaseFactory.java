@@ -15,6 +15,12 @@ import use_case.make_team.create_team.addPlayer.AddPlayerUCI;
 import use_case.make_team.create_team.search_player.SearchPlayerController;
 import use_case.make_team.create_team.search_player.SearchPlayerInputBoundary;
 import use_case.make_team.create_team.search_player.SearchPlayerUCI;
+import use_case.make_team.player_stats.PlayerStatsInputBoundary;
+import use_case.make_team.player_stats.PlayerStatsInteractor;
+import use_case.make_team.player_stats.PlayerStatsOutputBoundary;
+import use_case.make_team.player_stats.interface_adapater.PlayerStatsController;
+import use_case.make_team.player_stats.interface_adapater.PlayerStatsPresenter;
+import use_case.make_team.player_stats.interface_adapater.PlayerStatsViewModel;
 import use_case.make_team.save_team.SaveTeamInputBoundary;
 import use_case.make_team.save_team.SaveTeamOutputBoundary;
 import use_case.make_team.save_team.SaveTeamUCI;
@@ -27,18 +33,21 @@ public class MakeTeamUseCaseFactory {
             CreateTeamViewModel createTeamViewModel,
             APIinterface apiDAO,
             MakeTeamDAI databaseDAO,
-            ViewManagerModel viewManagerModel
+            ViewManagerModel viewManagerModel,
+            PlayerStatsViewModel playerStatsViewModel
     ) {
 
         SearchPlayerController searchPlayerController = createSearchPlayerController(createTeamViewModel, apiDAO);
         AddPlayerController addPlayerController = createAddPlayerController(createTeamViewModel);
         SaveTeamController saveTeamController = createSaveTeamController(databaseDAO, viewManagerModel);
-
+        PlayerStatsController playerStatsController = playerStatsController(apiDAO, playerStatsViewModel, viewManagerModel);
         return new CreateTeamView(
                 searchPlayerController,
                 addPlayerController,
                 createTeamViewModel,
-                saveTeamController
+                saveTeamController,
+                playerStatsController
+
                 );
 
     }
@@ -73,5 +82,22 @@ public class MakeTeamUseCaseFactory {
         SaveTeamInputBoundary saveTeamUCI = new SaveTeamUCI(dao, saveTeamPresenter, teamFactory);
 
         return new SaveTeamController(saveTeamUCI);
+    }
+
+    public static PlayerStatsController playerStatsController (
+            APIinterface apIinterface,
+            PlayerStatsViewModel playerStatsViewModel,
+            ViewManagerModel viewManagerModel
+
+    ) {
+
+        PlayerStatsOutputBoundary playerStatsOutputBoundary = new PlayerStatsPresenter(
+                playerStatsViewModel, viewManagerModel
+        );
+
+
+        PlayerStatsInputBoundary playerStatsUCI = new PlayerStatsInteractor(
+                playerStatsOutputBoundary, apIinterface);
+        return new PlayerStatsController(playerStatsUCI);
     }
 }

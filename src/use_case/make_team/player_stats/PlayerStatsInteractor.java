@@ -6,15 +6,13 @@ import data_access.APIinterface;
 
 public class PlayerStatsInteractor implements PlayerStatsInputBoundary{
 
-    private final PlayerStatsInputData playerStatsInputData;
 
     private final PlayerStatsOutputBoundary playerStatsOutputBoundary;
 
     private final APIinterface apIinterface;
 
 
-public PlayerStatsInteractor(PlayerStatsInputData playerStatsInputData, PlayerStatsOutputData playerStatsOutputData, PlayerStatsOutputBoundary playerStatsOutputBoundary, APIinterface apIinterface ) {
-        this.playerStatsInputData = playerStatsInputData;
+public PlayerStatsInteractor(PlayerStatsOutputBoundary playerStatsOutputBoundary, APIinterface apIinterface ) {
         this.playerStatsOutputBoundary = playerStatsOutputBoundary;
         this.apIinterface = apIinterface;
 

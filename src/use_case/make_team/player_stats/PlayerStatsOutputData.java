@@ -6,18 +6,18 @@ import java.util.List;
 
 public class PlayerStatsOutputData {
 
-    private ArrayList<ArrayList<Integer>> playerStats;
+    private ArrayList<ArrayList<Double>> playerStats;
 
 
     public PlayerStatsOutputData() {
         ;
     }
 
-    public void setPlayerStats(ArrayList<ArrayList<Integer>> stats){
+    public void setPlayerStats(ArrayList<ArrayList<Double>> stats){
         this.playerStats = stats;
     }
 
-    public ArrayList<ArrayList<Integer>> getPlayerStats() {
+    public ArrayList<ArrayList<Double>> getPlayerStats() {
         return this.playerStats;
 
     }
