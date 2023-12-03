@@ -1,5 +1,6 @@
 package view;
 
+import use_case.make_team.create_team.CreateTeamViewModel;
 import use_case.view_team.interface_adapter.ViewTeamController;
 
 import javax.swing.*;
@@ -95,6 +96,20 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                         }
                     }
                 }
+        );
+
+        createTeam.addActionListener(
+                new ActionListener() {
+                     @Override
+                     public void actionPerformed(ActionEvent e) {
+                         if (e.getSource().equals(createTeam)) {
+                             viewManagerModel.setActiveView(CreateTeamViewModel.VIEW_NAME);
+                             viewManagerModel.firePropertyChanged();
+                         }
+
+                     }
+                }
+
         );
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

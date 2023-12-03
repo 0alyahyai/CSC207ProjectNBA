@@ -63,9 +63,6 @@ public class FileUserDataAccessObject implements
                     String password = String.valueOf(col[headers.get("password")]);
                     String userid = String.valueOf((col[headers.get("user_id")]));
 
-                    System.out.println(col.length);
-
-
                     String userTeamString = String.valueOf((col[headers.get("team")]));
                     Team team = teamStringToTeam(userTeamString);
 
@@ -232,10 +229,6 @@ public class FileUserDataAccessObject implements
 
         @Override
         public boolean saveTeam(User user, Team team) {
-//            List<Player> players = team.getTeamPlayers();
-//            String newTeam = String.format("[%s;%s;%s;%s;%s;%s]",
-//                    team.getTeamName(), players.get(0), players.get(1), players.get(2), players.get(3), players.get(4));
-//            System.out.println(newTeam);
             user.setTeam(team);
             this.save();
             return true;
@@ -248,15 +241,15 @@ public class FileUserDataAccessObject implements
         }
 
         public static void main(String[] args) throws IOException {
-            UserFactory uf = new CommonUserFactory();
-            FileUserDataAccessObject dao = new FileUserDataAccessObject("./users.csv",
-                    uf, new MockAPIDAO());
-
-            User user = uf.create("32", "Bob", "mar420");
-            dao.save(user);
-
-            TeamFactory tf = new CommonTeamFactory();
-            dao.saveTeam(user, tf.createMockTeam());
+//            UserFactory uf = new CommonUserFactory();
+//            FileUserDataAccessObject dao = new FileUserDataAccessObject("./users.csv",
+//                    uf, new MockAPIDAO());
+//
+//            User user = uf.create("32", "Bob", "mar420");
+//            dao.save(user);
+//
+//            TeamFactory tf = new CommonTeamFactory();
+//            dao.saveTeam(user, tf.createMockTeam());
         }
 
 

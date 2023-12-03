@@ -24,7 +24,9 @@ public class APIDataAccessObject implements APIinterface {
 
 
     @Override
-    public Map<String, Object> searchPlayer(String name) {
+    public List<Player> searchPlayer(String name) {
+        PlayerFactory playerFactory = new CommonPlayerFactory();
+
         //create url
         String url = String.format("https://api-nba-v1.p.rapidapi.com/players?search=%s", name);
 
@@ -39,7 +41,21 @@ public class APIDataAccessObject implements APIinterface {
                     HttpResponse.BodyHandlers.ofString());
             //turn response into map
             Map<String, Object> responseMap = jsonToMap(response.body());
-            return responseMap;
+            List<Map> result = (List<Map>) responseMap.get("response");
+            List<Player> matchingPlayers = new ArrayList<>();
+
+            for (Map m : result) {
+                int id = (int) (double) m.get("id");
+                String playerName = m.get("firstname") + " " + m.get("lastname");
+
+                Player p = playerFactory.create(playerName, id);
+
+                matchingPlayers.add(p);
+            }
+
+            System.out.println("matchingPlayers: " + matchingPlayers);
+            return matchingPlayers;
+
         } catch (Exception e) {
             //TODO: handle exception
             System.out.println("Error: " + e);
@@ -209,6 +225,33 @@ public class APIDataAccessObject implements APIinterface {
         viewStats.add(String.format("%.2f", blocksPG));
 
         return viewStats;
+    }
+
+    // Dummy method
+    @Override
+    public List<Player> getAllPlayersByName() {
+        PlayerFactory pf = new CommonPlayerFactory();
+        Player p1 = pf.createMockPlayer();
+        Player p2 = pf.createMockPlayer();
+        Player p3 = pf.createMockPlayer();
+        Player p4 = pf.createMockPlayer();
+
+        List<Player> list = new ArrayList<>();
+
+        list.add(p1);
+        list.add(p2);
+        list.add(p3);
+        list.add(p4);
+
+        return list;
+    }
+
+
+    public static void main(String[] args) {
+        APIinterface dao = new APIDataAccessObject();
+
+        System.out.println(dao.searchPlayer("Leb"));
+        System.out.println(dao.getNameOfPlayer(2504));
     }
 
     //Todo: The following methods I implemented for the leaderboard. We will need to find a way to set teamId, for now I just pass in the userId.

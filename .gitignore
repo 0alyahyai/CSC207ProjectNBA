@@ -2,5 +2,6 @@
 CSC207ProjectNBA.iml
 out/
 users.csv
-target/
 NBAproject.iml
+target/
+.DS_Store

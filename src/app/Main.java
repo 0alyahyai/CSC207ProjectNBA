@@ -12,6 +12,8 @@ import entity.dummys.TeamComparatorDummy;
 import entity.dummys.TeamEvaluatorDummy;
 import use_case.leaderboard.view.LeaderboardView;
 import use_case.login.view.LoginView;
+import use_case.make_team.create_team.CreateTeamView;
+import use_case.make_team.create_team.CreateTeamViewModel;
 import use_case.menu.interface_adapter.MenuViewModel;
 import use_case.menu.view.MenuView;
 import use_case.signup.view.SignupView;
@@ -68,7 +70,7 @@ public class Main {
         SignupViewModel signupViewModel = new SignupViewModel();
         ViewTeamViewModel viewTeamViewModel = new ViewTeamViewModel();
 
-        APIinterface apiDAO = new MockAPIDAO();
+        APIinterface apiDAO = new APIDataAccessObject();
 
         FileUserDataAccessObject userDataAccessObject;
         try {
@@ -107,6 +109,17 @@ public class Main {
         ViewTeamView viewTeamView = ViewTeamUseCaseFactory.create(viewTeamViewModel, viewManagerModel);
         views.add(viewTeamView, viewTeamView.viewName);
 
+
+        // Make-Team Usecase
+        CreateTeamViewModel createTeamViewModel = new CreateTeamViewModel();
+        CreateTeamView createTeamView =
+                MakeTeamUseCaseFactory.createCreateTeamView(
+                        createTeamViewModel,
+                        apiDAO,
+                        userDataAccessObject,
+                        viewManagerModel
+                );
+        views.add(createTeamView, CreateTeamViewModel.VIEW_NAME);
 
         viewManagerModel.setActiveView(menuView.viewName);
         viewManagerModel.firePropertyChanged();

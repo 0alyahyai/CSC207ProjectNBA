@@ -16,6 +16,7 @@ public class SaveTeamPresenter implements SaveTeamOutputBoundary {
     public void prepareSuccessView(SaveTeamOutputData outputData) {
         viewManagerModel.setActiveView(LoggedInViewModel.TITLE_LABEL);
         viewManagerModel.firePropertyChanged();
+        System.out.println("PREPARE SUCCESS VIEW INVOKED!");
 
         // TODO: Code for showing pop-up of success with outputData.<...>
     }
