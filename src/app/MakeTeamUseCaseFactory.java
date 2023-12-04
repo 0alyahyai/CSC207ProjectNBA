@@ -38,8 +38,8 @@ public class MakeTeamUseCaseFactory {
                 searchPlayerController,
                 addPlayerController,
                 createTeamViewModel,
-                saveTeamController
-                );
+                saveTeamController,
+                viewManagerModel);
 
     }
 

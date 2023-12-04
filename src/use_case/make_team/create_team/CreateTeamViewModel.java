@@ -61,5 +61,10 @@ public class CreateTeamViewModel extends ViewModel {
         propertyChangeSupport.addPropertyChangeListener(listener);
     }
 
+    public void clearState() {
+        state.clear();
+        propertyChangeSupport.firePropertyChange("state-clearance", null, state);
+    }
+
 //    public static PlayerListToListOfStrings
 }

@@ -1,5 +1,6 @@
 package view;
 
+import entity.User;
 import use_case.make_team.create_team.CreateTeamViewModel;
 import use_case.view_team.interface_adapter.ViewTeamController;
 
@@ -56,7 +57,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         buttons.add(leaderboard);
         buttons.add(createTeam);
         buttons.add(compareTeams);
-        buttons.add(getPlayerStats);
+        // This is removed from the specification
+//        buttons.add(getPlayerStats);
         buttons.add(viewTeam);
         buttons.add(logOut);
         // Logs out the user when the button is clicked.
@@ -92,7 +94,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                             viewTeamController.execute();
 //                            viewManagerModel.setActiveView("view team");
 //                            viewManagerModel.firePropertyChanged();
-
                         }
                     }
                 }

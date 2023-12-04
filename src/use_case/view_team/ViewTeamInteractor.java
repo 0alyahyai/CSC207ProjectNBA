@@ -40,6 +40,9 @@ public class ViewTeamInteractor implements ViewTeamInputBoundary{
             outputData.setFailureMessage("You do not have a team yet! Create a team by going to the 'Create Team' tab.");
             viewTeamOutputBoundary.prepareFailview(outputData);
         } else { // team exists
+            System.out.println(team);
+            System.out.println(team.getTeamPlayers());
+
             ViewTeamOutputData outputData = new ViewTeamOutputData();
             List<Player> players = team.getTeamPlayers();
             for (int i = 0; i < 5; i++) {
