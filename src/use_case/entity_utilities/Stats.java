@@ -1,4 +1,4 @@
-package entity;
+package use_case.entity_utilities;
 
 /**
  * A "boundary" allowing the PlayerEvaluator entity to communicate with the use-case layer so that it can access

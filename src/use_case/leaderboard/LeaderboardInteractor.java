@@ -1,6 +1,6 @@
 package use_case.leaderboard;
 
-import entity.TeamComparator;
+import use_case.entity_utilities.TeamComparator;
 
 public class LeaderboardInteractor implements LeaderboardInputBoundary{
 

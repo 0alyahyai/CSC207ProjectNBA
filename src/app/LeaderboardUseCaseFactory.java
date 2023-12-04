@@ -1,8 +1,7 @@
 package app;
 
 
-import entity.TeamComparator;
-import use_case.menu.interface_adapter.MenuViewModel;
+import use_case.entity_utilities.TeamComparator;
 import view.LoggedInViewModel;
 import view.ViewManagerModel;
 import use_case.leaderboard.interface_adapter.LeaderboardController;
