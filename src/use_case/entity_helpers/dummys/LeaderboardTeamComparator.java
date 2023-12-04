@@ -1,12 +1,11 @@
-package entity.dummys;
+package use_case.entity_helpers.dummys;
 
 import entity.Team;
 import use_case.entity_helpers.TeamComparator;
 import use_case.entity_helpers.TeamEvaluator;
 
-public class TeamComparatorDummy extends TeamComparator {
-
-    public TeamComparatorDummy(TeamEvaluator teamEvaluator) {
+public class LeaderboardTeamComparator extends TeamComparator {
+    public LeaderboardTeamComparator(TeamEvaluator teamEvaluator) {
         super(teamEvaluator);
     }
 
@@ -14,4 +13,6 @@ public class TeamComparatorDummy extends TeamComparator {
     public Team compareTeams(Team t1, Team t2) {
         return null;
     }
+
+
 }

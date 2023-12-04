@@ -9,6 +9,8 @@ import view.LabelTextPanel;
 import view.ViewManagerModel;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -53,6 +55,18 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         buttons.add(signUp);
         cancel = new JButton(SignupViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
+
+        //Styling:
+        int leftMargin = 30;
+        int rightMargin = 30;
+        int topMargin = 10;
+        int bottomMargin = 10;
+        Border marginBorder = new EmptyBorder(topMargin, leftMargin, bottomMargin, rightMargin);
+        buttons.setBorder(marginBorder);
+        title.setBorder(marginBorder);
+
+        Font font = new Font("Arial", Font.BOLD, 16);
+        title.setFont(font);
 
 
         signUp.addActionListener(

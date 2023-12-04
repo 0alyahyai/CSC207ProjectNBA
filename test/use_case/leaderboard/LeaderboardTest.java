@@ -3,18 +3,26 @@ package use_case.leaderboard;
 import app.*;
 import data_access.*;
 import entity.*;
-import entity.dummys.PlayerEvaluatorDummy;
-import entity.dummys.TeamComparatorDummy;
-import entity.dummys.TeamEvaluatorDummy;
-import use_case.entity_helpers.PlayerEvaluator;
-import use_case.entity_helpers.TeamComparator;
-import use_case.entity_helpers.TeamEvaluator;
+import use_case.algorithm.AlgorithmDataAccessInterface;
+import use_case.algorithm.interface_adapter.AlgorithmViewModel;
+import use_case.algorithm.viewAlgorithm.AlgorithmView;
+import use_case.compareTeam.interface_adapter.CompareViewModel;
+import use_case.compareTeam.viewCompareTeam.CompareViewOptions;
+import use_case.entity_helpers.*;
+import use_case.entity_helpers.dummys.LeaderboardTeamComparator;
+import use_case.entity_helpers.dummys.PlayerEvaluatorDummy;
+import use_case.entity_helpers.dummys.TeamComparatorDummy;
+import use_case.entity_helpers.dummys.TeamEvaluatorDummy;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
 import use_case.leaderboard.view.LeaderboardView;
 import use_case.login.interface_adapter.LoginViewModel;
 import use_case.login.view.LoginView;
+import use_case.make_team.create_team.CreateTeamView;
+import use_case.make_team.create_team.CreateTeamViewModel;
+import use_case.make_team.player_stats.interface_adapater.PlayerStatsViewModel;
+import use_case.make_team.player_stats.view.PlayerStatsView;
 import use_case.menu.interface_adapter.MenuViewModel;
 import use_case.menu.view.MenuView;
 import use_case.signup.interface_adapter.SignupViewModel;
@@ -43,7 +51,7 @@ public class LeaderboardTest {
     LeaderboardTest() throws IOException {
     }
 
-    //The following clears the csv file after each test
+//    The following clears the csv file after each test
     @AfterEach
     public void tearDown() throws IOException {
         String filePath = "./users.csv";
@@ -61,11 +69,7 @@ public class LeaderboardTest {
         }
     }
 
-    public static void testMain() throws IOException {
-        // Build the main program window, the main panel containing the
-        // various cards, and the layout, and stitch them together.
-
-
+    public void testMain() throws IOException {
 
         // The main application window.
         JFrame application = new JFrame("Login Example");
@@ -86,6 +90,7 @@ public class LeaderboardTest {
         // This keeps track of and manages which view is currently showing.
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
+        this.viewManagerModel = viewManagerModel;
 
         // The data for the views, such as username and password, are in the ViewModels.
         // This information will be changed by a presenter object that is reporting the
@@ -93,12 +98,17 @@ public class LeaderboardTest {
         // be observed by the Views.
         MenuViewModel menuViewModel = new MenuViewModel();
         LeaderboardViewModel leaderboardViewModel = new LeaderboardViewModel();
+        this.leaderboardViewModel = leaderboardViewModel;
         LoginViewModel loginViewModel = new LoginViewModel();
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
         ViewTeamViewModel viewTeamViewModel = new ViewTeamViewModel();
 
-        APIinterface apiDAO = new MockAPIDAO();
+        APIinterface apiDAO = new APIDataAccessObject();
+
+        //Here VARP starts coding
+        CompareViewModel compareViewModel = new CompareViewModel();
+        //Here VARP ends coding
 
         FileUserDataAccessObject userDataAccessObject;
         try {
@@ -121,12 +131,17 @@ public class LeaderboardTest {
         views.add(loginView, loginView.viewName);
 
         LoggedInView loggedInView = LoggedInViewFactory.create(loggedInViewModel, viewManagerModel, viewTeamViewModel,
-                userDataAccessObject, apiDataAccessObject);
+                userDataAccessObject, apiDataAccessObject, compareViewModel);
         views.add(loggedInView, loggedInView.viewName);
 
-        PlayerEvaluator playerEvaluator = new PlayerEvaluatorDummy();
-        TeamEvaluator teamEvaluator = new TeamEvaluatorDummy(playerEvaluator);
-        TeamComparator teamComparator = new TeamComparatorDummy(teamEvaluator);
+//        PlayerEvaluator playerEvaluator = new PlayerEvaluatorDummy();
+//        TeamEvaluator teamEvaluator = new TeamEvaluatorDummy(playerEvaluator);
+//        TeamComparator teamComparator = new TeamComparatorDummy(teamEvaluator);
+
+        PlayerEvaluatorFactory playerEvaluatorFactory = new PlayerEvaluatorFactory();
+        TeamEvaluatorFactory teamEvaluatorFactory = new TeamEvaluatorFactory(playerEvaluatorFactory);
+        TeamEvaluator teamEvaluator = teamEvaluatorFactory.getLogarithmTeamEvaluator(apiDAO);
+        TeamComparator teamComparator = new LeaderboardTeamComparator(teamEvaluator);
 
         MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel, loginViewModel);
         views.add(menuView, menuView.viewName);
@@ -138,8 +153,50 @@ public class LeaderboardTest {
         views.add(viewTeamView, viewTeamView.viewName);
 
 
+        // Player Stats use case
+        PlayerStatsViewModel playerStatsViewModel = new PlayerStatsViewModel();
+        PlayerStatsView playerStatsView = new PlayerStatsView(playerStatsViewModel, viewManagerModel);
+        views.add(playerStatsView, playerStatsView.viewName);
+
+
+        // Make-Team Usecase
+        CreateTeamViewModel createTeamViewModel = new CreateTeamViewModel();
+        CreateTeamView createTeamView =
+                MakeTeamUseCaseFactory.createCreateTeamView(
+                        createTeamViewModel,
+                        apiDAO,
+                        userDataAccessObject,
+                        viewManagerModel,
+                        playerStatsViewModel
+
+                );
+        views.add(createTeamView, CreateTeamViewModel.VIEW_NAME);
+
+
+
+
+
         viewManagerModel.setActiveView(menuView.viewName);
         viewManagerModel.firePropertyChanged();
+
+        //Here VARP starts coding
+
+//        CompareViewOptions compareViewOptions = LoggedInViewFactory.create(viewManagerModel, compareViewModel);
+//        views.add(compareViewOptions, compareViewOptions.viewName);
+
+        AlgorithmViewModel algorithmViewModel = new AlgorithmViewModel();
+//        CompareViewModel compareViewModel = new CompareViewModel();
+        CompareViewOptions compareViewOptions = AlgorithmUseCaseFactory.createFirstView(
+                algorithmViewModel, viewManagerModel, apiDAO, userDataAccessObject, compareViewModel
+        );
+        views.add(compareViewOptions, compareViewOptions.viewName);
+
+        AlgorithmView algorithmView = AlgorithmUseCaseFactory.createAlgorithmView(algorithmViewModel, viewManagerModel);
+        views.add(algorithmView, algorithmView.viewName);
+
+
+
+        //Here VARP ends coding
 
         application.pack();
         application.setVisible(true);
@@ -173,8 +230,8 @@ public class LeaderboardTest {
         user1.setTeam(team1);
         user2.setTeam(team2);
 
-        users[0] = user1;
-        users[1] = user2;
+        users[1] = user1;
+        users[0] = user2;
         APIinterface apiDAO = new APIDataAccessObject();
         FileUserDataAccessObject fudao;
         try {
@@ -209,7 +266,11 @@ public class LeaderboardTest {
 
         LeaderboardView sv = (LeaderboardView) jp2.getComponent(4);
 
-        return (JPanel) sv.getComponent(1); // this should be the LeaderBoard
+        JScrollPane leaderboardWrapper = (JScrollPane) sv.getComponent(1);
+
+        JViewport leaderboardViewport = (JViewport) leaderboardWrapper.getComponent(0);
+
+        return (JPanel) leaderboardViewport.getComponent(0); // this should be the LeaderBoard
     }
 
     //This returns the back button from the leaderboard view
@@ -287,7 +348,7 @@ public class LeaderboardTest {
 
         LoggedInView sv = (LoggedInView) jp2.getComponent(2);
 
-        JPanel buttons = (JPanel) sv.getComponent(3);
+        JPanel buttons = (JPanel) sv.getComponent(2);
 
         return (JButton) buttons.getComponent(0); // this should be the LeaderBoard button in the LoggedInView
     }
@@ -331,10 +392,10 @@ public class LeaderboardTest {
     @Test
     public void LeaderboardBackButtonLoggedIn() throws IOException {
         testMain();
-        leaderboardViewModel.getState().setActiveUserID("123");
         JButton toLeaderboard = getLeaderboardButtonMenu();
         JButton button = getBackButtonLeaderboard();
         toLeaderboard.doClick();
+        leaderboardViewModel.getState().setActiveUserID("123");
         button.doClick();
         assert (viewManagerModel.getActiveView().equals("logged in"));
     }
@@ -346,8 +407,8 @@ public class LeaderboardTest {
         JButton toLeaderboard = getLeaderboardButtonMenu();
         toLeaderboard.doClick();
         JPanel leaderboard = getLeaderboard();
-        JLabel userLabel = (JLabel) leaderboard.getComponent(0);
-        assert (userLabel.getText().equals("No users yet!"));
+        JLabel userLabel = (JLabel) leaderboard.getComponent(1);
+        assert (userLabel.getText().equals("No users with teams yet!"));
     }
 
     //this is a test method for load when no users have teams
@@ -357,6 +418,20 @@ public class LeaderboardTest {
     public void loadTestUsersWithTeams() throws IOException {
         User[] users = addTwoUsersWithTeams();
         testMain();
+        JButton toLeaderboard = getLeaderboardButtonMenu();
+        toLeaderboard.doClick();
+        JPanel leaderboard = getLeaderboard();
+        JLabel userLabel1 = (JLabel) leaderboard.getComponent(0 + 2*2);
+        JLabel userLabel2 = (JLabel) leaderboard.getComponent(1 + 2*3);
+        assert (userLabel1.getText().equals(users[0].getUserName()));
+        assert (userLabel2.getText().equals(users[1].getUserName()));
+    }
+
+    @Test
+    public void leaderboardLoggedInWithTeam() throws IOException {
+        User[] users = addTwoUsersWithTeams();
+        testMain();
+        leaderboardViewModel.getState().setActiveUserID(users[1].getUserID());
         JButton toLeaderboard = getLeaderboardButtonMenu();
         toLeaderboard.doClick();
         JPanel leaderboard = getLeaderboard();

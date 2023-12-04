@@ -6,6 +6,8 @@ import use_case.make_team.create_team.CreateTeamViewModel;
 import use_case.view_team.interface_adapter.ViewTeamController;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,8 +50,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         JLabel title = new JLabel("Main Menu");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel usernameInfo = new JLabel(String.format("Logged in as: %s", loggedInViewModel.getState().getUsername()));
         username = new JLabel();
+        username.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JPanel buttons = new JPanel();
         logOut = new JButton(loggedInViewModel.LOGOUT_BUTTON_LABEL);
@@ -65,6 +67,20 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 //        buttons.add(getPlayerStats);
         buttons.add(viewTeam);
         buttons.add(logOut);
+
+        //Styling:
+        int leftMargin = 30;
+        int rightMargin = 30;
+        int topMargin = 10;
+        int bottomMargin = 10;
+        Border marginBorder = new EmptyBorder(topMargin, leftMargin, bottomMargin, rightMargin);
+        buttons.setBorder(marginBorder);
+        buttons.setBorder(marginBorder);
+        title.setBorder(marginBorder);
+
+        Font font = new Font("Arial", Font.BOLD, 16);
+        title.setFont(font);
+
         // Logs out the user when the button is clicked.
         logOut.addActionListener(
                 new ActionListener() {
@@ -134,7 +150,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         this.add(title);
-        this.add(usernameInfo);
         this.add(username);
         this.add(buttons);
 
@@ -151,7 +166,9 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         LoggedInState state = (LoggedInState) evt.getNewValue();
-        username.setText(state.getUsername());
+        String userText = "<html>" + String.format("Logged in as: %s", state.getUsername()) + "</html>";
+        username.setText(userText);
+        username.setHorizontalAlignment(SwingConstants.CENTER);
     }
 
 

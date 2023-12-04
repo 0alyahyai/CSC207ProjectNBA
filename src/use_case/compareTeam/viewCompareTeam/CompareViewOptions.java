@@ -115,9 +115,9 @@ public class CompareViewOptions extends JPanel implements ActionListener, Proper
                     new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
                             if (e.getSource().equals(compareButton)) {
-                               algorithmController.execute(
-                                       (String) comboBox1.getSelectedItem(),
-                                       (String) comboBox2.getSelectedItem());
+                                algorithmController.execute(
+                                        (String) comboBox1.getSelectedItem(),
+                                        (String) comboBox2.getSelectedItem());
                             }
 
                         }

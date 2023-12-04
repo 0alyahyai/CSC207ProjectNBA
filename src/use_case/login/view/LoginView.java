@@ -7,6 +7,8 @@ import view.LabelTextPanel;
 import view.ViewManagerModel;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,7 +41,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         this.viewManagerModel = viewManagerModel;
 
 
-        JLabel title = new JLabel("Login Screen");
+        JLabel title = new JLabel("Login");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         LabelTextPanel usernameInfo = new LabelTextPanel(
@@ -52,6 +54,18 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         buttons.add(logIn);
         cancel = new JButton(loginViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
+
+        //Styling:
+        int leftMargin = 30;
+        int rightMargin = 30;
+        int topMargin = 10;
+        int bottomMargin = 10;
+        Border marginBorder = new EmptyBorder(topMargin, leftMargin, bottomMargin, rightMargin);
+        buttons.setBorder(marginBorder);
+        title.setBorder(marginBorder);
+
+        Font font = new Font("Arial", Font.BOLD, 16);
+        title.setFont(font);
 
         logIn.addActionListener(                // This creates an anonymous subclass of ActionListener and instantiates it.
                 new ActionListener() {

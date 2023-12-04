@@ -3,16 +3,16 @@ package app;
 import data_access.APIinterface;
 import data_access.FileUserDataAccessObject;
 import entity.CommonUserFactory;
+import use_case.algorithm.AlgorithmDataAccessInterface;
 import use_case.algorithm.interface_adapter.AlgorithmViewModel;
 import use_case.algorithm.viewAlgorithm.AlgorithmView;
 import use_case.compareTeam.interface_adapter.CompareViewModel;
 import use_case.compareTeam.viewCompareTeam.CompareViewOptions;
-import use_case.entity_helpers.PlayerEvaluator;
-import use_case.entity_helpers.TeamComparator;
-import use_case.entity_helpers.TeamEvaluator;
-import entity.dummys.PlayerEvaluatorDummy;
-import entity.dummys.TeamComparatorDummy;
-import entity.dummys.TeamEvaluatorDummy;
+import use_case.entity_helpers.*;
+import use_case.entity_helpers.dummys.LeaderboardTeamComparator;
+import use_case.entity_helpers.dummys.PlayerEvaluatorDummy;
+import use_case.entity_helpers.dummys.TeamComparatorDummy;
+import use_case.entity_helpers.dummys.TeamEvaluatorDummy;
 import use_case.leaderboard.view.LeaderboardView;
 import use_case.login.view.LoginView;
 import use_case.make_team.create_team.CreateTeamView;
@@ -105,9 +105,14 @@ public class Main {
                 userDataAccessObject, apiDataAccessObject, compareViewModel);
         views.add(loggedInView, loggedInView.viewName);
 
-        PlayerEvaluator playerEvaluator = new PlayerEvaluatorDummy();
-        TeamEvaluator teamEvaluator = new TeamEvaluatorDummy(playerEvaluator);
-        TeamComparator teamComparator = new TeamComparatorDummy(teamEvaluator);
+//        PlayerEvaluator playerEvaluator = new PlayerEvaluatorDummy();
+//        TeamEvaluator teamEvaluator = new TeamEvaluatorDummy(playerEvaluator);
+//        TeamComparator teamComparator = new TeamComparatorDummy(teamEvaluator);
+
+        PlayerEvaluatorFactory playerEvaluatorFactory = new PlayerEvaluatorFactory();
+        TeamEvaluatorFactory teamEvaluatorFactory = new TeamEvaluatorFactory(playerEvaluatorFactory);
+        TeamEvaluator teamEvaluator = teamEvaluatorFactory.getLogarithmTeamEvaluator(apiDAO);
+        TeamComparator teamComparator = new LeaderboardTeamComparator(teamEvaluator);
 
         MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel, loginViewModel);
         views.add(menuView, menuView.viewName);

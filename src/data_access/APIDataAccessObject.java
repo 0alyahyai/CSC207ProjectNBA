@@ -232,49 +232,49 @@ public class APIDataAccessObject implements APIinterface {
         ArrayList<Map<String, Object>> responseArray = (ArrayList<Map<String, Object>>) map.get("response");
 
 
-            double pointsPG = -1.0;
-            double assistsPG = -1.0;
-            double reboundsPG = -1.0;
+        double pointsPG = -1.0;
+        double assistsPG = -1.0;
+        double reboundsPG = -1.0;
 
-            if (responseArray.size() != 0) {
-                ArrayList<Double> pointslist = new ArrayList<>();
-                ArrayList<Double> assistlist = new ArrayList<>();
-                ArrayList<Double> reblist = new ArrayList<>();
-                for (int i = 0; i < responseArray.size(); i++) {
-                    Map<String, Object> game = responseArray.get(i);
-                    pointsPG = (double) game.get("points");
-                    assistsPG = (double) game.get("assists");
-                    reboundsPG = (double) game.get("totReb");
-                    pointslist.add(pointsPG);
-                    assistlist.add(assistsPG);
-                    reblist.add(reboundsPG);
-
-
-                }
-                playerStats.add(pointslist);
-                playerStats.add(assistlist);
-                playerStats.add(reblist);
-            }
-            else {
-
-                ArrayList<Double> pointslist = new ArrayList<>();
-                ArrayList<Double> assistlist = new ArrayList<>();
-                ArrayList<Double> reblist = new ArrayList<>();
+        if (responseArray.size() != 0) {
+            ArrayList<Double> pointslist = new ArrayList<>();
+            ArrayList<Double> assistlist = new ArrayList<>();
+            ArrayList<Double> reblist = new ArrayList<>();
+            for (int i = 0; i < responseArray.size(); i++) {
+                Map<String, Object> game = responseArray.get(i);
+                pointsPG = (double) game.get("points");
+                assistsPG = (double) game.get("assists");
+                reboundsPG = (double) game.get("totReb");
                 pointslist.add(pointsPG);
                 assistlist.add(assistsPG);
                 reblist.add(reboundsPG);
-                playerStats.add(pointslist);
-                playerStats.add(assistlist);
-                playerStats.add(reblist);
+
 
             }
+            playerStats.add(pointslist);
+            playerStats.add(assistlist);
+            playerStats.add(reblist);
+        }
+        else {
 
-
-
-                return playerStats;
-
+            ArrayList<Double> pointslist = new ArrayList<>();
+            ArrayList<Double> assistlist = new ArrayList<>();
+            ArrayList<Double> reblist = new ArrayList<>();
+            pointslist.add(pointsPG);
+            assistlist.add(assistsPG);
+            reblist.add(reboundsPG);
+            playerStats.add(pointslist);
+            playerStats.add(assistlist);
+            playerStats.add(reblist);
 
         }
+
+
+
+        return playerStats;
+
+
+    }
 
 
     // Dummy method
@@ -322,4 +322,3 @@ public class APIDataAccessObject implements APIinterface {
         return Factory.createTeam(teamId, List.of(players));
     }
 }
-
