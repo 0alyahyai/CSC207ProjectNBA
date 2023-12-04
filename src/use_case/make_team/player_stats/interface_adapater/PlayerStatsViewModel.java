@@ -1,6 +1,5 @@
 package use_case.make_team.player_stats.interface_adapater;
 
-import use_case.view_team.interface_adapter.ViewTeamState;
 import view.ViewModel;
 
 import java.beans.PropertyChangeListener;

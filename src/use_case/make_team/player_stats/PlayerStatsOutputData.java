@@ -2,7 +2,6 @@ package use_case.make_team.player_stats;
 
 //import entity.Stats;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PlayerStatsOutputData {
 

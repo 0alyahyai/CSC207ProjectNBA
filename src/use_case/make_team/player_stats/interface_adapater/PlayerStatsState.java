@@ -1,7 +1,6 @@
 package use_case.make_team.player_stats.interface_adapater;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class PlayerStatsState {
 

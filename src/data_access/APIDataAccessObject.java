@@ -241,36 +241,25 @@ public class APIDataAccessObject implements APIinterface {
             double pointsPG = 0;
             double assistsPG = 0;
             double reboundsPG = 0;
-            double stealsPG = 0;
-            double blocksPG = 0;
 
             if (responseArray.size() != 0) {
                 ArrayList<Double> pointslist = new ArrayList<>();
                 ArrayList<Double> assistlist = new ArrayList<>();
                 ArrayList<Double> reblist = new ArrayList<>();
-//                ArrayList<Integer> blocklist = new ArrayList<>();
-//                ArrayList<Integer> steallist = new ArrayList<>();
                 for (int i = 0; i < responseArray.size(); i++) {
                     Map<String, Object> game = responseArray.get(i);
                     pointsPG = (double) game.get("points");
                     assistsPG = (double) game.get("assists");
                     reboundsPG = (double) game.get("totReb");
-//                    stealsPG = (int) game.get("steals");
-//                    blocksPG = (int) game.get("blocks");
                     pointslist.add(pointsPG);
                     assistlist.add(assistsPG);
                     reblist.add(reboundsPG);
-//                    blocklist.add(stealsPG);
-//                    steallist.add(blocksPG);
-//                    playerStats.add(listtoadd);
 
 
                 }
                 playerStats.add(pointslist);
                 playerStats.add(assistlist);
                 playerStats.add(reblist);
-//                playerStats.add(blocklist);
-//                playerStats.add(steallist);
             }
             else {
 

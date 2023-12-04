@@ -1,6 +1,5 @@
 package use_case.make_team.player_stats.view;
 
-import use_case.make_team.create_team.CreateTeamView;
 import use_case.make_team.create_team.CreateTeamViewModel;
 import use_case.make_team.player_stats.interface_adapater.PlayerStatsState;
 import use_case.make_team.player_stats.interface_adapater.PlayerStatsViewModel;
@@ -13,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -71,7 +69,6 @@ public class PlayerStatsView extends JPanel implements ActionListener, PropertyC
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setPreferredSize(new Dimension(800, 200));
 
-//        add(backButton);
     }
 
     private JFreeChart createChart() {
@@ -83,10 +80,13 @@ public class PlayerStatsView extends JPanel implements ActionListener, PropertyC
 
         ArrayList<ArrayList<Double>> stats = state.getPlayerStats();
 
+        String[] seriesNames = {"Points", "Assists", "Rebounds"}; //since the stats list will always be of length 3
+
+
 
         for (int seriesIndex = 0; seriesIndex < stats.size(); seriesIndex++) {
             List<Double> statList = stats.get(seriesIndex);
-            String seriesName = "Series " + (seriesIndex + 1); // Replace with actual series names as needed
+            String seriesName = seriesNames[seriesIndex]; //I can use the seriesNames to set the name of the legend;
 
             if (statList.size() == 1) {
                 // If there's only one data point, add it twice to create a visible dot or a tiny line
