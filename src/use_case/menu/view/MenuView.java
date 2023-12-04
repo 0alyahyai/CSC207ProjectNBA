@@ -92,8 +92,6 @@ public class MenuView extends JPanel implements ActionListener, PropertyChangeLi
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(Leaderboard)) {
-//                            leaderboardViewModel
-//                            leaderboardController.load();
                             menuController.execute("leaderboard");
                         }
                     }

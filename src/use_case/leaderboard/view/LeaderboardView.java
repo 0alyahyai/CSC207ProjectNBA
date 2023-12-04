@@ -145,7 +145,6 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         add(title);
         add(leaderboardWrapper);
         add(buttons);
-        leaderboardController.load();
     }
 
 
@@ -177,10 +176,20 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
             if (!activeViewName.equals(viewName)) {
                 return;
             }
-            leaderboardController.load();
             if (!logged) {
                 state.setActiveUserID(null);
             }
+            JLabel spacerleft = new JLabel();
+            JLabel loading = new JLabel("Leaderboard Updating...");
+            JLabel spacerright = new JLabel();
+
+            loading.setAlignmentX(Component.CENTER_ALIGNMENT);
+            leaderboard.removeAll();
+            leaderboard.add(spacerleft);
+            leaderboard.add(loading);
+            leaderboard.add(spacerright);
+            new YourSwingWorker(state, logged).execute();
+            return;
         }
 
         if (evt.getNewValue() instanceof LeaderboardState) {
@@ -190,146 +199,177 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         if (state.getLeaderboardError() != null) {
             JOptionPane.showMessageDialog(this, state.getLeaderboardError());
         } else {
-            //Remove everything from leaderboard
-            leaderboard.removeAll();
+            leaderboardRepaint(state);
+        }
+    }
 
-            if (state.getLeaderboardUsers() == null) {
+    public class YourSwingWorker extends SwingWorker<Void, Void> {
+        private final LeaderboardState state;
+        private boolean logged;
+
+        public YourSwingWorker(LeaderboardState state, boolean logged) {
+            this.state = state;
+            this.logged = logged;
+        }
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            // Perform the actual backend processing asynchronously
+            leaderboardController.load();
+            if (!logged) {
+                state.setActiveUserID(null);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            leaderboardRepaint(state);
+        }
+    }
+
+
+    private void leaderboardRepaint(LeaderboardState state){
+        //Remove everything from leaderboard
+        leaderboard.removeAll();
+
+        if (state.getLeaderboardUsers() == null) {
 //                Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
-                JLabel leftSpacer = new JLabel();
-                JLabel userLabel = new JLabel("No users with teams yet!");
-                JLabel rightSpacer = new JLabel();
+            JLabel leftSpacer = new JLabel();
+            JLabel userLabel = new JLabel("No users with teams yet!");
+            JLabel rightSpacer = new JLabel();
 
 //                leftSpacer.setBorder(border);
 //                userLabel.setBorder(border);
 //                rightSpacer.setBorder(border);
 
-                // Set the icon for the label
+            // Set the icon for the label
+            try {
+                ImageIcon icon = new ImageIcon(new File("").getAbsolutePath()
+                        + "/src/assests/icons/error.png");
+                //resize the icon
+                Image image = icon.getImage();
+                Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);
+                ImageIcon errorIcon = new ImageIcon(newimg);
+                userLabel.setIcon(errorIcon);
+
+            } catch (Exception ignored) {
+
+            }
+            leftSpacer.setAlignmentX(Component.CENTER_ALIGNMENT);
+            userLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            rightSpacer.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            userLabel.setFont(new Font("Open Sans", Font.BOLD, 14));
+
+            leaderboard.add(leftSpacer);
+            leaderboard.add(userLabel);
+            leaderboard.add(rightSpacer);
+
+            return;
+        }
+
+        //Add new labels for the leaderboard
+        JLabel placeLabel = new JLabel("Rank");
+        JLabel userLabel = new JLabel("User");
+        JLabel ptsLabel = new JLabel("Score");
+        //Set font for labels
+        Font font = new Font("Arial", Font.BOLD, 16);
+        placeLabel.setFont(font);
+        userLabel.setFont(font);
+        ptsLabel.setFont(font);
+        //Center Labels
+        placeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        userLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        ptsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        //Add labels to leaderboard
+        leaderboard.add(placeLabel);
+        leaderboard.add(userLabel);
+        leaderboard.add(ptsLabel);
+
+        //The following forloop adds users to the leaderboard.
+        //Note that the place and score values are dummy values. These will be replaced
+        //formulaically when we have determined how to set places/scores.
+
+        String[] UserIds = state.getLeaderboardUserIDs();
+        String currUserId = state.getActiveUserID();
+        int j = -1;  // Initialize to -1 to indicate not found
+
+        // Iterate through the array to find the index of currUserId
+        if (currUserId != null) {
+            for (int k = 0; k < UserIds.length; k++) {
+                if (UserIds[k].equals(currUserId)) {
+                    j = k;
+                    break;  // Exit the loop once found
+                }
+            }
+        }
+
+        int i = 0;
+        Float score = 0.0F;
+        for (String user : state.getLeaderboardUsers()) {
+            JLabel place = new JLabel((i + 1) + ".");
+            JLabel userName = new JLabel(user);
+            score = state.getLeaderboardScores()[i];
+            JLabel pts = new JLabel(Float.toString(score * 100));
+
+            userName.putClientProperty("id", state.getLeaderboardUserIDs()[i]);
+
+            if (i == 0){
+                place.setForeground(Color.GREEN);
+                userName.setForeground(Color.GREEN);
+                pts.setForeground(Color.GREEN);
+                userName.setFont(new Font("Arial", Font.BOLD, 16));
+                place.setFont(new Font("Arial", Font.BOLD, 16));
+                pts.setFont(new Font("Arial", Font.BOLD, 16));
+
                 try {
                     ImageIcon icon = new ImageIcon(new File("").getAbsolutePath()
-                            + "/src/assests/icons/error.png");
+                            + "/src/assests/icons/crown.png");
                     //resize the icon
                     Image image = icon.getImage();
-                    Image newimg = image.getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);
+                    Image newimg = image.getScaledInstance(50, 30,  java.awt.Image.SCALE_SMOOTH);
                     ImageIcon errorIcon = new ImageIcon(newimg);
-                    userLabel.setIcon(errorIcon);
+                    userName.setIcon(errorIcon);
 
                 } catch (Exception ignored) {
 
                 }
-                leftSpacer.setAlignmentX(Component.CENTER_ALIGNMENT);
-                userLabel.setHorizontalAlignment(SwingConstants.CENTER);
-                rightSpacer.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-                userLabel.setFont(new Font("Open Sans", Font.BOLD, 14));
-
-                leaderboard.add(leftSpacer);
-                leaderboard.add(userLabel);
-                leaderboard.add(rightSpacer);
-
-                return;
             }
+            if (i == j && j != 0){
+                place.setForeground(Color.BLUE);
+                userName.setForeground(Color.BLUE);
+                pts.setForeground(Color.BLUE);
 
-            //Add new labels for the leaderboard
-            JLabel placeLabel = new JLabel("Rank");
-            JLabel userLabel = new JLabel("User");
-            JLabel ptsLabel = new JLabel("Score");
-            //Set font for labels
-            Font font = new Font("Arial", Font.BOLD, 16);
-            placeLabel.setFont(font);
-            userLabel.setFont(font);
-            ptsLabel.setFont(font);
-            //Center Labels
-            placeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            userLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            ptsLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            //Add labels to leaderboard
-            leaderboard.add(placeLabel);
-            leaderboard.add(userLabel);
-            leaderboard.add(ptsLabel);
+                try {
+                    ImageIcon icon = new ImageIcon(new File("").getAbsolutePath()
+                            + "/src/assests/icons/dot-filled.png");
+                    //resize the icon
+                    Image image = icon.getImage();
+                    Image newimg = image.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH);
+                    ImageIcon errorIcon = new ImageIcon(newimg);
+                    userName.setIcon(errorIcon);
 
-            //The following forloop adds users to the leaderboard.
-            //Note that the place and score values are dummy values. These will be replaced
-            //formulaically when we have determined how to set places/scores.
+                } catch (Exception ignored) {
 
-            String[] UserIds = state.getLeaderboardUserIDs();
-            String currUserId = state.getActiveUserID();
-            int j = -1;  // Initialize to -1 to indicate not found
-
-            // Iterate through the array to find the index of currUserId
-            if (currUserId != null) {
-                for (int k = 0; k < UserIds.length; k++) {
-                    if (UserIds[k].equals(currUserId)) {
-                        j = k;
-                        break;  // Exit the loop once found
-                    }
                 }
             }
 
-            int i = 0;
-            Float score = 0.0F;
-            for (String user : state.getLeaderboardUsers()) {
-                JLabel place = new JLabel((i + 1) + ".");
-                JLabel userName = new JLabel(user);
-                score = state.getLeaderboardScores()[i];
-                JLabel pts = new JLabel(Float.toString(score * 100));
+            //Center Values
+            place.setHorizontalAlignment(SwingConstants.CENTER);
+            userName.setHorizontalAlignment(SwingConstants.CENTER);
+            pts.setHorizontalAlignment(SwingConstants.CENTER);
 
-                userName.putClientProperty("id", state.getLeaderboardUserIDs()[i]);
+            Font font1 = new Font("Arial", Font.PLAIN, 16);
+            userName.setFont(font1);
+            leaderboard.add(place);
+            leaderboard.add(userName);
+            leaderboard.add(pts);
 
-                if (i == 0){
-                    place.setForeground(Color.GREEN);
-                    userName.setForeground(Color.GREEN);
-                    pts.setForeground(Color.GREEN);
-                    userName.setFont(new Font("Arial", Font.BOLD, 16));
-                    place.setFont(new Font("Arial", Font.BOLD, 16));
-                    pts.setFont(new Font("Arial", Font.BOLD, 16));
-
-                    try {
-                        ImageIcon icon = new ImageIcon(new File("").getAbsolutePath()
-                                + "/src/assests/icons/crown.png");
-                        //resize the icon
-                        Image image = icon.getImage();
-                        Image newimg = image.getScaledInstance(50, 30,  java.awt.Image.SCALE_SMOOTH);
-                        ImageIcon errorIcon = new ImageIcon(newimg);
-                        userName.setIcon(errorIcon);
-
-                    } catch (Exception ignored) {
-
-                    }
-                }
-                if (i == j && j != 0){
-                    place.setForeground(Color.BLUE);
-                    userName.setForeground(Color.BLUE);
-                    pts.setForeground(Color.BLUE);
-
-                    try {
-                        ImageIcon icon = new ImageIcon(new File("").getAbsolutePath()
-                                + "/src/assests/icons/dot-filled.png");
-                        //resize the icon
-                        Image image = icon.getImage();
-                        Image newimg = image.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH);
-                        ImageIcon errorIcon = new ImageIcon(newimg);
-                        userName.setIcon(errorIcon);
-
-                    } catch (Exception ignored) {
-
-                    }
-                }
-
-                //Center Values
-                place.setHorizontalAlignment(SwingConstants.CENTER);
-                userName.setHorizontalAlignment(SwingConstants.CENTER);
-                pts.setHorizontalAlignment(SwingConstants.CENTER);
-
-                Font font1 = new Font("Arial", Font.PLAIN, 16);
-                userName.setFont(font1);
-                leaderboard.add(place);
-                leaderboard.add(userName);
-                leaderboard.add(pts);
-
-                i++;
-            }
-            leaderboard.revalidate();
-            leaderboard.repaint();
+            i++;
         }
+        leaderboard.revalidate();
+        leaderboard.repaint();
     }
 }
