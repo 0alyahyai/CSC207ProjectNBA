@@ -1,5 +1,6 @@
 package view;
 
+import entity.User;
 import use_case.make_team.create_team.CreateTeamViewModel;
 import use_case.view_team.interface_adapter.ViewTeamController;
 
@@ -92,7 +93,6 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                             viewTeamController.execute();
 //                            viewManagerModel.setActiveView("view team");
 //                            viewManagerModel.firePropertyChanged();
-
                         }
                     }
                 }
