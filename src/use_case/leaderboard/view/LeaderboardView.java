@@ -22,6 +22,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
     private final ViewManagerModel viewModelManager;
     private final LeaderboardViewModel leaderboardViewModel;
+    private boolean logged;
     private final LeaderboardController leaderboardController;
     public final String viewName = "leaderboard";
     private final JLabel title = new JLabel("Leaderboard");
@@ -35,6 +36,8 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         leaderboardViewModel.addPropertyChangeListener(this);
         loggedInViewModel.addPropertyChangeListener(this);
         viewManagerModel.addPropertyChangeListener(this);
+
+        this.logged = false;
 
         JLabel title = new JLabel(LeaderboardViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -142,15 +145,17 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getNewValue() instanceof LoggedInState) {
-            LoggedInState state = (LoggedInState) evt.getNewValue();
-            if (state.isLoggedIn()) {
+        LeaderboardState state = leaderboardViewModel.getState();
+        if (evt.getNewValue() instanceof LoggedInState loggedInState) {
+            if (loggedInState.isLoggedIn()) {
                 leaderboardController.setActiveUser();
+                logged = true;
                 return;
             }
-           LeaderboardState leaderboardState = leaderboardViewModel.getState();
-            leaderboardState.setActiveUserID(null);
-           return;
+            logged = false;
+            state.setActiveUserID(null);
+            return;
+
         }
 
         if (evt.getNewValue() instanceof String activeViewName) {
@@ -158,9 +163,15 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
                 return;
             }
             leaderboardController.load();
+            if (!logged){
+                state.setActiveUserID(null);
+            }
         }
 
-        LeaderboardState state = (LeaderboardState) evt.getNewValue();
+        if (evt.getNewValue() instanceof LeaderboardState){
+            state = (LeaderboardState) evt.getNewValue();
+        }
+
         if (state.getLeaderboardError() != null) {
             JOptionPane.showMessageDialog(this, state.getLeaderboardError());
         } else {
