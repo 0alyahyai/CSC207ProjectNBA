@@ -12,7 +12,7 @@ import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.Map;
 import com.google.gson.Gson;
-import use_case.entity_utilities.Stats;
+import use_case.entity_helpers.Stats;
 
 public class APIDataAccessObject implements APIinterface {
 

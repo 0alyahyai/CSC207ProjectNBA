@@ -1,7 +1,7 @@
 package app;
 
 
-import use_case.entity_utilities.TeamComparator;
+import use_case.entity_helpers.TeamComparator;
 import view.LoggedInViewModel;
 import view.ViewManagerModel;
 import use_case.leaderboard.interface_adapter.LeaderboardController;

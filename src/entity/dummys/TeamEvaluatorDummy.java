@@ -1,8 +1,8 @@
 package entity.dummys;
 
-import use_case.entity_utilities.PlayerEvaluator;
+import use_case.entity_helpers.PlayerEvaluator;
 import entity.Team;
-import use_case.entity_utilities.TeamEvaluator;
+import use_case.entity_helpers.TeamEvaluator;
 
 public class TeamEvaluatorDummy extends TeamEvaluator {
     public TeamEvaluatorDummy(PlayerEvaluator playerEvaluator) {
@@ -13,7 +13,7 @@ public class TeamEvaluatorDummy extends TeamEvaluator {
     public float evaluateTeam(Team t) {
         float teamScore = 0;
         for (entity.Player p : t.getTeamPlayers()) {
-            teamScore += playerEvaluator.evaluatePlayer(p, null);
+            teamScore += playerEvaluator.evaluatePlayer(p);
         }
         return teamScore;
     }
