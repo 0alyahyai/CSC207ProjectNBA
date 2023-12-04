@@ -52,22 +52,22 @@ public class LeaderboardTest {
     }
 
 //    The following clears the csv file after each test
-    @AfterEach
-    public void tearDown() throws IOException {
-        String filePath = "./users.csv";
-
-        try {
-            // Open the FileWriter with append mode set to false (clearing the file)
-            FileWriter fileWriter = new FileWriter(filePath, false);
-
-            // Close the FileWriter to save changes
-            fileWriter.close();
-
-            System.out.println("CSV file cleared successfully.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    @AfterEach
+//    public void tearDown() throws IOException {
+//        String filePath = "./users.csv";
+//
+//        try {
+//            // Open the FileWriter with append mode set to false (clearing the file)
+//            FileWriter fileWriter = new FileWriter(filePath, false);
+//
+//            // Close the FileWriter to save changes
+//            fileWriter.close();
+//
+//            System.out.println("CSV file cleared successfully.");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void testMain() throws IOException {
 
