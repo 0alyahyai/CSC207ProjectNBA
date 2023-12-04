@@ -46,8 +46,8 @@ public class LoggedInViewFactory {
 
     //viewTeamController is a dependency of LoggedInView
     private static ViewTeamController createViewTeamUseCase(ViewManagerModel viewManagerModel,
-            ViewTeamViewModel viewTeamViewModel, LoggedInViewModel loggedInViewModel,
-            ViewTeamUserDataAccessInterface userDataAccessObject, APIinterface apiDataAccessObject){
+                                                            ViewTeamViewModel viewTeamViewModel, LoggedInViewModel loggedInViewModel,
+                                                            ViewTeamUserDataAccessInterface userDataAccessObject, APIinterface apiDataAccessObject){
         ViewTeamOutputBoundary viewTeamOutputBoundary = new ViewTeamPresenter(viewTeamViewModel, viewManagerModel,
                 loggedInViewModel);
         ViewTeamInputBoundary viewTeamInteractor = new ViewTeamInteractor(viewTeamOutputBoundary, userDataAccessObject,

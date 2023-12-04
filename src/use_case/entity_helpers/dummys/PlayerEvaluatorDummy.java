@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class PlayerEvaluatorDummy implements PlayerEvaluator {
     @Override
-    public float evaluatePlayer(Player player, Stats statsBoundary) {
+    public float evaluatePlayer(Player player) {
         Random random = new Random();
         return random.nextFloat() * 100;
     }

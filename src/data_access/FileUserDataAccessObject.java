@@ -1,7 +1,8 @@
 package data_access;
 
 import entity.*;
-import entity.PlayerFactory;
+import use_case.algorithm.AlgorithmDataAccessInterface;
+import use_case.compareTeam.CompareDataAccessInterface;
 import use_case.entity_helpers.TeamComparator;
 import use_case.leaderboard.LeaderboardFileUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
@@ -17,8 +18,8 @@ import java.util.*;
 public class FileUserDataAccessObject implements
         SignupUserDataAccessInterface, LoginUserDataAccessInterface,
         LeaderboardFileUserDataAccessInterface, MenuUserDataAccessInterface,
-        MakeTeamDAI, ViewTeamUserDataAccessInterface
-    {
+        MakeTeamDAI, ViewTeamUserDataAccessInterface, CompareDataAccessInterface, AlgorithmDataAccessInterface
+{
 
 
     private final File csvFile;
@@ -65,9 +66,6 @@ public class FileUserDataAccessObject implements
                     String password = String.valueOf(col[headers.get("password")]);
                     String userid = String.valueOf((col[headers.get("user_id")]));
 
-                    System.out.println(col.length);
-
-
                     String userTeamString = String.valueOf((col[headers.get("team")]));
                     Team team = teamStringToTeam(userTeamString);
 
@@ -111,7 +109,7 @@ public class FileUserDataAccessObject implements
                         user.getUserPassword(),
                         user.getUserID(),
                         teamString
-                        );
+                );
                 writer.write(line);
                 writer.newLine();
             }
@@ -232,92 +230,191 @@ public class FileUserDataAccessObject implements
         return orderedUserIDs;
     }
 
-        @Override
-        public boolean saveTeam(User user, Team team) {
-//            List<Player> players = team.getTeamPlayers();
-//            String newTeam = String.format("[%s;%s;%s;%s;%s;%s]",
-//                    team.getTeamName(), players.get(0), players.get(1), players.get(2), players.get(3), players.get(4));
-//            System.out.println(newTeam);
-            user.setTeam(team);
-            this.save();
-            return true;
+    @Override
+    public boolean saveTeam(User user, Team team) {
+        user.setTeam(team);
+        this.save();
+        return true;
+    }
+
+    @Override
+    public Team getTeamOfUser(String userName) {
+        User user = accounts.get(userName);
+        return user.getUserTeam();
+    }
+
+
+    public static String userTeamToString(User user) {
+        List<Player> players = user.getUserTeam().getTeamPlayers();
+        String newTeamString = String.format("[%s;%s;%s;%s;%s;%s]",
+                user.getUserTeam().getTeamName(),
+                players.get(0).getPlayerID(),
+                players.get(1).getPlayerID(),
+                players.get(2).getPlayerID(),
+                players.get(3).getPlayerID(),
+                players.get(4).getPlayerID());
+        return newTeamString;
+    }
+
+
+
+    public Team teamStringToTeam(String teamString) {
+        if (teamString.equals("NA")) {
+            return null;
         }
+        PlayerFactory playerFactory = new CommonPlayerFactory();
+        teamString = teamString.substring(1, teamString.length() -1); // removing square brackets
+        String[] parts = teamString.split(";");
+        String teamName = parts[0];
 
-        @Override
-        public Team getTeamOfUser(String userName) {
-            User user = accounts.get(userName);
-            return user.getUserTeam();
-        }
+        int[] teamPlayerIds = new int[5];
+        teamPlayerIds[0] = Integer.parseInt(parts[1]);
+        teamPlayerIds[1] = Integer.parseInt(parts[2]);
+        teamPlayerIds[2] = Integer.parseInt(parts[3]);
+        teamPlayerIds[3] = Integer.parseInt(parts[4]);
+        teamPlayerIds[4] = Integer.parseInt(parts[5]);
 
-        public static void main(String[] args) throws IOException {
-            UserFactory uf = new CommonUserFactory();
-            FileUserDataAccessObject dao = new FileUserDataAccessObject("./users.csv",
-                    uf, new MockAPIDAO());
+        Player p1 = playerFactory.create(
+                apiDAO.getNameOfPlayer(teamPlayerIds[0]), teamPlayerIds[0]);
+        Player p2 = playerFactory.create(
+                apiDAO.getNameOfPlayer(teamPlayerIds[1]), teamPlayerIds[1]);
+        Player p3 = playerFactory.create(
+                apiDAO.getNameOfPlayer(teamPlayerIds[2]), teamPlayerIds[2]);
+        Player p4 = playerFactory.create(
+                apiDAO.getNameOfPlayer(teamPlayerIds[3]), teamPlayerIds[3]);
+        Player p5 = playerFactory.create(
+                apiDAO.getNameOfPlayer(teamPlayerIds[4]), teamPlayerIds[4]);
 
-            User user = uf.create("32", "Bob", "mar420");
-            dao.save(user);
+        List<Player> players = new ArrayList<>();
+        players.add(p1);
+        players.add(p2);
+        players.add(p3);
+        players.add(p4);
+        players.add(p5);
 
-            TeamFactory tf = new CommonTeamFactory();
-            dao.saveTeam(user, tf.createMockTeam());
-        }
+        Team team = teamFactory.createTeam(teamName, players);
 
+        return team;
 
-        public static String userTeamToString(User user) {
-            List<Player> players = user.getUserTeam().getTeamPlayers();
-            String newTeamString = String.format("[%s;%s;%s;%s;%s;%s]",
-                    user.getUserTeam().getTeamName(),
-                    players.get(0).getPlayerID(),
-                    players.get(1).getPlayerID(),
-                    players.get(2).getPlayerID(),
-                    players.get(3).getPlayerID(),
-                    players.get(4).getPlayerID());
-            return newTeamString;
-        }
+    }
+
+    // VARP starts coding
+    public Boolean activeUserhasTeam(){
+
+        return getTeamOfUser(this.activeUser.getUserName()) != null;
+
+    }
 
 
 
-        public Team teamStringToTeam(String teamString) {
-            if (teamString.equals("NA")) {
-                return null;
+
+    @Override
+    public List<Team> geteams(){
+        List<String> usernames = this.getUsernamesExceptActiveUser();
+        List<Team> teams = new ArrayList<>();
+        for (String username : usernames){
+            if (this.getTeamOfUser(username) != null) {
+                teams.add(this.getTeamOfUser(username));
             }
-            PlayerFactory playerFactory = new CommonPlayerFactory();
-            teamString = teamString.substring(1, teamString.length() -1); // removing square brackets
-            String[] parts = teamString.split(";");
-            String teamName = parts[0];
+        }
+        return teams;
 
-            int[] teamPlayerIds = new int[5];
-            teamPlayerIds[0] = Integer.parseInt(parts[1]);
-            teamPlayerIds[1] = Integer.parseInt(parts[2]);
-            teamPlayerIds[2] = Integer.parseInt(parts[3]);
-            teamPlayerIds[3] = Integer.parseInt(parts[4]);
-            teamPlayerIds[4] = Integer.parseInt(parts[5]);
+    }
 
-            Player p1 = playerFactory.create(
-                    apiDAO.getNameOfPlayer(teamPlayerIds[0]), teamPlayerIds[0]);
-            Player p2 = playerFactory.create(
-                    apiDAO.getNameOfPlayer(teamPlayerIds[1]), teamPlayerIds[1]);
-            Player p3 = playerFactory.create(
-                    apiDAO.getNameOfPlayer(teamPlayerIds[2]), teamPlayerIds[2]);
-            Player p4 = playerFactory.create(
-                    apiDAO.getNameOfPlayer(teamPlayerIds[3]), teamPlayerIds[3]);
-            Player p5 = playerFactory.create(
-                    apiDAO.getNameOfPlayer(teamPlayerIds[4]), teamPlayerIds[4]);
+    public List<String> getUsernamesExceptActiveUser() {
+        List<String> usernames = new ArrayList<>();
+        String activeUsername = (activeUser != null) ? activeUser.getUserName() : null;
 
-            List<Player> players = new ArrayList<>();
-            players.add(p1);
-            players.add(p2);
-            players.add(p3);
-            players.add(p4);
-            players.add(p5);
+        try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
+            String row;
 
-            Team team = teamFactory.createTeam(teamName, players);
+            // Skip the header row
+            reader.readLine();
 
-            return team;
+            while ((row = reader.readLine()) != null) {
+                String[] col = row.split(",");
 
+                // First column is the username
+                String username = col[headers.get("username")];
+
+                // Add username to the list if it's not the active user's username
+                if (!username.equals(activeUsername)) {
+                    usernames.add(username);
+                }
+            }
+        } catch (IOException e) {
+            // In case, there is no file or something
+            e.printStackTrace();
         }
 
+        return usernames;
+    }
 
+    @Override
+    public ArrayList<Team> getteams(String teamname) throws IOException{
 
+        String userNameOne = findUserByTeam(teamname);
+        Team otherTeam = this.getTeamOfUser(userNameOne);
+        Team thisTeam = this.getTeamOfUser(activeUser.getUserName());
+        ArrayList<Team> teamList = new ArrayList<>();
+        teamList.add(thisTeam);
+        teamList.add(otherTeam);
+        return teamList;
 
 
     }
+
+    @Override
+    public String getActiveName() {
+        return this.activeUser.getUserName();
+    }
+
+
+    public String findUserByTeam(String teamName) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(this.csvFile))) {
+            String line;
+
+            // Skip the header row
+            br.readLine();
+
+            while ((line = br.readLine()) != null) {
+                String[] columns = line.split(",");
+
+                // Assuming the last column contains the array and first column contains the username. We substreact
+                // first character given that it is a "["
+                if (columns.length >= 4) {
+                    String[] teamArray = columns[3].split(";");
+
+
+                    if (teamArray.length > 0 && teamArray[0].substring(1).equals(teamName)) {
+
+                        return columns[0]; // Return the username
+                    }
+                }
+            }
+        }
+        return null; // Return null if no matching user is found
+
+
+    }
+    // VARP ends coding
+
+
+    public static void main(String[] args) throws IOException {
+        UserFactory uf = new CommonUserFactory();
+//            FileUserDataAccessObject dao = new FileUserDataAccessObject("./users.csv",
+//                    uf, new MockAPIDAO());
+        FileUserDataAccessObject dao = new FileUserDataAccessObject("./users.csv",
+                uf, new APIDataAccessObject());
+
+
+//            dao.getteams();
+        System.out.println(dao.getteams("victeam"));
+
+
+    }
+
+
+
+
+}
