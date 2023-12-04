@@ -2,6 +2,9 @@
 CSC207ProjectNBA.iml
 out/
 users.csv
+target/
+.idea/misc.xml
+.idea/modules.xml
 NBAproject.iml
 target/
 .DS_Store

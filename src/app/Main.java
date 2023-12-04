@@ -3,6 +3,10 @@ package app;
 import data_access.APIinterface;
 import data_access.FileUserDataAccessObject;
 import entity.CommonUserFactory;
+import use_case.algorithm.interface_adapter.AlgorithmViewModel;
+import use_case.algorithm.viewAlgorithm.AlgorithmView;
+import use_case.compareTeam.interface_adapter.CompareViewModel;
+import use_case.compareTeam.viewCompareTeam.CompareViewOptions;
 import use_case.entity_helpers.PlayerEvaluator;
 import use_case.entity_helpers.TeamComparator;
 import use_case.entity_helpers.TeamEvaluator;
@@ -71,6 +75,10 @@ public class Main {
 
         APIinterface apiDAO = new APIDataAccessObject();
 
+        //Here VARP starts coding
+        CompareViewModel compareViewModel = new CompareViewModel();
+        //Here VARP ends coding
+
         FileUserDataAccessObject userDataAccessObject;
         try {
             File csvfile = new File("./users.csv");
@@ -92,7 +100,7 @@ public class Main {
         views.add(loginView, loginView.viewName);
 
         LoggedInView loggedInView = LoggedInViewFactory.create(loggedInViewModel, viewManagerModel, viewTeamViewModel,
-                userDataAccessObject, apiDataAccessObject);
+                userDataAccessObject, apiDataAccessObject, compareViewModel);
         views.add(loggedInView, loggedInView.viewName);
 
         PlayerEvaluator playerEvaluator = new PlayerEvaluatorDummy();
@@ -122,6 +130,25 @@ public class Main {
 
         viewManagerModel.setActiveView(menuView.viewName);
         viewManagerModel.firePropertyChanged();
+
+        //Here VARP starts coding
+
+//        CompareViewOptions compareViewOptions = LoggedInViewFactory.create(viewManagerModel, compareViewModel);
+//        views.add(compareViewOptions, compareViewOptions.viewName);
+
+        AlgorithmViewModel algorithmViewModel = new AlgorithmViewModel();
+//        CompareViewModel compareViewModel = new CompareViewModel();
+        CompareViewOptions compareViewOptions = AlgorithmUseCaseFactory.createFirstView(
+                algorithmViewModel, viewManagerModel, apiDAO, userDataAccessObject, compareViewModel
+        );
+        views.add(compareViewOptions, compareViewOptions.viewName);
+
+        AlgorithmView algorithmView = AlgorithmUseCaseFactory.createAlgorithmView(algorithmViewModel, viewManagerModel);
+        views.add(algorithmView, algorithmView.viewName);
+
+
+
+        //Here VARP ends coding
 
         application.pack();
         application.setVisible(true);

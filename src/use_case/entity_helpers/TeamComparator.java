@@ -28,7 +28,7 @@ public abstract class TeamComparator {
      * and this class will evaluate teams based on the TeamEvaluator used to instantiate it (i.e. passed to it as an
      * attribute).
      */
-    private final TeamEvaluator teamEvaluator;
+    protected final TeamEvaluator teamEvaluator;
 
     protected TeamComparator(TeamEvaluator teamEvaluator) {
         this.teamEvaluator = teamEvaluator;

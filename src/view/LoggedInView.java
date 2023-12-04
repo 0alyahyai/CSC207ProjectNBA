@@ -1,5 +1,6 @@
 package view;
 
+import use_case.compareTeam.interface_adapter.CompareController;
 import entity.User;
 import use_case.make_team.create_team.CreateTeamViewModel;
 import use_case.view_team.interface_adapter.ViewTeamController;
@@ -21,6 +22,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 
     private final ViewTeamController viewTeamController;
 
+    private final CompareController compareController;
+
     JLabel username;
 
     final JButton logOut;
@@ -35,10 +38,11 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
      * A window with a title and a JButton.
      */
     public LoggedInView(LoggedInViewModel loggedInViewModel, ViewManagerModel viewManagerModel,
-                        ViewTeamController viewTeamController) {
+                        ViewTeamController viewTeamController, CompareController compareController) {
         this.loggedInViewModel = loggedInViewModel;
         this.viewManagerModel = viewManagerModel;
         this.viewTeamController = viewTeamController;
+        this.compareController = compareController;
         this.loggedInViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel("Main Menu");
@@ -87,6 +91,20 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                 }
         );
 
+        //Here VARP will code the button for Compare Teams (The add Action Listener). VARP is below
+        compareTeams.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getSource().equals(compareTeams)) {
+                            compareController.execute();
+                        }
+
+                    }
+                }
+
+        );
+        //VARP is above
+
         viewTeam.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
@@ -119,6 +137,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         this.add(usernameInfo);
         this.add(username);
         this.add(buttons);
+
+
     }
 
     /**
@@ -133,4 +153,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         LoggedInState state = (LoggedInState) evt.getNewValue();
         username.setText(state.getUsername());
     }
+
+
+
 }
