@@ -8,14 +8,13 @@ import use_case.algorithm.interface_adapter.AlgorithmViewModel;
 import use_case.algorithm.viewAlgorithm.AlgorithmView;
 import use_case.compareTeam.interface_adapter.CompareViewModel;
 import use_case.compareTeam.viewCompareTeam.CompareViewOptions;
+import use_case.entity_helpers.*;
+import use_case.entity_helpers.dummys.LeaderboardTeamComparator;
 import use_case.entity_helpers.dummys.PlayerEvaluatorDummy;
 import use_case.entity_helpers.dummys.TeamComparatorDummy;
 import use_case.entity_helpers.dummys.TeamEvaluatorDummy;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import use_case.entity_helpers.PlayerEvaluator;
-import use_case.entity_helpers.TeamComparator;
-import use_case.entity_helpers.TeamEvaluator;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
 import use_case.leaderboard.view.LeaderboardView;
 import use_case.login.interface_adapter.LoginViewModel;
@@ -53,22 +52,22 @@ public class LeaderboardTest {
     }
 
 //    The following clears the csv file after each test
-//    @AfterEach
-//    public void tearDown() throws IOException {
-//        String filePath = "./users.csv";
-//
-//        try {
-//            // Open the FileWriter with append mode set to false (clearing the file)
-//            FileWriter fileWriter = new FileWriter(filePath, false);
-//
-//            // Close the FileWriter to save changes
-//            fileWriter.close();
-//
-//            System.out.println("CSV file cleared successfully.");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    @AfterEach
+    public void tearDown() throws IOException {
+        String filePath = "./users.csv";
+
+        try {
+            // Open the FileWriter with append mode set to false (clearing the file)
+            FileWriter fileWriter = new FileWriter(filePath, false);
+
+            // Close the FileWriter to save changes
+            fileWriter.close();
+
+            System.out.println("CSV file cleared successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void testMain() throws IOException {
 
@@ -91,6 +90,7 @@ public class LeaderboardTest {
         // This keeps track of and manages which view is currently showing.
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
+        this.viewManagerModel = viewManagerModel;
 
         // The data for the views, such as username and password, are in the ViewModels.
         // This information will be changed by a presenter object that is reporting the
@@ -98,6 +98,7 @@ public class LeaderboardTest {
         // be observed by the Views.
         MenuViewModel menuViewModel = new MenuViewModel();
         LeaderboardViewModel leaderboardViewModel = new LeaderboardViewModel();
+        this.leaderboardViewModel = leaderboardViewModel;
         LoginViewModel loginViewModel = new LoginViewModel();
         LoggedInViewModel loggedInViewModel = new LoggedInViewModel();
         SignupViewModel signupViewModel = new SignupViewModel();
@@ -133,9 +134,14 @@ public class LeaderboardTest {
                 userDataAccessObject, apiDataAccessObject, compareViewModel);
         views.add(loggedInView, loggedInView.viewName);
 
-        PlayerEvaluator playerEvaluator = new PlayerEvaluatorDummy();
-        TeamEvaluator teamEvaluator = new TeamEvaluatorDummy(playerEvaluator);
-        TeamComparator teamComparator = new TeamComparatorDummy(teamEvaluator);
+//        PlayerEvaluator playerEvaluator = new PlayerEvaluatorDummy();
+//        TeamEvaluator teamEvaluator = new TeamEvaluatorDummy(playerEvaluator);
+//        TeamComparator teamComparator = new TeamComparatorDummy(teamEvaluator);
+
+        PlayerEvaluatorFactory playerEvaluatorFactory = new PlayerEvaluatorFactory();
+        TeamEvaluatorFactory teamEvaluatorFactory = new TeamEvaluatorFactory(playerEvaluatorFactory);
+        TeamEvaluator teamEvaluator = teamEvaluatorFactory.getLogarithmTeamEvaluator(apiDAO);
+        TeamComparator teamComparator = new LeaderboardTeamComparator(teamEvaluator);
 
         MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel, loginViewModel);
         views.add(menuView, menuView.viewName);
@@ -181,7 +187,7 @@ public class LeaderboardTest {
         AlgorithmViewModel algorithmViewModel = new AlgorithmViewModel();
 //        CompareViewModel compareViewModel = new CompareViewModel();
         CompareViewOptions compareViewOptions = AlgorithmUseCaseFactory.createFirstView(
-                algorithmViewModel, viewManagerModel, apiDAO, (AlgorithmDataAccessInterface) userDataAccessObject, compareViewModel
+                algorithmViewModel, viewManagerModel, apiDAO, userDataAccessObject, compareViewModel
         );
         views.add(compareViewOptions, compareViewOptions.viewName);
 
@@ -224,8 +230,8 @@ public class LeaderboardTest {
         user1.setTeam(team1);
         user2.setTeam(team2);
 
-        users[0] = user1;
-        users[1] = user2;
+        users[1] = user1;
+        users[0] = user2;
         APIinterface apiDAO = new APIDataAccessObject();
         FileUserDataAccessObject fudao;
         try {
@@ -260,7 +266,11 @@ public class LeaderboardTest {
 
         LeaderboardView sv = (LeaderboardView) jp2.getComponent(4);
 
-        return (JPanel) sv.getComponent(1); // this should be the LeaderBoard
+        JScrollPane leaderboardWrapper = (JScrollPane) sv.getComponent(1);
+
+        JViewport leaderboardViewport = (JViewport) leaderboardWrapper.getComponent(0);
+
+        return (JPanel) leaderboardViewport.getComponent(0); // this should be the LeaderBoard
     }
 
     //This returns the back button from the leaderboard view
@@ -338,7 +348,7 @@ public class LeaderboardTest {
 
         LoggedInView sv = (LoggedInView) jp2.getComponent(2);
 
-        JPanel buttons = (JPanel) sv.getComponent(3);
+        JPanel buttons = (JPanel) sv.getComponent(2);
 
         return (JButton) buttons.getComponent(0); // this should be the LeaderBoard button in the LoggedInView
     }
@@ -382,10 +392,10 @@ public class LeaderboardTest {
     @Test
     public void LeaderboardBackButtonLoggedIn() throws IOException {
         testMain();
-        leaderboardViewModel.getState().setActiveUserID("123");
         JButton toLeaderboard = getLeaderboardButtonMenu();
         JButton button = getBackButtonLeaderboard();
         toLeaderboard.doClick();
+        leaderboardViewModel.getState().setActiveUserID("123");
         button.doClick();
         assert (viewManagerModel.getActiveView().equals("logged in"));
     }

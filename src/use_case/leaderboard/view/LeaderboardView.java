@@ -4,6 +4,7 @@ import use_case.leaderboard.interface_adapter.LeaderboardController;
 import use_case.leaderboard.interface_adapter.LeaderboardState;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
 import use_case.login.view.LoginView;
+import use_case.menu.view.MenuView;
 import view.LoggedInState;
 import view.LoggedInView;
 import view.LoggedInViewModel;
@@ -15,6 +16,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -41,8 +44,9 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         JLabel title = new JLabel(LeaderboardViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JPanel buttons = new JPanel();
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         leaderboard = new JPanel(new GridLayout(0, 3, 10, 10));
+        JScrollPane leaderboardWrapper = new JScrollPane(leaderboard);
 
         // Create an EmptyBorder with left and right margins (10 pixels each)
         int leftMargin = 15;
@@ -53,12 +57,16 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
         // Set the border of the leaderboard panel to the EmptyBorder
         leaderboard.setBorder(marginBorder);
+        title.setBorder(marginBorder);
+        Font font = new Font("Arial", Font.BOLD, 16);
+        title.setFont(font);
 
 
         if (leaderboardViewModel.getState().getLeaderboardUsers() != null) {
             for (String user : leaderboardViewModel.getState().getLeaderboardUsers()) {
                 JLabel userLabel = new JLabel(user);
-                Font font = new Font("Arial", Font.PLAIN, 16);
+                font = new Font("Arial", Font.PLAIN, 16);
+                title.setFont(font);
                 userLabel.setFont(font);
                 leaderboard.add(userLabel);
             }
@@ -87,7 +95,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
             userLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            Font font = new Font("Arial", Font.PLAIN, 16);
+            font = new Font("Arial", Font.PLAIN, 16);
             userLabel.setFont(font);
             leaderboard.add(leftSpacer);
             leaderboard.add(userLabel);
@@ -95,6 +103,12 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         }
 
         back = new JButton(LeaderboardViewModel.BACK_BUTTON_LABEL);
+        back.addMouseListener(new MenuView.HoverMouseListener(back));
+        back.setBorder(marginBorder);
+        back.setFont(new Font("Arial", Font.BOLD, 14));
+        back.setBackground(Color.LIGHT_GRAY);
+        back.setForeground(Color.BLACK);
+        back.setPreferredSize(new Dimension(120, 30));
         buttons.add(back);
 
         //Current methodology is to create an actionlistener for each button, and pass in the name of the button
@@ -129,7 +143,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         add(title);
-        add(leaderboard);
+        add(leaderboardWrapper);
         add(buttons);
         leaderboardController.load();
     }
@@ -161,7 +175,6 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
         if (evt.getNewValue() instanceof String activeViewName) {
             activeViewName = (String) evt.getNewValue();
             if (!activeViewName.equals(viewName)) {
-                leaderboardController.load();
                 return;
             }
             leaderboardController.load();
@@ -203,8 +216,9 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
                 } catch (Exception ignored) {
 
                 }
-
+                leftSpacer.setAlignmentX(Component.CENTER_ALIGNMENT);
                 userLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                rightSpacer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
                 userLabel.setFont(new Font("Open Sans", Font.BOLD, 14));
 
@@ -224,6 +238,10 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
             placeLabel.setFont(font);
             userLabel.setFont(font);
             ptsLabel.setFont(font);
+            //Center Labels
+            placeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            userLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            ptsLabel.setHorizontalAlignment(SwingConstants.CENTER);
             //Add labels to leaderboard
             leaderboard.add(placeLabel);
             leaderboard.add(userLabel);
@@ -253,7 +271,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
                 JLabel place = new JLabel((i + 1) + ".");
                 JLabel userName = new JLabel(user);
                 score = state.getLeaderboardScores()[i];
-                JLabel pts = new JLabel(Float.toString(score));
+                JLabel pts = new JLabel(Float.toString(score * 100));
 
                 userName.putClientProperty("id", state.getLeaderboardUserIDs()[i]);
 
@@ -296,6 +314,11 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
                     }
                 }
+
+                //Center Values
+                place.setHorizontalAlignment(SwingConstants.CENTER);
+                userName.setHorizontalAlignment(SwingConstants.CENTER);
+                pts.setHorizontalAlignment(SwingConstants.CENTER);
 
                 Font font1 = new Font("Arial", Font.PLAIN, 16);
                 userName.setFont(font1);
