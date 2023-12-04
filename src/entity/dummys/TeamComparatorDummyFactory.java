@@ -1,6 +1,6 @@
 package entity.dummys;
 
-import entity.entity_helpers.TeamComparatorFactory;
+import use_case.entity_helpers.TeamComparatorFactory;
 
 public class TeamComparatorDummyFactory implements TeamComparatorFactory {
     public TeamComparatorDummy create() {

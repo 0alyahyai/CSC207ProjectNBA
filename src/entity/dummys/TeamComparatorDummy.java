@@ -1,8 +1,8 @@
 package entity.dummys;
 
 import entity.Team;
-import entity.entity_helpers.TeamComparator;
-import entity.entity_helpers.TeamEvaluator;
+import use_case.entity_helpers.TeamComparator;
+import use_case.entity_helpers.TeamEvaluator;
 
 public class TeamComparatorDummy extends TeamComparator {
 

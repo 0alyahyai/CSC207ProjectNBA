@@ -1,7 +1,7 @@
 package entity.dummys;
 
 import entity.Player;
-import entity.entity_helpers.PlayerEvaluator;
+import use_case.entity_helpers.PlayerEvaluator;
 
 import java.util.Random;
 

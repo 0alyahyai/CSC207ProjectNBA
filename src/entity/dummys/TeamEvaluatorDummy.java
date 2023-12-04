@@ -1,8 +1,8 @@
 package entity.dummys;
 
-import entity.entity_helpers.PlayerEvaluator;
+import use_case.entity_helpers.PlayerEvaluator;
 import entity.Team;
-import entity.entity_helpers.TeamEvaluator;
+import use_case.entity_helpers.TeamEvaluator;
 
 public class TeamEvaluatorDummy extends TeamEvaluator {
     public TeamEvaluatorDummy(PlayerEvaluator playerEvaluator) {
