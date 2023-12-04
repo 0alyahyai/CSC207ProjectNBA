@@ -171,6 +171,40 @@ public class FileUserDataAccessObject implements
         return usersWithTeam;
     }
 
+    private List<UserScore> cachedOrderedUserScores;
+
+    public void updateUserScores(TeamComparator teamComparator) {
+        this.cachedOrderedUserScores = getOrderedUserScores(teamComparator);
+    }
+
+
+    public String[] getOrderedNames() {
+        String[] result = new String[cachedOrderedUserScores.size()];
+
+        for (int i = 0; i < cachedOrderedUserScores.size(); i++) {
+            result[i] = cachedOrderedUserScores.get(i).getUsername();
+        }
+        return result;
+    }
+
+    public Float[] getOrderedScores() {
+        Float[] result = new Float[cachedOrderedUserScores.size()];
+
+        for (int i = 0; i < cachedOrderedUserScores.size(); i++) {
+            result[i] = cachedOrderedUserScores.get(i).getScore();
+        }
+        return result;
+    }
+
+    public String[] getOrderedIDs() {
+        String[] result = new String[cachedOrderedUserScores.size()];
+
+        for (int i = 0; i < cachedOrderedUserScores.size(); i++) {
+            result[i] = cachedOrderedUserScores.get(i).getUserId();
+        }
+        return result;
+    }
+
     public List<UserScore> getOrderedUserScores(TeamComparator teamComparator) {
         List<User> usersWithTeam = this.getUserswithTeam();
         List<UserScore> userScores = new ArrayList<>();
@@ -198,36 +232,6 @@ public class FileUserDataAccessObject implements
             }
         }
         return userScores;
-    }
-
-    public String[] getOrderedNames(TeamComparator teamComparator) {
-        List<UserScore> userScores = getOrderedUserScores(teamComparator);
-        String[] orderedNames = new String[userScores.size()];
-        for (int i = 0; i < userScores.size(); i++) {
-            orderedNames[i] = userScores.get(i).getUsername();
-        }
-        if (orderedNames.length == 0) {
-            return null;
-        }
-        return orderedNames;
-    }
-
-    public Float[] getOrderedScores(TeamComparator teamComparator) {
-        List<UserScore> userScores = getOrderedUserScores(teamComparator);
-        Float[] orderedScores = new Float[userScores.size()];
-        for (int i = 0; i < userScores.size(); i++) {
-            orderedScores[i] = userScores.get(i).getScore();
-        }
-        return orderedScores;
-    }
-
-    public String[] getOrderedIDs(TeamComparator teamComparator) {
-        List<UserScore> userScores = getOrderedUserScores(teamComparator);
-        String[] orderedUserIDs = new String[userScores.size()];
-        for (int i = 0; i < userScores.size(); i++) {
-            orderedUserIDs[i] = userScores.get(i).getUserId();
-        }
-        return orderedUserIDs;
     }
 
     @Override
