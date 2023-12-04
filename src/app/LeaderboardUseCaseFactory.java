@@ -25,7 +25,7 @@ public class LeaderboardUseCaseFactory {
 
         try {
             LeaderboardController leaderboardController = createLeaderboardUseCase(viewManagerModel, leaderboardViewModel, menuViewName, loggedInViewName, userDataAccessObject, teamComparator);
-            return new LeaderboardView(loggedInViewModel, leaderboardViewModel, leaderboardController);
+            return new LeaderboardView(viewManagerModel, loggedInViewModel, leaderboardViewModel, leaderboardController);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }
