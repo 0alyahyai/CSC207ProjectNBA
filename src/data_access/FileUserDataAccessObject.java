@@ -409,7 +409,6 @@ public class FileUserDataAccessObject implements
 
 
 //            dao.getteams();
-        System.out.println(dao.getteams("victeam"));
 
 
     }

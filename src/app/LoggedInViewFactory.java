@@ -55,7 +55,7 @@ public class LoggedInViewFactory {
         return new ViewTeamController(viewTeamInteractor);
     }
 
-    private static CompareController createCompareTeamUseCase(ViewManagerModel viewManagerModel,
+    public static CompareController createCompareTeamUseCase(ViewManagerModel viewManagerModel,
                                                               CompareViewModel compareViewModel,
                                                               CompareDataAccessInterface dao){
 
