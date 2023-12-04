@@ -8,6 +8,8 @@ import java.beans.PropertyChangeSupport;
 public class LeaderboardViewModel extends ViewModel{
 
 //    public static final String SIGNUP_BUTTON_LABEL = "Sign up";
+
+
     public static final String TITLE_LABEL = "Leaderboard View";
     public static final String BACK_BUTTON_LABEL = "Back";
     public static final String LEADERBOARD_BUTTON_LABEL = "Leaderboard";

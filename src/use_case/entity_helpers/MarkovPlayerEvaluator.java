@@ -15,7 +15,6 @@ import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.linear.SingularValueDecomposition;
 import data_access.APIinterface;
 import entity.Player;
-import entity.Stats;
 import use_case.algorithm.AlgorithmDataAccessInterface;
 
 import java.util.ArrayList;

@@ -43,6 +43,7 @@ class SaveTeamUCITest {
     void successTest() {
         User user = userFactory.createMockUser();
         ((MockDAO) dao).save(user);
+        ((MockDAO) dao).setActiveUser(user);
 
         List<Player> players = playerFactory.generateMockTeam();
         String teamName = "Jets";
@@ -72,6 +73,7 @@ class SaveTeamUCITest {
                 Assertions.fail("Should not fail.");
             }
         };
+
 
         SaveTeamInputBoundary interactor = new SaveTeamUCI(dao, outputBoundary, teamFactory);
 

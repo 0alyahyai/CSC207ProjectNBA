@@ -1,12 +1,13 @@
 package app;
 
 
-import use_case.menu.interface_adapter.MenuViewModel;
+import use_case.entity_helpers.TeamComparator;
+import view.LoggedInViewModel;
 import view.ViewManagerModel;
 import use_case.leaderboard.interface_adapter.LeaderboardController;
 import use_case.leaderboard.interface_adapter.LeaderboardPresenter;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
-import use_case.leaderboard.LeaderboardDataAccessInterface;
+import use_case.leaderboard.LeaderboardFileUserDataAccessInterface;
 import use_case.leaderboard.LeaderboardInputBoundary;
 import use_case.leaderboard.LeaderboardInteractor;
 import use_case.leaderboard.LeaderboardOutputBoundary;
@@ -17,14 +18,14 @@ import java.io.IOException;
 
 public class LeaderboardUseCaseFactory {
 
-    private LeaderboardUseCaseFactory() {}
+    public LeaderboardUseCaseFactory() {}
 
-    public static LeaderboardView create(MenuViewModel menuViewModel, ViewManagerModel viewManagerModel,
-                                  LeaderboardViewModel leaderboardViewModel, LeaderboardDataAccessInterface userDataAccessObject) {
+    public static LeaderboardView create(LoggedInViewModel loggedInViewModel, String menuViewName,String loggedInViewName, ViewManagerModel viewManagerModel,
+                                  LeaderboardViewModel leaderboardViewModel, LeaderboardFileUserDataAccessInterface userDataAccessObject, TeamComparator teamComparator) {
 
         try {
-            LeaderboardController leaderboardController = createLeaderboardUseCase(viewManagerModel, leaderboardViewModel, menuViewModel, userDataAccessObject);
-            return new LeaderboardView(leaderboardViewModel, leaderboardController);
+            LeaderboardController leaderboardController = createLeaderboardUseCase(viewManagerModel, leaderboardViewModel, menuViewName, loggedInViewName, userDataAccessObject, teamComparator);
+            return new LeaderboardView(loggedInViewModel, leaderboardViewModel, leaderboardController);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         }
@@ -33,12 +34,12 @@ public class LeaderboardUseCaseFactory {
     }
 
     public static LeaderboardController createLeaderboardUseCase(ViewManagerModel viewManagerModel, LeaderboardViewModel leaderboardViewModel,
-                                                                  MenuViewModel menuViewModel, LeaderboardDataAccessInterface userDataAccessObject) throws IOException {
+                                                                 String menuViewName, String loggedInViewName, LeaderboardFileUserDataAccessInterface userDataAccessObject, TeamComparator teamComparator) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
-        LeaderboardOutputBoundary leaderboardOutputBoundary = new LeaderboardPresenter(leaderboardViewModel, viewManagerModel, menuViewModel);
+        LeaderboardOutputBoundary leaderboardOutputBoundary = new LeaderboardPresenter(leaderboardViewModel, viewManagerModel, menuViewName, loggedInViewName);
 
-        LeaderboardInputBoundary leaderboardInteractor = new LeaderboardInteractor(leaderboardOutputBoundary, userDataAccessObject);
+        LeaderboardInputBoundary leaderboardInteractor = new LeaderboardInteractor(leaderboardOutputBoundary, userDataAccessObject, teamComparator);
 
         return new LeaderboardController(leaderboardInteractor);
     }

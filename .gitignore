@@ -6,3 +6,5 @@ target/
 .idea/misc.xml
 .idea/modules.xml
 NBAproject.iml
+target/
+.DS_Store

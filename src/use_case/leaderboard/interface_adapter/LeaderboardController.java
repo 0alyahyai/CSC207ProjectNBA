@@ -9,8 +9,16 @@ public class LeaderboardController {
     public LeaderboardController(LeaderboardInputBoundary leaderboardUseCaseInteractor) {
         this.leaderboardUseCaseInteractor = leaderboardUseCaseInteractor;
     }
-    public void back () {
-        leaderboardUseCaseInteractor.back();
+    public void toMenu () {
+        leaderboardUseCaseInteractor.toMenu();
+    }
+
+    public void toLoggedIn () {
+        leaderboardUseCaseInteractor.toLoggedIn();
+    }
+
+    public void setActiveUser () {
+        leaderboardUseCaseInteractor.setActiveUser();
     }
 
     public void load () {

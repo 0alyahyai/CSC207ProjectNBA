@@ -1,6 +1,8 @@
 package view;
 
 import use_case.compareTeam.interface_adapter.CompareController;
+import entity.User;
+import use_case.make_team.create_team.CreateTeamViewModel;
 import use_case.view_team.interface_adapter.ViewTeamController;
 
 import javax.swing.*;
@@ -59,7 +61,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         buttons.add(leaderboard);
         buttons.add(createTeam);
         buttons.add(compareTeams);
-        buttons.add(getPlayerStats);
+        // This is removed from the specification
+//        buttons.add(getPlayerStats);
         buttons.add(viewTeam);
         buttons.add(logOut);
         // Logs out the user when the button is clicked.
@@ -69,7 +72,20 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                         if (evt.getSource().equals(logOut)) {
                             viewManagerModel.setActiveView("menu");
                             viewManagerModel.firePropertyChanged();
+                            LoggedInState currState = loggedInViewModel.getState();
+                            currState.setLoggedIn(false);
+                            loggedInViewModel.firePropertyChanged();
+                        }
+                    }
+                }
+        );
 
+        leaderboard.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(leaderboard)) {
+                            viewManagerModel.setActiveView("leaderboard");
+                            viewManagerModel.firePropertyChanged();
                         }
                     }
                 }
@@ -96,10 +112,23 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
                             viewTeamController.execute();
 //                            viewManagerModel.setActiveView("view team");
 //                            viewManagerModel.firePropertyChanged();
-
                         }
                     }
                 }
+        );
+
+        createTeam.addActionListener(
+                new ActionListener() {
+                     @Override
+                     public void actionPerformed(ActionEvent e) {
+                         if (e.getSource().equals(createTeam)) {
+                             viewManagerModel.setActiveView(CreateTeamViewModel.VIEW_NAME);
+                             viewManagerModel.firePropertyChanged();
+                         }
+
+                     }
+                }
+
         );
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
