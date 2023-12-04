@@ -18,25 +18,26 @@ public class ComparePresenter implements CompareOutputBoundary {
     }
     @Override
     public void prepareSuccessView(CompareOutputData outputData) {
-        CompareState state = new CompareState(outputData.getTeams());
+        CompareState state = new CompareState(outputData.getTeams(),outputData.getactiveHasTeam());
         compareViewModel.setState(state);
         compareViewModel.firePropertyChanged();
-
         viewManagerModel.setActiveView("CompareOptions");
         viewManagerModel.firePropertyChanged();
+
+
 
 
     }
 
     @Override
-    public void prepareFailView(String problem) {
-        CompareState state = new CompareState(new ArrayList<Team>() {
-        });
+    public void prepareFailView(String problem, Boolean bool) {
+        CompareState state = new CompareState(new ArrayList<Team>() {}, bool);
         compareViewModel.setState(state);
         compareViewModel.firePropertyChanged();
 
         viewManagerModel.setActiveView("CompareOptions");
         viewManagerModel.firePropertyChanged();
+
 
     }
 

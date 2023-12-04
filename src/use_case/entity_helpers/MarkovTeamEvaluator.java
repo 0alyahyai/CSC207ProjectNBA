@@ -16,8 +16,7 @@ public class MarkovTeamEvaluator extends TeamEvaluator{
     public float evaluateTeam(Team team) {
         float subtotal = 0;
         for(int i = 0; i < 5; i++){
-            float playerScore = ((MarkovPlayerEvaluator)playerEvaluator).evaluatePlayer(team.getTeamPlayers().get(i));
-            //This uses player evaluator, but it should use the Markov one... thats why I casted above
+            float playerScore = playerEvaluator.evaluatePlayer(team.getTeamPlayers().get(i));
             subtotal = subtotal + playerScore;
         }
         return subtotal/5; //the average of the five players

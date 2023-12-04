@@ -10,13 +10,9 @@ public class PlayerEvaluatorFactory {
 
     }
 
-    public PlayerEvaluator getBonusPlayerEvaluator(APIinterface apIinterface) {
-        PlayerEvaluator logarithmPlayerEvaluator = new LogarithmicPlayerEvaluator(apIinterface);
-        return logarithmPlayerEvaluator;
-    }
 
     public PlayerEvaluator getLogarithmPlayerEvaluator(APIinterface apIinterface) {
-        PlayerEvaluator bonusPlayerEvaluator = new BonusPlayerEvaluator(apIinterface);
-        return bonusPlayerEvaluator;
+        PlayerEvaluator logPlayerEvaluator = new LogarithmicPlayerEvaluator(apIinterface);
+        return logPlayerEvaluator;
     }
 }

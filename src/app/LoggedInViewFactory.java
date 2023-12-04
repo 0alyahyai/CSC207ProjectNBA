@@ -68,11 +68,11 @@ public class LoggedInViewFactory {
         return new CompareController(compareUCI);
     }
 
-    public static CompareViewOptions create(ViewManagerModel viewManagerModel,
-                                            CompareViewModel compareViewModel) {
-
-
-
-        return new CompareViewOptions(compareViewModel, viewManagerModel);
-    }
+//    public static CompareViewOptions create(ViewManagerModel viewManagerModel,
+//                                            CompareViewModel compareViewModel) {
+//
+//
+//
+//        return new CompareViewOptions(algorithmController, compareViewModel, viewManagerModel);
+//    }
 }

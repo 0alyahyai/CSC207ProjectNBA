@@ -23,7 +23,10 @@ public class CompareInteractor implements CompareInputBoundary{
     public void execute() {
         //Here we need to go to the csv file to get of all of the information of all the teams (EXEECPT OURS)
         List<Team> teams = compareDataAccessInterface.geteams();
-        CompareOutputData compareOutputData = new CompareOutputData(teams );
+        Boolean bool = compareDataAccessInterface.activeUserhasTeam();
+        CompareOutputData compareOutputData = new CompareOutputData(teams, bool);
+
+
 
 
 
@@ -32,12 +35,15 @@ public class CompareInteractor implements CompareInputBoundary{
         // In this case, we return it to the presenter. To do that, the use case interactor must have an attribute of
         // presenter... but, that can not happen by SOLID. So it has an attribute of type output boundary that is an
         // abstraction of presenter.
-        if (!teams.isEmpty()) {
+        if (!teams.isEmpty() && bool) {
             compareOutputBoundary.prepareSuccessView(compareOutputData);
+
         } else{
 
             String problemString = "There are no teams other than yours." ;
-            compareOutputBoundary.prepareFailView(problemString);
+
+            compareOutputBoundary.prepareFailView(problemString, !bool);
+
         }
 
 

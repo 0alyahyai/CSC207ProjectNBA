@@ -4,6 +4,10 @@ import use_case.compareTeam.CompareInputBoundary;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInputData;
 
+/**
+ *
+ * Controller of compare options that recives no data
+ */
 public class CompareController {
 
     // Here in the controller, we will run the intercator. We create a method call excecute. It will have as a parameter

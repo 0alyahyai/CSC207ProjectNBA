@@ -9,5 +9,7 @@ import java.util.Map;
 public interface AlgorithmDataAccessInterface {
 
     public ArrayList<Team> getteams(String teamname) throws IOException;
+    public String getActiveName();
+    public String findUserByTeam(String teamName)throws IOException;
 
 }

@@ -1,8 +1,13 @@
 package use_case.algorithm;
 
+import data_access.APIinterface;
 import entity.Player;
 import entity.Team;
 import use_case.algorithm.viewAlgorithm.AlgorithmDataAccessInterfaceApi;
+import use_case.entity_helpers.MarkovPlayerEvaluator;
+import use_case.entity_helpers.PlayerEvaluatorFactory;
+import use_case.entity_helpers.TeamEvaluator;
+import use_case.entity_helpers.TeamEvaluatorFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,67 +17,55 @@ public class AlgorithmInteractor implements AlgorithmInputBoundary{
 
     public AlgorithmOutputBoundary algorithmOutputBoundary;
     public AlgorithmDataAccessInterface algorithmDataAccessInterface;
-    public AlgorithmDataAccessInterfaceApi algorithmDataAccessInterfaceApi;
+    public  APIinterface apiDAO;
 
     public AlgorithmInteractor(AlgorithmOutputBoundary algorithmOutputBoundary,
                                AlgorithmDataAccessInterface algorithmDataAccessInterface,
-                               AlgorithmDataAccessInterfaceApi algorithmDataAccessInterfaceApi){
+                               APIinterface apiDAO){
         this.algorithmOutputBoundary = algorithmOutputBoundary;
         this.algorithmDataAccessInterface = algorithmDataAccessInterface;
-        this.algorithmDataAccessInterfaceApi = algorithmDataAccessInterfaceApi;
+        this.apiDAO = apiDAO;
 
 
     }
 
     @Override
-    public void execute(String algorithm, String otherTeamName) {
+    public void execute(String otherTeamName, String algorithm) {
 
         // Here we need to do several things. First, notice that we have the name of the team and the desired algorithm.
         // [x]So, first we want to get the team.
         // Also, we want to compare. [x]To do that, we will create a function that searches the requiered information for
         // Then, we will compare the two obtained values. In other words, we will...
         try {
-              ArrayList<Team> teams = this.algorithmDataAccessInterface.getteams(otherTeamName);  //This will get the 2 teams.
+              ArrayList<Team> teams = this.algorithmDataAccessInterface.getteams(otherTeamName);//This will get the 2 teams.
+              String activePlayerName = this.algorithmDataAccessInterface.getActiveName();
               Team activeTeam = teams.get(0);
-              Team otherTeam = teams.get(0);
+              Team otherTeam = teams.get(1);
+              String otherTeamUser = this.algorithmDataAccessInterface.findUserByTeam(otherTeamName);
+              if (algorithm.equals("Markov prediction")){
+                  PlayerEvaluatorFactory playerEvaluatorFactory = new PlayerEvaluatorFactory();
+                  TeamEvaluatorFactory teamEvaluatorFactory = new TeamEvaluatorFactory(playerEvaluatorFactory);
+                  TeamEvaluator teamEvaluator = teamEvaluatorFactory.getMarkovTeamEvaluator(apiDAO);
+                  Float activeTeamScore = teamEvaluator.evaluateTeam(activeTeam);
+                  Float otherTeamScore = teamEvaluator.evaluateTeam(otherTeam);
+                  //String activePlayerName, String otherTeamName, String otherPlayerName
+//                  Float score1, Float score2, String algorithm, String activeTeamName, String activePlayerName, String otherTeamName, String otherPlayerName
+                  AlgorithmOutputData algorithmOutputData = new AlgorithmOutputData(activeTeamScore, otherTeamScore, algorithm, activeTeam.getTeamName() ,activePlayerName, otherTeamName,otherTeamUser);
+                  algorithmOutputBoundary.prepareSuccessView(algorithmOutputData);
 
-              TeamC
-
-
-
-
-
-
-
-
-//            ArrayList<Player> playersThisTeam = (ArrayList<Player>) teams.get(0).getTeamPlayers();
-//            ArrayList<Player> playersOtherTeam = (ArrayList<Player>) teams.get(0).getTeamPlayers();
-//
-//            ArrayList<Map<Object, Object>> playersFirstTeamStats = new ArrayList<>();
-//            ArrayList<Map<Object, Object>> playersSecondTeamStats = new ArrayList<>();
-//
-//
-//
-//            for(int i = 0; i < playersThisTeam.size(); i++){ //the size should be 5, but just in case
-//                playersFirstTeamStats.add(this.algorithmDataAccessInterfaceApi.getData(playersThisTeam.get(i).getPlayerID()));
-//            }
-//            for(int i = 0; i < playersOtherTeam.size(); i++){ //the size should be 5, but just in case
-//                playersSecondTeamStats.add(this.algorithmDataAccessInterfaceApi.getData(playersOtherTeam.get(i).getPlayerID()));
-//            }
-//
-//            //Here we have the big maps, as in Docs. We want to get the information. [MAP1, MAP2, MAP3, MAP4, MAP5] (ASI)
-//            // we want to send this to the given algorithm.
-
-
+              }
+              else {
+                  //This means that "Logarithmic comparison"
+                  PlayerEvaluatorFactory playerEvaluatorFactory = new PlayerEvaluatorFactory();
+                  TeamEvaluatorFactory teamEvaluatorFactory = new TeamEvaluatorFactory(playerEvaluatorFactory);
+                  TeamEvaluator teamEvaluator = teamEvaluatorFactory.getLogarithmTeamEvaluator(apiDAO);
+                  Float activeTeamScore = teamEvaluator.evaluateTeam(activeTeam);
+                  Float otherTeamScore = teamEvaluator.evaluateTeam(otherTeam);
+                  AlgorithmOutputData algorithmOutputData = new AlgorithmOutputData(activeTeamScore, otherTeamScore, algorithm, activeTeam.getTeamName() ,activePlayerName, otherTeamName,otherTeamUser);
+                  algorithmOutputBoundary.prepareSuccessView(algorithmOutputData);
+              }
         } catch (IOException e){
-            //this is not necessary because el otro nos garantiza que este ya reciba dos cosas.
+            algorithmOutputBoundary.prepareFailView("There was a problem");
         }
-
-
-
-
-
-
     }
-
 }

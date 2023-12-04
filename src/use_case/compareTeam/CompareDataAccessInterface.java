@@ -9,4 +9,5 @@ public interface CompareDataAccessInterface
 {
 
     public List<Team> geteams();
+    public Boolean activeUserhasTeam();
 }

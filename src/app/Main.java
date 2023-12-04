@@ -4,6 +4,8 @@ import data_access.APIinterface;
 import data_access.FileUserDataAccessObject;
 import data_access.MockAPIDAO;
 import entity.CommonUserFactory;
+import use_case.algorithm.interface_adapter.AlgorithmViewModel;
+import use_case.algorithm.viewAlgorithm.AlgorithmView;
 import use_case.compareTeam.interface_adapter.CompareViewModel;
 import use_case.compareTeam.viewCompareTeam.CompareViewOptions;
 import use_case.leaderboard.view.LeaderboardView;
@@ -65,7 +67,7 @@ public class Main {
         SignupViewModel signupViewModel = new SignupViewModel();
         ViewTeamViewModel viewTeamViewModel = new ViewTeamViewModel();
 
-        APIinterface apiDAO = new MockAPIDAO();
+        APIinterface apiDAO = new APIDataAccessObject();
 
         //Here VARP starts coding
         CompareViewModel compareViewModel = new CompareViewModel();
@@ -110,8 +112,18 @@ public class Main {
 
         //Here VARP starts coding
 
-        CompareViewOptions compareViewOptions = LoggedInViewFactory.create(viewManagerModel, compareViewModel);
+//        CompareViewOptions compareViewOptions = LoggedInViewFactory.create(viewManagerModel, compareViewModel);
+//        views.add(compareViewOptions, compareViewOptions.viewName);
+
+        AlgorithmViewModel algorithmViewModel = new AlgorithmViewModel();
+//        CompareViewModel compareViewModel = new CompareViewModel();
+        CompareViewOptions compareViewOptions = AlgorithmUseCaseFactory.createFirstView(
+                algorithmViewModel, viewManagerModel, apiDAO, userDataAccessObject, compareViewModel
+        );
         views.add(compareViewOptions, compareViewOptions.viewName);
+
+        AlgorithmView algorithmView = AlgorithmUseCaseFactory.createAlgorithmView(algorithmViewModel, viewManagerModel);
+        views.add(algorithmView, algorithmView.viewName);
 
 
 

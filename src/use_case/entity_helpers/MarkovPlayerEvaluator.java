@@ -47,8 +47,9 @@ public class MarkovPlayerEvaluator implements PlayerEvaluator{
     @Override
     public float evaluatePlayer(Player player) {
         Map<String, Object> dataMap = this.apIinterface.getPlayerStats(player.getPlayerID());
-
-
+        if (isResponseEmpty(dataMap)){
+            return 0;
+        }
         ArrayList<Double> pointsArray = MarkovPlayerEvaluator.extractPoints(dataMap);
         ArrayList<Double> reboundsArray = MarkovPlayerEvaluator.extractTotalRebounds(dataMap);
         ArrayList<Double> assistsArray = MarkovPlayerEvaluator.extractAssists(dataMap);
@@ -57,6 +58,19 @@ public class MarkovPlayerEvaluator implements PlayerEvaluator{
         Double Assists = MarkovPlayerEvaluator.MarkovApproximation(assistsArray);
         return (float) ((Points + Rebounds + Assists)/3);
 
+    }
+
+    public static boolean isResponseEmpty(Map<String, Object> dataMap) {
+        if (dataMap == null || !dataMap.containsKey("response")) {
+            return true; // The map is null or doesn't contain the key "response"
+        }
+
+        Object response = dataMap.get("response");
+        if (response instanceof List) {
+            return ((List<?>) response).isEmpty();
+        }
+
+        return true; // The response is not a List or is empty
     }
     public static ArrayList<Double> extractAssists(Map<String, Object> dataMap) {
         ArrayList<Double> assistsList = new ArrayList<>();

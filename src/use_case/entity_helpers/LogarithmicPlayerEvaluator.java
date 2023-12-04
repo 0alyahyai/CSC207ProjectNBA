@@ -19,6 +19,9 @@ public class LogarithmicPlayerEvaluator implements PlayerEvaluator{
     @Override
     public float evaluatePlayer(Player player) {
         Map<String, Object> dataMap = this.apIinterface.getPlayerStats(player.getPlayerID());
+        if (isResponseEmpty(dataMap)){
+            return 1;
+        }
         ArrayList<Double> pointsArray = LogarithmicPlayerEvaluator.extractPoints(dataMap);
         ArrayList<Double> reboundsArray = LogarithmicPlayerEvaluator.extractTotalRebounds(dataMap);
         ArrayList<Double> assistsArray = LogarithmicPlayerEvaluator.extractAssists(dataMap);
@@ -27,6 +30,21 @@ public class LogarithmicPlayerEvaluator implements PlayerEvaluator{
         Double Assists = LogarithmicPlayerEvaluator.LogarithmicPlayerEvaluation(assistsArray);
         return (float) ((Points + Rebounds + Assists)/3);
 
+
+
+    }
+
+    public static boolean isResponseEmpty(Map<String, Object> dataMap) {
+        if (dataMap == null || !dataMap.containsKey("response")) {
+            return true; // The map is null or doesn't contain the key "response"
+        }
+
+        Object response = dataMap.get("response");
+        if (response instanceof List) {
+            return ((List<?>) response).isEmpty();
+        }
+
+        return true; // The response is not a List or is empty
     }
     public static Double LogarithmicPlayerEvaluation(ArrayList<Double> arrayOfStats){
         int sizeOfArray = arrayOfStats.size();

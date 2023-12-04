@@ -15,15 +15,10 @@ public class TeamEvaluatorFactory {
         return markovTeamEvaluator;
     }
 
-    public TeamEvaluator getBonusTeamEvaluator(APIinterface apIinterface) {
-        PlayerEvaluator bonusPlayerEvaluator = playerEvalFactory.getBonusPlayerEvaluator(apIinterface);
-        TeamEvaluator bonusTeamEvaluator = new MarkovTeamEvaluator(bonusPlayerEvaluator);
-        return bonusTeamEvaluator;
-    }
 
     public TeamEvaluator getLogarithmTeamEvaluator(APIinterface apIinterface) {
-        PlayerEvaluator LogarithmPlayerEvaluator = playerEvalFactory.getLogarithmPlayerEvaluator(apIinterface);
-        TeamEvaluator LogarithmTeamEvaluator = new MarkovTeamEvaluator(LogarithmPlayerEvaluator);
+        PlayerEvaluator logarithmPlayerEvaluator = playerEvalFactory.getLogarithmPlayerEvaluator(apIinterface);
+        TeamEvaluator LogarithmTeamEvaluator = new LogarithmicTeamEvaluator(logarithmPlayerEvaluator);
         return LogarithmTeamEvaluator;
     }
 }

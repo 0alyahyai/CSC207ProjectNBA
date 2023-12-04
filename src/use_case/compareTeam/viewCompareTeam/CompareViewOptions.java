@@ -2,7 +2,6 @@ package use_case.compareTeam.viewCompareTeam;
 
 import use_case.algorithm.interface_adapter.AlgorithmController;
 import use_case.compareTeam.interface_adapter.CompareViewModel;
-import use_case.menu.interface_adapter.MenuController;
 import view.ViewManagerModel;
 
 import javax.swing.*;
@@ -11,10 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 
 
 public class CompareViewOptions extends JPanel implements ActionListener, PropertyChangeListener {
+
+    private final AlgorithmController algorithmController;
     public final String viewName = "CompareOptions";
     private final CompareViewModel compareViewModel;
     private final ViewManagerModel viewManagerModel;
@@ -25,12 +25,13 @@ public class CompareViewOptions extends JPanel implements ActionListener, Proper
     private JButton backButton;
     private JButton compareButton;
     private JPanel comboBoxPanel;
-    public CompareViewOptions(CompareViewModel compareViewModel, ViewManagerModel viewManagerModel) {
+    public CompareViewOptions(AlgorithmController algorithmController, CompareViewModel compareViewModel, ViewManagerModel viewManagerModel) {
+        this.algorithmController = algorithmController;
         this.compareViewModel = compareViewModel;
         this.viewManagerModel = viewManagerModel;
         this.compareViewModel.addPropertyChangeListener(this);
 
-        String[] items2 = {"Algorithm 1", "Algorithm 2", "Algorithm 3"};
+        String[] items2 = {"Markov prediction", "Logarithmic comparison"};
 
         comboBoxPanel = new JPanel();
 
@@ -66,7 +67,6 @@ public class CompareViewOptions extends JPanel implements ActionListener, Proper
                 }
         );
         buttonPanel.add(backButton);
-
 
         if (compareViewModel.getState().getPossible()) {
             String[] items1 = new String[compareViewModel.getState().getTeams().size()];
@@ -115,8 +115,9 @@ public class CompareViewOptions extends JPanel implements ActionListener, Proper
                     new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
                             if (e.getSource().equals(compareButton)) {
-//                                AlgorithmController.execute(comboBox1.getSelectedItem(), comboBox2.getSelectedItem());
-                                //execute should have as parameters an input interface?
+                               algorithmController.execute(
+                                       (String) comboBox1.getSelectedItem(),
+                                       (String) comboBox2.getSelectedItem());
                             }
 
                         }

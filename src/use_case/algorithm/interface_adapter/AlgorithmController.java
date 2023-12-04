@@ -5,16 +5,12 @@ import use_case.compareTeam.CompareInputBoundary;
 
 public class AlgorithmController{
     public final AlgorithmInputBoundary algorithmInputBoundary;
-    public  final String algorithm;
-    public final String team;
 
-    public AlgorithmController(AlgorithmInputBoundary algorithmInputBoundary, String algorithm, String team) {
+    public AlgorithmController(AlgorithmInputBoundary algorithmInputBoundary) {
         this.algorithmInputBoundary = algorithmInputBoundary;
-        this.algorithm = algorithm;
-        this.team = team;
     }
 
-    public void execute(){
+    public void execute(String algorithm, String team){
         algorithmInputBoundary.execute(algorithm, team);
     }
 }

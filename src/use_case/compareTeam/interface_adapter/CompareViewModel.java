@@ -29,6 +29,8 @@ public class  CompareViewModel extends ViewModel {
 
     }
 
+
+
     public void setState(CompareState state) {
 
         this.state = state;
@@ -39,9 +41,9 @@ public class  CompareViewModel extends ViewModel {
 
     public void firePropertyChanged() {
         support.firePropertyChange("state", null, this.state);
-    }
+    } //
 
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
+    public void addPropertyChangeListener(PropertyChangeListener listener) { //
         support.addPropertyChangeListener(listener);
     }
 

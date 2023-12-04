@@ -8,11 +8,12 @@ public class CompareState {
     public  final List<Team> teams;
     public boolean possible;
 
-
-
-    public CompareState(List<Team> teams) {
+    public CompareState(List<Team> teams, Boolean activeHasTeam) {
         this.teams = teams;
-        this.possible = !teams.isEmpty();
+        this.possible = !teams.isEmpty() && activeHasTeam;
+
+
+
     }
 
 

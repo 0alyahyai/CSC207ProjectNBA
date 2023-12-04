@@ -181,17 +181,7 @@ public class FileUserDataAccessObject implements
             return user.getUserTeam();
         }
 
-        public static void main(String[] args) throws IOException {
-            UserFactory uf = new CommonUserFactory();
-            FileUserDataAccessObject dao = new FileUserDataAccessObject("./users.csv",
-                    uf, new MockAPIDAO());
 
-            User user = uf.create("32", "Bob", "mar420");
-            dao.save(user);
-
-            TeamFactory tf = new CommonTeamFactory();
-            dao.saveTeam(user, tf.createMockTeam());
-        }
 
 
         public static String userTeamToString(User user) {
@@ -249,6 +239,15 @@ public class FileUserDataAccessObject implements
         }
 
         // VARP starts coding
+        public Boolean activeUserhasTeam(){
+
+            return getTeamOfUser(this.activeUser.getUserName()) != null;
+
+        }
+
+
+
+
         @Override
         public List<Team> geteams(){
              List<String> usernames = this.getUsernamesExceptActiveUser();
@@ -293,6 +292,7 @@ public class FileUserDataAccessObject implements
 
         @Override
         public ArrayList<Team> getteams(String teamname) throws IOException{
+
             String userNameOne = findUserByTeam(teamname);
             Team otherTeam = this.getTeamOfUser(userNameOne);
             Team thisTeam = this.getTeamOfUser(activeUser.getUserName());
@@ -303,6 +303,12 @@ public class FileUserDataAccessObject implements
 
 
         }
+
+        @Override
+        public String getActiveName() {
+            return this.activeUser.getUserName();
+        }
+
 
         public String findUserByTeam(String teamName) throws IOException {
             try (BufferedReader br = new BufferedReader(new FileReader(this.csvFile))) {
@@ -318,7 +324,10 @@ public class FileUserDataAccessObject implements
                     // first character given that it is a "["
                     if (columns.length >= 4) {
                         String[] teamArray = columns[3].split(";");
+
+
                         if (teamArray.length > 0 && teamArray[0].substring(1).equals(teamName)) {
+
                             return columns[0]; // Return the username
                         }
                     }
@@ -329,5 +338,23 @@ public class FileUserDataAccessObject implements
 
         }
         // VARP ends coding
+
+
+        public static void main(String[] args) throws IOException {
+            UserFactory uf = new CommonUserFactory();
+//            FileUserDataAccessObject dao = new FileUserDataAccessObject("./users.csv",
+//                    uf, new MockAPIDAO());
+            FileUserDataAccessObject dao = new FileUserDataAccessObject("./users.csv",
+                    uf, new APIDataAccessObject());
+
+
+//            dao.getteams();
+            System.out.println(dao.getteams("victeam"));
+
+
+        }
+
+
+
 
     }
