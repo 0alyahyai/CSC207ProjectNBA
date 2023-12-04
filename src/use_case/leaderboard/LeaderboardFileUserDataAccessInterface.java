@@ -7,11 +7,13 @@ public interface LeaderboardFileUserDataAccessInterface {
 
     //Returns the names of the users in the database in order of their teams score. Only returns users with teams,
     //If no users getOrderedNames returns null, but the other methods will still return arrays of the same length 0
-    String[] getOrderedNames(TeamComparator teamComparator);
 
-    Float[] getOrderedScores(TeamComparator teamComparator);
+    void updateUserScores(TeamComparator teamComparator);
+    String[] getOrderedNames();
 
-    String[] getOrderedIDs(TeamComparator teamComparator);
+    Float[] getOrderedScores();
+
+    String[] getOrderedIDs();
 
     String getActiveUserID();
 }
