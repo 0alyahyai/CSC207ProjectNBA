@@ -420,6 +420,14 @@ public class LeaderboardTest {
         testMain();
         JButton toLeaderboard = getLeaderboardButtonMenu();
         toLeaderboard.doClick();
+        try {
+            // Wait for one minute (60,000 milliseconds)
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            // Handle the exception if necessary
+            e.printStackTrace();
+        }
+
         JPanel leaderboard = getLeaderboard();
         JLabel userLabel1 = (JLabel) leaderboard.getComponent(0 + 2*2);
         JLabel userLabel2 = (JLabel) leaderboard.getComponent(1 + 2*3);
@@ -434,6 +442,14 @@ public class LeaderboardTest {
         leaderboardViewModel.getState().setActiveUserID(users[1].getUserID());
         JButton toLeaderboard = getLeaderboardButtonMenu();
         toLeaderboard.doClick();
+        try {
+            // Wait for one minute (60,000 milliseconds)
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            // Handle the exception if necessary
+            e.printStackTrace();
+        }
+
         JPanel leaderboard = getLeaderboard();
         JLabel userLabel1 = (JLabel) leaderboard.getComponent(0 + 2*2);
         JLabel userLabel2 = (JLabel) leaderboard.getComponent(1 + 2*3);
