@@ -3,22 +3,18 @@ package use_case.leaderboard;
 import app.*;
 import data_access.*;
 import entity.*;
-import use_case.algorithm.interface_adapter.AlgorithmViewModel;
-import use_case.algorithm.viewAlgorithm.AlgorithmView;
-import use_case.compareTeam.interface_adapter.CompareViewModel;
-import use_case.compareTeam.viewCompareTeam.CompareViewOptions;
-import use_case.entity_helpers.dummys.*;
+import use_case.entity_helpers.dummys.PlayerEvaluatorDummy;
+import use_case.entity_helpers.dummys.TeamComparatorDummy;
+import use_case.entity_helpers.dummys.TeamEvaluatorDummy;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import use_case.entity_helpers.PlayerEvaluator;
 import use_case.entity_helpers.TeamComparator;
 import use_case.entity_helpers.TeamEvaluator;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
 import use_case.leaderboard.view.LeaderboardView;
 import use_case.login.interface_adapter.LoginViewModel;
 import use_case.login.view.LoginView;
-import use_case.make_team.create_team.CreateTeamView;
-import use_case.make_team.create_team.CreateTeamViewModel;
 import use_case.menu.interface_adapter.MenuViewModel;
 import use_case.menu.view.MenuView;
 import use_case.signup.interface_adapter.SignupViewModel;
@@ -87,7 +83,6 @@ public class LeaderboardTest {
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
         this.viewManagerModel = viewManagerModel;
-
         // The data for the views, such as username and password, are in the ViewModels.
         // This information will be changed by a presenter object that is reporting the
         // results from the use case. The ViewModels are observable, and will
@@ -100,11 +95,7 @@ public class LeaderboardTest {
         SignupViewModel signupViewModel = new SignupViewModel();
         ViewTeamViewModel viewTeamViewModel = new ViewTeamViewModel();
 
-        APIinterface apiDAO = new APIDataAccessObject();
-
-        //Here VARP starts coding
-        CompareViewModel compareViewModel = new CompareViewModel();
-        //Here VARP ends coding
+        APIinterface apiDAO = new MockAPIDAO();
 
         FileUserDataAccessObject userDataAccessObject;
         try {
@@ -127,7 +118,7 @@ public class LeaderboardTest {
         views.add(loginView, loginView.viewName);
 
         LoggedInView loggedInView = LoggedInViewFactory.create(loggedInViewModel, viewManagerModel, viewTeamViewModel,
-                userDataAccessObject, apiDataAccessObject, compareViewModel);
+                userDataAccessObject, apiDataAccessObject);
         views.add(loggedInView, loggedInView.viewName);
 
         PlayerEvaluator playerEvaluator = new PlayerEvaluatorDummy();
@@ -144,43 +135,12 @@ public class LeaderboardTest {
         views.add(viewTeamView, viewTeamView.viewName);
 
 
-        // Make-Team Usecase
-        CreateTeamViewModel createTeamViewModel = new CreateTeamViewModel();
-        CreateTeamView createTeamView =
-                MakeTeamUseCaseFactory.createCreateTeamView(
-                        createTeamViewModel,
-                        apiDAO,
-                        userDataAccessObject,
-                        viewManagerModel
-                );
-        views.add(createTeamView, CreateTeamViewModel.VIEW_NAME);
-
         viewManagerModel.setActiveView(menuView.viewName);
         viewManagerModel.firePropertyChanged();
-
-        //Here VARP starts coding
-
-//        CompareViewOptions compareViewOptions = LoggedInViewFactory.create(viewManagerModel, compareViewModel);
-//        views.add(compareViewOptions, compareViewOptions.viewName);
-
-        AlgorithmViewModel algorithmViewModel = new AlgorithmViewModel();
-//        CompareViewModel compareViewModel = new CompareViewModel();
-        CompareViewOptions compareViewOptions = AlgorithmUseCaseFactory.createFirstView(
-                algorithmViewModel, viewManagerModel, apiDAO, userDataAccessObject, compareViewModel
-        );
-        views.add(compareViewOptions, compareViewOptions.viewName);
-
-        AlgorithmView algorithmView = AlgorithmUseCaseFactory.createAlgorithmView(algorithmViewModel, viewManagerModel);
-        views.add(algorithmView, algorithmView.viewName);
-
-
-
-        //Here VARP ends coding
 
         application.pack();
         application.setVisible(true);
     }
-
 
     public void addTwoUsers() {
         UserFactory uf = new CommonUserFactory();
