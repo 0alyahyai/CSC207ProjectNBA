@@ -1,4 +1,4 @@
-package use_case.entity_utilities;
+package use_case.entity_helpers;
 
 import entity.Player;
 
@@ -14,5 +14,5 @@ public interface PlayerEvaluator {
      * @param player the player to be evaluated
      * @return a float corresponding to the "evaluation" of the player
      */
-    float evaluatePlayer(Player player, Stats statsBoundary);
+    float evaluatePlayer(Player player);
 }

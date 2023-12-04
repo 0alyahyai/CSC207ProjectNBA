@@ -1,4 +1,4 @@
-package use_case.entity_utilities;
+package use_case.entity_helpers;
 
 import entity.Team;
 
