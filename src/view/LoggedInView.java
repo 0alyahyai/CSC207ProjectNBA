@@ -3,6 +3,7 @@ package view;
 import use_case.compareTeam.interface_adapter.CompareController;
 import entity.User;
 import use_case.make_team.create_team.CreateTeamViewModel;
+import use_case.menu.view.MenuView;
 import use_case.view_team.interface_adapter.ViewTeamController;
 
 import javax.swing.*;
@@ -67,6 +68,16 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
 //        buttons.add(getPlayerStats);
         buttons.add(viewTeam);
         buttons.add(logOut);
+
+        for (Component component : buttons.getComponents()) {
+            JButton button = (JButton) component;
+            button.addMouseListener(new MenuView.HoverMouseListener((JButton) button));
+            button.setFont(new Font("Arial", Font.BOLD, 14));
+            button.setBackground(Color.LIGHT_GRAY);
+            button.setForeground(Color.BLACK);
+            button.setPreferredSize(new Dimension(120, 30));
+            button.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
+        }
 
         //Styling:
         int leftMargin = 30;

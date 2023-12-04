@@ -2,6 +2,7 @@ package use_case.signup.view;
 
 
 import use_case.login.interface_adapter.LoginState;
+import use_case.menu.view.MenuView;
 import use_case.signup.interface_adapter.SignupController;
 import use_case.signup.interface_adapter.SignupState;
 import use_case.signup.interface_adapter.SignupViewModel;
@@ -55,6 +56,14 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         buttons.add(signUp);
         cancel = new JButton(SignupViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
+
+        for (Component button : buttons.getComponents()) {
+            button.addMouseListener(new MenuView.HoverMouseListener((JButton) button));
+            button.setFont(new Font("Arial", Font.BOLD, 14));
+            button.setBackground(Color.LIGHT_GRAY);
+            button.setForeground(Color.BLACK);
+            button.setPreferredSize(new Dimension(120, 30));
+        }
 
         //Styling:
         int leftMargin = 30;

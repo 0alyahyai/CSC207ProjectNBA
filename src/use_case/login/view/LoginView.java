@@ -3,6 +3,7 @@ package use_case.login.view;
 import use_case.login.interface_adapter.LoginController;
 import use_case.login.interface_adapter.LoginState;
 import use_case.login.interface_adapter.LoginViewModel;
+import use_case.menu.view.MenuView;
 import view.LabelTextPanel;
 import view.ViewManagerModel;
 
@@ -54,6 +55,14 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         buttons.add(logIn);
         cancel = new JButton(loginViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
+
+        for (Component button : buttons.getComponents()) {
+            button.addMouseListener(new MenuView.HoverMouseListener((JButton) button));
+            button.setFont(new Font("Arial", Font.BOLD, 14));
+            button.setBackground(Color.LIGHT_GRAY);
+            button.setForeground(Color.BLACK);
+            button.setPreferredSize(new Dimension(120, 30));
+        }
 
         //Styling:
         int leftMargin = 30;

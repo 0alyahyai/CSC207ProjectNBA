@@ -2,6 +2,7 @@ package use_case.compareTeam.viewCompareTeam;
 
 import use_case.algorithm.interface_adapter.AlgorithmController;
 import use_case.compareTeam.interface_adapter.CompareViewModel;
+import use_case.menu.view.MenuView;
 import view.ViewManagerModel;
 
 import javax.swing.*;
@@ -137,7 +138,13 @@ public class CompareViewOptions extends JPanel implements ActionListener, Proper
             JOptionPane.showMessageDialog(null, "No teams!");
 
         }
-
+        for (Component button : buttonPanel.getComponents()) {
+            button.addMouseListener(new MenuView.HoverMouseListener((JButton) button));
+            button.setFont(new Font("Arial", Font.BOLD, 14));
+            button.setBackground(Color.LIGHT_GRAY);
+            button.setForeground(Color.BLACK);
+            button.setPreferredSize(new Dimension(120, 30));
+        }
 
 
     }

@@ -3,9 +3,11 @@ package use_case.make_team.player_stats.view;
 import use_case.make_team.create_team.CreateTeamViewModel;
 import use_case.make_team.player_stats.interface_adapater.PlayerStatsState;
 import use_case.make_team.player_stats.interface_adapater.PlayerStatsViewModel;
+import use_case.menu.view.MenuView;
 import view.ViewManagerModel;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,9 +45,12 @@ public class PlayerStatsView extends JPanel implements ActionListener, PropertyC
         JPanel Graph = new JPanel();
 
         backButton = new JButton("Back");
+        backButton.addMouseListener(new MenuView.HoverMouseListener(backButton));
+        backButton.setBorder(new EmptyBorder(10, 15, 10, 15));
         backButton.setFont(new Font("Arial", Font.BOLD, 14));
-        backButton.setBackground(new Color(179, 26, 26)); // Light gray background
-        backButton.setMargin(new Insets(5, 15, 5, 15)); // Padding around the button text
+        backButton.setBackground(Color.LIGHT_GRAY);
+        backButton.setForeground(Color.BLACK);
+        backButton.setPreferredSize(new Dimension(120, 30));
 
 
         //switch to the menu view when the back button is pressed
@@ -120,7 +125,10 @@ public class PlayerStatsView extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttons.add(backButton);
         removeAll();
+
         ArrayList<ArrayList<Double>> stats = viewModel.getState().getPlayerStats();
         if (stats.get(0).get(0) == -1.0){
             // Create the label and set a message
@@ -130,7 +138,7 @@ public class PlayerStatsView extends JPanel implements ActionListener, PropertyC
 
             // Add the label to the view
             add(messageLabel);
-            add(backButton);
+            add(buttons);
 
         }
         else {
@@ -142,7 +150,7 @@ public class PlayerStatsView extends JPanel implements ActionListener, PropertyC
 
 
             add(graphPanel);
-            add(backButton);
+            add(buttons);
 
 
         }

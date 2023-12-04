@@ -45,16 +45,24 @@ public class Main {
 
 
         // The main application window.
-        JFrame application = new JFrame("Login Example");
+        JFrame application = new JFrame("NBA Fantasy League");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 
         CardLayout cardLayout = new CardLayout();
 
-        // ToDo: Changed Menu View to grid so options appear down a column?
-//        int columns = 3;
-//        int rows = 0; // You can adjust the number of rows based on your needs
-//        GridLayout gridLayout = new GridLayout(rows, columns);
+        //Setting Frame Logo
+        try {
+            ImageIcon logo = new ImageIcon(new File("").getAbsolutePath()
+                    + "/src/assests/icons/bball.png");
+            //resize the icon
+            Image image = logo.getImage();
+            Image frameLogo = image.getScaledInstance(100, 100,  java.awt.Image.SCALE_SMOOTH);
+            application.setIconImage(frameLogo);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // The various View objects. Only one view is visible at a time.
         JPanel views = new JPanel(cardLayout);
