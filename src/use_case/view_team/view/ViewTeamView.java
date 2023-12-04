@@ -1,11 +1,14 @@
 package use_case.view_team.view;
 
+import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
+import use_case.menu.view.MenuView;
 import use_case.view_team.interface_adapter.ViewTeamState;
 import use_case.view_team.interface_adapter.ViewTeamViewModel;
 import view.ViewManagerModel;
 
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.plaf.basic.BasicBorders;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
@@ -35,9 +38,13 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
         viewTeamViewModel.addPropertyChangeListener(this);
 
         back = new JButton("Back");
+        back.addMouseListener(new MenuView.HoverMouseListener(back));
         back.setFont(new Font("Arial", Font.BOLD, 14));
-        back.setBackground(new Color(200, 200, 200)); // Light gray background
-        back.setMargin(new Insets(5, 15, 5, 15)); // Padding around the button text
+        back.setBackground(Color.LIGHT_GRAY);
+        back.setForeground(Color.BLACK);
+        back.setPreferredSize(new Dimension(120, 30));
+        back.setBorder(new EmptyBorder(10, 15, 10, 15));
+//        back.setMargin(new Insets(5, 15, 5, 15)); // Padding around the button text
 
 
         //switch to the menu view when the back button is pressed
@@ -195,7 +202,9 @@ public class ViewTeamView extends JPanel implements ActionListener, PropertyChan
             //add the row to the view
             add(newRow);
             //add the back button to the view
-            add(back);
+            JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+            buttons.add(back);
+            add(buttons);
         }
     }
 

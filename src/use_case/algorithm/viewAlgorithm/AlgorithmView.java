@@ -2,9 +2,11 @@ package use_case.algorithm.viewAlgorithm;
 
 import use_case.algorithm.interface_adapter.AlgorithmViewModel;
 import use_case.compareTeam.interface_adapter.CompareViewModel;
+import use_case.menu.view.MenuView;
 import view.ViewManagerModel;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -108,7 +110,12 @@ public class AlgorithmView extends JPanel implements ActionListener, PropertyCha
 
         // Back button at the bottom
         backButton = new JButton("Back");
-        backButton.setPreferredSize(new Dimension(100, 50));
+        backButton.addMouseListener(new MenuView.HoverMouseListener(backButton));
+        backButton.setBorder(new EmptyBorder(10, 15, 10, 15));
+        backButton.setFont(new Font("Arial", Font.BOLD, 14));
+        backButton.setBackground(Color.LIGHT_GRAY);
+        backButton.setForeground(Color.BLACK);
+        backButton.setPreferredSize(new Dimension(120, 30));
 
         backButton.addActionListener(
                 new ActionListener() {
@@ -121,8 +128,11 @@ public class AlgorithmView extends JPanel implements ActionListener, PropertyCha
         );
 
         // Add components to the frame
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttons.add(backButton);
+
         add(scorePanel, BorderLayout.CENTER);
-        add(backButton, BorderLayout.SOUTH);
+        add(buttons, BorderLayout.SOUTH);
     }
 
 
