@@ -1,6 +1,7 @@
 package data_access;
 
 import entity.*;
+import use_case.entity_utilities.TeamComparator;
 import use_case.leaderboard.LeaderboardFileUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.make_team.MakeTeamDAI;

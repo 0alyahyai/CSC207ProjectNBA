@@ -2,11 +2,10 @@ package app;
 
 import data_access.APIinterface;
 import data_access.FileUserDataAccessObject;
-import data_access.MockAPIDAO;
 import entity.CommonUserFactory;
-import entity.PlayerEvaluator;
-import entity.TeamComparator;
-import entity.TeamEvaluator;
+import use_case.entity_utilities.PlayerEvaluator;
+import use_case.entity_utilities.TeamComparator;
+import use_case.entity_utilities.TeamEvaluator;
 import entity.dummys.PlayerEvaluatorDummy;
 import entity.dummys.TeamComparatorDummy;
 import entity.dummys.TeamEvaluatorDummy;

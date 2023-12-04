@@ -1,10 +1,10 @@
 package entity.dummys;
 
-import entity.PlayerEvaluator;
+import use_case.entity_utilities.PlayerEvaluator;
 import entity.Team;
-import java.util.Random;
+import use_case.entity_utilities.TeamEvaluator;
 
-public class TeamEvaluatorDummy extends entity.TeamEvaluator{
+public class TeamEvaluatorDummy extends TeamEvaluator {
     public TeamEvaluatorDummy(PlayerEvaluator playerEvaluator) {
         super(playerEvaluator);
     }
