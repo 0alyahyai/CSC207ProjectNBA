@@ -238,9 +238,9 @@ public class APIDataAccessObject implements APIinterface {
         ArrayList<Map<String, Object>> responseArray = (ArrayList<Map<String, Object>>) map.get("response");
 
 
-            double pointsPG = 0;
-            double assistsPG = 0;
-            double reboundsPG = 0;
+            double pointsPG = -1.0;
+            double assistsPG = -1.0;
+            double reboundsPG = -1.0;
 
             if (responseArray.size() != 0) {
                 ArrayList<Double> pointslist = new ArrayList<>();

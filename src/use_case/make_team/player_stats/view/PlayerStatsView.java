@@ -89,9 +89,10 @@ public class PlayerStatsView extends JPanel implements ActionListener, PropertyC
             String seriesName = seriesNames[seriesIndex]; //I can use the seriesNames to set the name of the legend;
 
             if (statList.size() == 1) {
-                // If there's only one data point, add it twice to create a visible dot or a tiny line
                 dataset.addValue(statList.get(0), seriesName, "1");
                 dataset.addValue(statList.get(0), seriesName, "Only One Game Played");
+                // If there's only one data point, add it twice to create a visible dot or a tiny line
+
             } else {
                 // Multiple data points - proceed as usual
                 for (int gameIndex = 0; gameIndex < statList.size(); gameIndex++) {
@@ -111,29 +112,6 @@ public class PlayerStatsView extends JPanel implements ActionListener, PropertyC
                 false);
     }
 
-    public static void main(String[] args) {
-
-        PlayerStatsViewModel playerStatsViewModel = new PlayerStatsViewModel();
-        ViewManagerModel viewManagerModel = new ViewManagerModel();
-
-
-        fff(new PlayerStatsViewModel(), new ViewManagerModel());
-    }
-    public static void fff(PlayerStatsViewModel viewModel, ViewManagerModel viewManagerModel) {
-
-        JFrame frame = new JFrame("Player Statistics");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        PlayerStatsView playerStatsView = new PlayerStatsView(viewModel, viewManagerModel);
-        frame.add(playerStatsView);
-
-        frame.setSize(400, 300); // Set a specific size
-        frame.validate(); // Layout components
-
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -143,19 +121,31 @@ public class PlayerStatsView extends JPanel implements ActionListener, PropertyC
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         removeAll();
-        chart = createChart();
-        ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new Dimension(800, 600)); // Adjust size as needed
+        ArrayList<ArrayList<Double>> stats = viewModel.getState().getPlayerStats();
+        if (stats.get(0).get(0) == -1.0){
+            // Create the label and set a message
+            JTextArea messageLabel = new JTextArea("Player has not played any games this season.");
+            messageLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            messageLabel.setEditable(false); // Make the JTextArea non-editable
 
-        // Replace the custom graphPanel with the JFreeChart panel
-        graphPanel = chartPanel;
+            // Add the label to the view
+            add(messageLabel);
+            add(backButton);
+
+        }
+        else {
+            chart = createChart();
+            ChartPanel chartPanel = new ChartPanel(chart);
+            chartPanel.setPreferredSize(new Dimension(800, 600)); // Adjust size as needed
+
+            graphPanel = chartPanel;
 
 
+            add(graphPanel);
+            add(backButton);
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setPreferredSize(new Dimension(800, 200));
 
-        add(graphPanel);
-        add(backButton);
+        }
+
     }
 }
