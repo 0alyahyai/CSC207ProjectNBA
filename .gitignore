@@ -2,13 +2,11 @@
 CSC207ProjectNBA.iml
 out/
 users.csv
+target/
+.idea/misc.xml
+.idea/modules.xml
 NBAproject.iml
-<<<<<<< HEAD
 .DS_Store
 src/.DS_Store
 src/use_case/.DS_Store
 src/use_case/make_team/.DS_Store
-=======
-target/
-.DS_Store
->>>>>>> master

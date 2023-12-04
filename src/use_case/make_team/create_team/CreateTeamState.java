@@ -48,4 +48,10 @@ public class CreateTeamState {
         return (teamSoFar.size() == 5);
     }
 
+    public final void clear() {
+        teamName = "";
+        searchedPlayer = null;
+        teamSoFar = new ArrayList<>();
+        matchingPlayers.clear();
+    }
 }

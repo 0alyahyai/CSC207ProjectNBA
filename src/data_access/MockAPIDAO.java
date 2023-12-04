@@ -3,7 +3,6 @@ package data_access;
 import entity.CommonPlayerFactory;
 import entity.Player;
 import entity.PlayerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

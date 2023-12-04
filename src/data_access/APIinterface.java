@@ -1,7 +1,6 @@
 package data_access;
 
 import entity.Player;
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;

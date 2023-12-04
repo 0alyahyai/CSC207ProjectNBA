@@ -45,11 +45,9 @@ public class MakeTeamUseCaseFactory {
                 searchPlayerController,
                 addPlayerController,
                 createTeamViewModel,
+                playerStatsController,
                 saveTeamController,
-                playerStatsController
-
-                );
-
+                viewManagerModel);
     }
 
     private static SearchPlayerController createSearchPlayerController(
