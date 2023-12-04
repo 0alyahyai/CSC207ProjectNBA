@@ -12,7 +12,6 @@ import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.Map;
 import com.google.gson.Gson;
-import use_case.entity_helpers.Stats;
 
 public class APIDataAccessObject implements APIinterface {
 
@@ -137,17 +136,6 @@ public class APIDataAccessObject implements APIinterface {
         }
     }
 
-
-    @Override
-    public Stats getStats() {
-        return null;
-
-
-
-
-
-    }
-
     @Override
     public String getNameOfPlayer(int id) {
 
@@ -233,6 +221,62 @@ public class APIDataAccessObject implements APIinterface {
         return viewStats;
     }
 
+    @Override
+    public ArrayList<ArrayList<Double>> getPlayerStatsforgraph(int id) {
+
+        ArrayList<ArrayList<Double>> playerStats = new ArrayList();
+
+
+        Map<String, Object> map = getPlayerStats(id);
+
+        ArrayList<Map<String, Object>> responseArray = (ArrayList<Map<String, Object>>) map.get("response");
+
+
+            double pointsPG = -1.0;
+            double assistsPG = -1.0;
+            double reboundsPG = -1.0;
+
+            if (responseArray.size() != 0) {
+                ArrayList<Double> pointslist = new ArrayList<>();
+                ArrayList<Double> assistlist = new ArrayList<>();
+                ArrayList<Double> reblist = new ArrayList<>();
+                for (int i = 0; i < responseArray.size(); i++) {
+                    Map<String, Object> game = responseArray.get(i);
+                    pointsPG = (double) game.get("points");
+                    assistsPG = (double) game.get("assists");
+                    reboundsPG = (double) game.get("totReb");
+                    pointslist.add(pointsPG);
+                    assistlist.add(assistsPG);
+                    reblist.add(reboundsPG);
+
+
+                }
+                playerStats.add(pointslist);
+                playerStats.add(assistlist);
+                playerStats.add(reblist);
+            }
+            else {
+
+                ArrayList<Double> pointslist = new ArrayList<>();
+                ArrayList<Double> assistlist = new ArrayList<>();
+                ArrayList<Double> reblist = new ArrayList<>();
+                pointslist.add(pointsPG);
+                assistlist.add(assistsPG);
+                reblist.add(reboundsPG);
+                playerStats.add(pointslist);
+                playerStats.add(assistlist);
+                playerStats.add(reblist);
+
+            }
+
+
+
+                return playerStats;
+
+
+        }
+
+
     // Dummy method
     @Override
     public List<Player> getAllPlayersByName() {
@@ -258,6 +302,9 @@ public class APIDataAccessObject implements APIinterface {
 
         System.out.println(dao.searchPlayer("Leb"));
         System.out.println(dao.getNameOfPlayer(2504));
+
+
+        System.out.println(dao.getPlayerStatsforgraph(236));
     }
 
     //Todo: The following methods I implemented for the leaderboard. We will need to find a way to set teamId, for now I just pass in the userId.

@@ -3,6 +3,7 @@ package use_case.make_team.create_team;
 import entity.Player;
 import use_case.make_team.create_team.addPlayer.AddPlayerController;
 import use_case.make_team.create_team.search_player.SearchPlayerController;
+import use_case.make_team.player_stats.interface_adapater.PlayerStatsController;
 import use_case.make_team.save_team.interface_adapter.SaveTeamController;
 import view.LoggedInViewModel;
 import view.ViewManagerModel;
@@ -30,6 +31,8 @@ public class CreateTeamView extends JPanel implements ActionListener, PropertyCh
     private final JLabel[] playerLabels;
     private final JButton backButton;
 
+    private final PlayerStatsController playerStatsController;
+
 
     // CA instance variables
     private final SearchPlayerController searchPlayerController;
@@ -44,6 +47,7 @@ public class CreateTeamView extends JPanel implements ActionListener, PropertyCh
             SearchPlayerController searchPlayerController,
             AddPlayerController addPlayerController,
             CreateTeamViewModel createTeamViewModel,
+            PlayerStatsController playerStatsController,
             SaveTeamController saveTeamController, ViewManagerModel viewManagerModel) {
 
         // Assign CA dependencies
@@ -52,6 +56,9 @@ public class CreateTeamView extends JPanel implements ActionListener, PropertyCh
         this.createTeamViewModel = createTeamViewModel;
         this.saveTeamController = saveTeamController;
         this.viewManagerModel = viewManagerModel;
+
+        // Sam
+        this.playerStatsController = playerStatsController;
 
         // Adding 'this' as an observer of createTeamViewModel
         createTeamViewModel.addPropertyChangeListener(this);
@@ -82,13 +89,21 @@ public class CreateTeamView extends JPanel implements ActionListener, PropertyCh
         seeStatsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 if (playerDropdown.getSelectedItem() == null) {
                     JOptionPane.showMessageDialog(null, "MUST SELECT A PLAYER!",
                             "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
                 else { // Sam
-
+                    playerStatsController.execute(
+                            ((Player) playerDropdown.getSelectedItem()).getPlayerID()
+                    );
                 }
+
+
+
+
+
             }
         });
         addPlayerButton.addActionListener(new ActionListener() {
