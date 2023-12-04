@@ -1,4 +1,4 @@
-package entity.dummys;
+package use_case.entity_helpers.dummys;
 
 import use_case.entity_helpers.PlayerEvaluator;
 import entity.Team;

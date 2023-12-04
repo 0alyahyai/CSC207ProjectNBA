@@ -1,4 +1,4 @@
-package entity.dummys;
+package use_case.entity_helpers.dummys;
 
 import entity.Team;
 import use_case.entity_helpers.TeamComparator;

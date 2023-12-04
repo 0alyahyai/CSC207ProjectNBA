@@ -253,7 +253,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
                     }
                 }
-                if (i == j){
+                if (i == j && j != 0){
                     place.setForeground(Color.BLUE);
                     userName.setForeground(Color.BLUE);
                     pts.setForeground(Color.BLUE);
