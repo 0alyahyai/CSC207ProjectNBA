@@ -1,4 +1,7 @@
-package entity;
+package use_case.entity_helpers;
+
+import entity.Team;
+import use_case.entity_helpers.PlayerEvaluator;
 
 /**
  * Class offering a single method 'evaluateTeam(Team t)' which returns a float representing the "score" of the team.

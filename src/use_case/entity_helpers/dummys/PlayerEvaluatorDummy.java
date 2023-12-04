@@ -1,11 +1,12 @@
-package entity.dummys;
+package use_case.entity_helpers.dummys;
 
 import entity.Player;
-import entity.Stats;
+import use_case.entity_helpers.Stats;
+import use_case.entity_helpers.PlayerEvaluator;
 
 import java.util.Random;
 
-public class PlayerEvaluatorDummy implements entity.PlayerEvaluator{
+public class PlayerEvaluatorDummy implements PlayerEvaluator {
     @Override
     public float evaluatePlayer(Player player, Stats statsBoundary) {
         Random random = new Random();

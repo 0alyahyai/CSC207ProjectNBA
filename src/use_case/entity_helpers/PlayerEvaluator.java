@@ -1,4 +1,6 @@
-package entity;
+package use_case.entity_helpers;
+
+import entity.Player;
 
 /**
  * Interface (whose implementations are) used to evaluate a Player with the offered 'evaluatePlayer(Player)' method.

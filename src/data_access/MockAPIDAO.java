@@ -1,7 +1,6 @@
 package data_access;
 
-import entity.Player;
-import entity.Stats;
+import use_case.entity_helpers.Stats;
 
 import java.util.ArrayList;
 import java.util.Map;

@@ -3,11 +3,14 @@ package use_case.leaderboard;
 import app.*;
 import data_access.*;
 import entity.*;
-import entity.dummys.PlayerEvaluatorDummy;
-import entity.dummys.TeamComparatorDummy;
-import entity.dummys.TeamEvaluatorDummy;
+import use_case.entity_helpers.dummys.PlayerEvaluatorDummy;
+import use_case.entity_helpers.dummys.TeamComparatorDummy;
+import use_case.entity_helpers.dummys.TeamEvaluatorDummy;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import use_case.entity_helpers.PlayerEvaluator;
+import use_case.entity_helpers.TeamComparator;
+import use_case.entity_helpers.TeamEvaluator;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
 import use_case.leaderboard.view.LeaderboardView;
 import use_case.login.interface_adapter.LoginViewModel;
@@ -41,22 +44,22 @@ public class LeaderboardTest {
     }
 
 //    The following clears the csv file after each test
-    @AfterEach
-    public void tearDown() throws IOException {
-        String filePath = "./users.csv";
-
-        try {
-            // Open the FileWriter with append mode set to false (clearing the file)
-            FileWriter fileWriter = new FileWriter(filePath, false);
-
-            // Close the FileWriter to save changes
-            fileWriter.close();
-
-            System.out.println("CSV file cleared successfully.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    @AfterEach
+//    public void tearDown() throws IOException {
+//        String filePath = "./users.csv";
+//
+//        try {
+//            // Open the FileWriter with append mode set to false (clearing the file)
+//            FileWriter fileWriter = new FileWriter(filePath, false);
+//
+//            // Close the FileWriter to save changes
+//            fileWriter.close();
+//
+//            System.out.println("CSV file cleared successfully.");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void testMain() throws IOException {
 

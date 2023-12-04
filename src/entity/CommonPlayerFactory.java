@@ -3,7 +3,7 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommonPlayerFactory implements PlayerFactory{
+public class CommonPlayerFactory implements PlayerFactory {
     @Override
     public Player create(String name, int id) {
         return new CommonPlayer(name, id);

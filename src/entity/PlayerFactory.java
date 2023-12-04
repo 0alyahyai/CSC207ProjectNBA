@@ -1,5 +1,7 @@
 package entity;
 
+import entity.Player;
+
 import java.util.List;
 
 public interface PlayerFactory {
