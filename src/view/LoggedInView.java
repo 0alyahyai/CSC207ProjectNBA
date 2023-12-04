@@ -57,7 +57,8 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         buttons.add(leaderboard);
         buttons.add(createTeam);
         buttons.add(compareTeams);
-        buttons.add(getPlayerStats);
+        // This is removed from the specification
+//        buttons.add(getPlayerStats);
         buttons.add(viewTeam);
         buttons.add(logOut);
         // Logs out the user when the button is clicked.
