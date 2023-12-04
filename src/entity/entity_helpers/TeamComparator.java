@@ -1,4 +1,6 @@
-package entity;
+package entity.entity_helpers;
+
+import entity.Team;
 
 /**
  * A class that aids in the comparison between two teams. This is used both in the leaderboard and the compare-team

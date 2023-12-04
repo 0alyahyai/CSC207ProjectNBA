@@ -136,12 +136,6 @@ public class APIDataAccessObject implements APIinterface {
         }
     }
 
-
-    @Override
-    public Stats getStats() {
-        return null;
-    }
-
     @Override
     public String getNameOfPlayer(int id) {
 

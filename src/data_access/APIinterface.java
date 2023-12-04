@@ -1,7 +1,6 @@
 package data_access;
 
 import entity.Player;
-import entity.Stats;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -31,10 +30,6 @@ public interface APIinterface  {
      * @return Stats
      */
     public Map<String, Object> getGeneralPlayerInfo(int id);
-
-
-    //TODO: delete this method or change it
-    Stats getStats();
 
 
     /**
