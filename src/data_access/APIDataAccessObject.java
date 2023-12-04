@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import com.google.gson.Gson;
 import entity.PlayerFactory;
+import use_case.entity_helpers.Stats;
 
 public class APIDataAccessObject implements APIinterface {
 
@@ -25,9 +26,7 @@ public class APIDataAccessObject implements APIinterface {
 
 
     @Override
-    public List<Player> searchPlayer(String name) {
-        PlayerFactory playerFactory = new CommonPlayerFactory();
-
+    public Map<String, Object> searchPlayer(String name) {
         //create url
         String url = String.format("https://api-nba-v1.p.rapidapi.com/players?search=%s", name);
 
@@ -42,21 +41,7 @@ public class APIDataAccessObject implements APIinterface {
                     HttpResponse.BodyHandlers.ofString());
             //turn response into map
             Map<String, Object> responseMap = jsonToMap(response.body());
-            List<Map> result = (List<Map>) responseMap.get("response");
-            List<Player> matchingPlayers = new ArrayList<>();
-
-            for (Map m : result) {
-                int id = (int) (double) m.get("id");
-                String playerName = m.get("firstname") + " " + m.get("lastname");
-
-                Player p = playerFactory.create(playerName, id);
-
-                matchingPlayers.add(p);
-            }
-
-            System.out.println("matchingPlayers: " + matchingPlayers);
-            return matchingPlayers;
-
+            return responseMap;
         } catch (Exception e) {
             //TODO: handle exception
             System.out.println("Error: " + e);
@@ -135,6 +120,12 @@ public class APIDataAccessObject implements APIinterface {
             System.out.println("Error: " + e);
             return null;
         }
+    }
+
+
+    @Override
+    public Stats getStats() {
+        return null;
     }
 
     @Override
@@ -222,92 +213,6 @@ public class APIDataAccessObject implements APIinterface {
         return viewStats;
     }
 
-    @Override
-    public ArrayList<ArrayList<Double>> getPlayerStatsforgraph(int id) {
-
-        ArrayList<ArrayList<Double>> playerStats = new ArrayList();
-
-
-        Map<String, Object> map = getPlayerStats(id);
-
-        ArrayList<Map<String, Object>> responseArray = (ArrayList<Map<String, Object>>) map.get("response");
-
-
-            double pointsPG = -1.0;
-            double assistsPG = -1.0;
-            double reboundsPG = -1.0;
-
-            if (responseArray.size() != 0) {
-                ArrayList<Double> pointslist = new ArrayList<>();
-                ArrayList<Double> assistlist = new ArrayList<>();
-                ArrayList<Double> reblist = new ArrayList<>();
-                for (int i = 0; i < responseArray.size(); i++) {
-                    Map<String, Object> game = responseArray.get(i);
-                    pointsPG = (double) game.get("points");
-                    assistsPG = (double) game.get("assists");
-                    reboundsPG = (double) game.get("totReb");
-                    pointslist.add(pointsPG);
-                    assistlist.add(assistsPG);
-                    reblist.add(reboundsPG);
-
-
-                }
-                playerStats.add(pointslist);
-                playerStats.add(assistlist);
-                playerStats.add(reblist);
-            }
-            else {
-
-                ArrayList<Double> pointslist = new ArrayList<>();
-                ArrayList<Double> assistlist = new ArrayList<>();
-                ArrayList<Double> reblist = new ArrayList<>();
-                pointslist.add(pointsPG);
-                assistlist.add(assistsPG);
-                reblist.add(reboundsPG);
-                playerStats.add(pointslist);
-                playerStats.add(assistlist);
-                playerStats.add(reblist);
-
-            }
-
-
-
-                return playerStats;
-
-
-        }
-
-
-    // Dummy method
-    @Override
-    public List<Player> getAllPlayersByName() {
-        PlayerFactory pf = new CommonPlayerFactory();
-        Player p1 = pf.createMockPlayer();
-        Player p2 = pf.createMockPlayer();
-        Player p3 = pf.createMockPlayer();
-        Player p4 = pf.createMockPlayer();
-
-        List<Player> list = new ArrayList<>();
-
-        list.add(p1);
-        list.add(p2);
-        list.add(p3);
-        list.add(p4);
-
-        return list;
-    }
-
-
-    public static void main(String[] args) {
-        APIinterface dao = new APIDataAccessObject();
-
-        System.out.println(dao.searchPlayer("Leb"));
-        System.out.println(dao.getNameOfPlayer(2504));
-
-
-        System.out.println(dao.getPlayerStatsforgraph(236));
-    }
-
     //Todo: The following methods I implemented for the leaderboard. We will need to find a way to set teamId, for now I just pass in the userId.
     public Player makePlayerFromId(int id){
         PlayerFactory Factory = new CommonPlayerFactory();
@@ -323,4 +228,3 @@ public class APIDataAccessObject implements APIinterface {
         return Factory.createTeam(teamId, List.of(players));
     }
 }
-

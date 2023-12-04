@@ -18,28 +18,25 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.Objects;
 
 public class LeaderboardView extends JPanel implements ActionListener, PropertyChangeListener {
 
-    private final ViewManagerModel viewModelManager;
+    private final ViewManagerModel viewManagerModel;
     private final LeaderboardViewModel leaderboardViewModel;
-    private boolean logged;
     private final LeaderboardController leaderboardController;
     public final String viewName = "leaderboard";
     private final JLabel title = new JLabel("Leaderboard");
     private final JPanel leaderboard;
+    private boolean logged = false;
     private final JButton back;
 
     public LeaderboardView(ViewManagerModel viewManagerModel, LoggedInViewModel loggedInViewModel, LeaderboardViewModel leaderboardViewModel, LeaderboardController leaderboardController) {
         this.leaderboardViewModel = leaderboardViewModel;
         this.leaderboardController = leaderboardController;
-        this.viewModelManager = viewManagerModel;
+        this.viewManagerModel = viewManagerModel;
         leaderboardViewModel.addPropertyChangeListener(this);
         loggedInViewModel.addPropertyChangeListener(this);
         viewManagerModel.addPropertyChangeListener(this);
-
-        this.logged = false;
 
         JLabel title = new JLabel(LeaderboardViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -148,29 +145,32 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         LeaderboardState state = leaderboardViewModel.getState();
+
         if (evt.getNewValue() instanceof LoggedInState loggedInState) {
             if (loggedInState.isLoggedIn()) {
                 leaderboardController.setActiveUser();
                 logged = true;
                 return;
             }
+           LeaderboardState leaderboardState = leaderboardViewModel.getState();
+            leaderboardState.setActiveUserID(null);
             logged = false;
-            state.setActiveUserID(null);
-            return;
-
+           return;
         }
 
         if (evt.getNewValue() instanceof String activeViewName) {
-            if (!Objects.equals(activeViewName, viewName)) {
+            activeViewName = (String) evt.getNewValue();
+            if (!activeViewName.equals(viewName)) {
+                leaderboardController.load();
                 return;
             }
             leaderboardController.load();
-            if (!logged){
+            if (!logged) {
                 state.setActiveUserID(null);
             }
         }
 
-        if (evt.getNewValue() instanceof LeaderboardState){
+        if (evt.getNewValue() instanceof LeaderboardState) {
             state = (LeaderboardState) evt.getNewValue();
         }
 

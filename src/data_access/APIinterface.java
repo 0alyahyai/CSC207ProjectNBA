@@ -1,7 +1,7 @@
 package data_access;
 
-import entity.Player;
-import java.util.List;
+import use_case.entity_helpers.Stats;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -13,7 +13,7 @@ public interface APIinterface  {
      * @param name
      * @return Map<String, Object>
      */
-    public  List<Player> searchPlayer(String name);
+    public  Map<String, Object> searchPlayer(String name);
 
 
     /**
@@ -31,6 +31,10 @@ public interface APIinterface  {
     public Map<String, Object> getGeneralPlayerInfo(int id);
 
 
+    //TODO: delete this method or change it
+    Stats getStats();
+
+
     /**
      * This method returns the name of a player given their id
      * @param id
@@ -45,12 +49,5 @@ public interface APIinterface  {
      * @return ArrayList<String>
      */
     public ArrayList<String> viewTeamGetStats(int id);
-
-
-    public ArrayList<ArrayList<Double>> getPlayerStatsforgraph(int id);
-
-
-    List<Player> getAllPlayersByName();
-
 
 }
