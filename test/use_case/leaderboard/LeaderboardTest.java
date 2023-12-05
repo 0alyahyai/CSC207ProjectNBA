@@ -15,6 +15,7 @@ import use_case.entity_helpers.dummys.TeamComparatorDummy;
 import use_case.entity_helpers.dummys.TeamEvaluatorDummy;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import use_case.leaderboard.interface_adapter.LeaderboardController;
 import use_case.leaderboard.interface_adapter.LeaderboardViewModel;
 import use_case.leaderboard.view.LeaderboardView;
 import use_case.login.interface_adapter.LoginViewModel;
@@ -47,27 +48,29 @@ public class LeaderboardTest {
 
     private ViewManagerModel viewManagerModel;
     private LeaderboardViewModel leaderboardViewModel;
+    private TeamComparator teamComparator;
+    private LeaderboardView leaderboardView;
 
     LeaderboardTest() throws IOException {
     }
 
 //    The following clears the csv file after each test
-//    @AfterEach
-//    public void tearDown() throws IOException {
-//        String filePath = "./users.csv";
-//
-//        try {
-//            // Open the FileWriter with append mode set to false (clearing the file)
-//            FileWriter fileWriter = new FileWriter(filePath, false);
-//
-//            // Close the FileWriter to save changes
-//            fileWriter.close();
-//
-//            System.out.println("CSV file cleared successfully.");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    @AfterEach
+    public void tearDown() throws IOException {
+        String filePath = "./users.csv";
+
+        try {
+            // Open the FileWriter with append mode set to false (clearing the file)
+            FileWriter fileWriter = new FileWriter(filePath, false);
+
+            // Close the FileWriter to save changes
+            fileWriter.close();
+
+            System.out.println("CSV file cleared successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void testMain() throws IOException {
 
@@ -142,12 +145,14 @@ public class LeaderboardTest {
         TeamEvaluatorFactory teamEvaluatorFactory = new TeamEvaluatorFactory(playerEvaluatorFactory);
         TeamEvaluator teamEvaluator = teamEvaluatorFactory.getLogarithmTeamEvaluator(apiDAO);
         TeamComparator teamComparator = new LeaderboardTeamComparator(teamEvaluator);
+        this.teamComparator = teamComparator;
 
         MenuView menuView = MenuUseCaseFactory.create(menuViewModel, viewManagerModel, signupViewModel, leaderboardViewModel, loginViewModel);
         views.add(menuView, menuView.viewName);
 
         LeaderboardView leaderboardView = LeaderboardUseCaseFactory.create(loggedInViewModel, menuView.viewName, loggedInView.viewName, viewManagerModel, leaderboardViewModel, userDataAccessObject, teamComparator);
         views.add(leaderboardView, leaderboardView.viewName);
+        this.leaderboardView = leaderboardView;
 
         ViewTeamView viewTeamView = ViewTeamUseCaseFactory.create(viewTeamViewModel, viewManagerModel);
         views.add(viewTeamView, viewTeamView.viewName);
@@ -455,6 +460,14 @@ public class LeaderboardTest {
         JLabel userLabel2 = (JLabel) leaderboard.getComponent(1 + 2*3);
         assert (userLabel1.getText().equals(users[0].getUserName()));
         assert (userLabel2.getText().equals(users[1].getUserName()));
+    }
+
+    @Test
+    public void InteractorTest() throws IOException {
+        testMain();
+        LeaderboardController leaderboardController = leaderboardView.leaderboardController;
+        leaderboardController.setActiveUser();
+        assert (leaderboardViewModel.getState().getActiveUserID().equals(null));
     }
 
 

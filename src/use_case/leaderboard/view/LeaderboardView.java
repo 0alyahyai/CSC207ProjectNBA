@@ -26,7 +26,7 @@ public class LeaderboardView extends JPanel implements ActionListener, PropertyC
 
     private final ViewManagerModel viewManagerModel;
     private final LeaderboardViewModel leaderboardViewModel;
-    private final LeaderboardController leaderboardController;
+    public final LeaderboardController leaderboardController;
     public final String viewName = "leaderboard";
     private final JLabel title = new JLabel("Leaderboard");
     private final JPanel leaderboard;
