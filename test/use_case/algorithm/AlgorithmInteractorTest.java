@@ -45,7 +45,7 @@ class AlgorithmInteractorTest {
         );
 
         String algorithm = "Markov prediction";
-        String team = "jdws";
+        String team = "woahh";
 
         AlgorithmOutputBoundary algorithmOutputBoundary = new AlgorithmOutputBoundary() {
             @Override
