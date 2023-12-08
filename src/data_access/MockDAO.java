@@ -1,6 +1,7 @@
 package data_access;
 
 import entity.*;
+import use_case.compareTeam.CompareDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.make_team.MakeTeamDAI;
 import use_case.menu.MenuUserDataAccessInterface;
@@ -11,7 +12,8 @@ import java.util.*;
 public class MockDAO implements
         SignupUserDataAccessInterface, LoginUserDataAccessInterface,
         MenuUserDataAccessInterface,
-        MakeTeamDAI {
+        MakeTeamDAI, CompareDataAccessInterface
+{
 
     private final Map<String, Integer> headers = new LinkedHashMap<>();
 
@@ -77,4 +79,18 @@ public class MockDAO implements
         return accounts.get(userName).getUserTeam();
     }
 
+    @Override
+    public List<Team> geteams() {
+        Team t1 = (new CommonTeamFactory()).createMockTeam();
+        Team t2 = (new CommonTeamFactory()).createMockTeam();
+        List<Team> teams = new ArrayList<>();
+        teams.add(t1);
+        teams.add(t2);
+        return  teams;
+    }
+
+    @Override
+    public Boolean activeUserhasTeam() {
+        return true;
+    }
 }
